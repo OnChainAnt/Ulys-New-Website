@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News | Ulys</title>
+  <meta name="description" content="The latest from Ulys — product updates, guides and crypto insights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=17" />
+  <script>(function(){try{if(localStorage.getItem("ulys-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+</head>
+<body>
+  <div class="bg-cosmos" aria-hidden="true"><div class="stars stars-1"></div><div class="stars stars-2"></div><div class="vignette"></div></div>
+  <div id="site-nav"></div>
+  <main class="page page-wide">
+    <div class="page-header">
+      <p class="eyebrow">News</p>
+      <h1>The latest from Ulys</h1>
+      <p class="page-meta">Product updates, guides and crypto insights.</p>
+    </div>
+    <div id="news-state" class="cms-state">Loading news…</div>
+    <div id="news-grid" class="card-grid"></div>
+  </main>
+  <div id="site-footer"></div>
+
+  <script src="partials.js?v=18"></script>
+  <script src="cms.js?v=17"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('news-grid');
+      const state = document.getElementById('news-state');
+      const cfg = window.CTF.news;
+
+      function card(t) {
+        const f = t.fields || {};
+        const title = f[cfg.fields.title];
+        const excerpt = f[cfg.fields.excerpt];
+        const date = f[cfg.fields.date] || (t.sys && t.sys.createdAt);
+        const slug = f[cfg.fields.slug];
+        const href = slug ? cfg.urlBase + slug : null;
+        const tag = href ? 'a' : 'div';
+        const attrs = href ? ` href="${window.esc(href)}" target="_blank" rel="noreferrer"` : '';
+        return `<${tag} class="term-card"${attrs}>` +
+          (date ? `<span class="term-date">${window.esc(window.fmtDate(date))}</span>` : '') +
+          `<h3>${window.esc(title)}</h3>` +
+          (excerpt ? `<p>${window.esc(excerpt)}</p>` : '') +
+          (href ? `<span class="term-more">Read more →</span>` : '') +
+          `</${tag}>`;
+      }
+
+      async function load() {
+        if (!window.cmsConfigured()) {
+          state.className = 'cms-state';
+          state.innerHTML = 'News loads from Contentful. Add your space ID and delivery token in <strong>cms.js</strong> to connect it.';
+          return;
+        }
+        try {
+          const items = await window.cmsFetchAll(cfg.contentType);
+          items.sort((a, b) => new Date(b.fields[cfg.fields.date] || b.sys.createdAt) - new Date(a.fields[cfg.fields.date] || a.sys.createdAt));
+          grid.innerHTML = items.map(card).join('');
+          state.style.display = items.length ? 'none' : 'block';
+          if (!items.length) state.textContent = 'No articles yet — check back soon.';
+        } catch (e) {
+          state.className = 'cms-state error';
+          state.textContent = 'Could not load news right now. Please try again later.';
+        }
+      }
+      load();
+    })();
+  </script>
+</body>
+</html>

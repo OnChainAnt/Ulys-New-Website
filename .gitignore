@@ -1,0 +1,15 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# local agent / editor settings
+.claude/
+
+# dependencies (none currently, but just in case)
+node_modules/
+
+# env / secrets — never commit Contentful or other tokens
+.env
+.env.*
+!.env.example

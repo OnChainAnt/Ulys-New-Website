@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Glossary | Ulys</title>
+  <meta name="description" content="Plain-English definitions for the crypto terms that matter — from the Ulys glossary." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=17" />
+  <script>(function(){try{if(localStorage.getItem("ulys-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+</head>
+<body>
+  <div class="bg-cosmos" aria-hidden="true"><div class="stars stars-1"></div><div class="stars stars-2"></div><div class="vignette"></div></div>
+  <div id="site-nav"></div>
+  <main class="page page-wide">
+    <div class="page-header">
+      <p class="eyebrow">Resources</p>
+      <h1>Crypto glossary</h1>
+      <p class="page-meta">Plain-English definitions for the terms that matter.</p>
+    </div>
+    <div class="glossary-tools">
+      <input id="glossary-search" class="glossary-search" type="search" placeholder="Search terms…" aria-label="Search glossary" />
+    </div>
+    <div id="glossary-state" class="cms-state">Loading glossary…</div>
+    <div id="glossary-grid" class="card-grid"></div>
+  </main>
+  <div id="site-footer"></div>
+
+  <script src="partials.js?v=18"></script>
+  <script src="cms.js?v=17"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('glossary-grid');
+      const state = document.getElementById('glossary-state');
+      const search = document.getElementById('glossary-search');
+      const cfg = window.CTF.glossary;
+      let all = [];
+
+      function card(t) {
+        const f = t.fields || {};
+        const title = f[cfg.fields.title];
+        const desc = f[cfg.fields.description];
+        const date = f[cfg.fields.date] || (t.sys && t.sys.createdAt);
+        const slug = f[cfg.fields.slug];
+        const href = slug ? cfg.urlBase + slug : null;
+        const tag = href ? 'a' : 'div';
+        const attrs = href ? ` href="${window.esc(href)}" target="_blank" rel="noreferrer"` : '';
+        return `<${tag} class="term-card"${attrs}>` +
+          (date ? `<span class="term-date">${window.esc(window.fmtDate(date))}</span>` : '') +
+          `<h3>${window.esc(title)}</h3>` +
+          `<p>${window.esc(desc)}</p>` +
+          (href ? `<span class="term-more">Read more →</span>` : '') +
+          `</${tag}>`;
+      }
+
+      function render(list) {
+        grid.innerHTML = list.map(card).join('');
+        state.style.display = list.length ? 'none' : 'block';
+        if (!list.length) state.textContent = 'No terms match your search.';
+      }
+
+      search.addEventListener('input', () => {
+        const q = search.value.trim().toLowerCase();
+        if (!q) return render(all);
+        render(all.filter((t) => {
+          const f = t.fields || {};
+          return ((f[cfg.fields.title] || '') + ' ' + (f[cfg.fields.description] || '')).toLowerCase().includes(q);
+        }));
+      });
+
+      async function load() {
+        if (!window.cmsConfigured()) {
+          state.className = 'cms-state';
+          state.innerHTML = 'The glossary loads from Contentful. Add your space ID and delivery token in <strong>cms.js</strong> to connect it.';
+          return;
+        }
+        try {
+          all = await window.cmsFetchAll(cfg.contentType);
+          all.sort((a, b) => new Date(b.fields[cfg.fields.date] || b.sys.createdAt) - new Date(a.fields[cfg.fields.date] || a.sys.createdAt));
+          render(all);
+        } catch (e) {
+          state.className = 'cms-state error';
+          state.textContent = 'Could not load the glossary right now. Please try again later.';
+        }
+      }
+      load();
+    })();
+  </script>
+</body>
+</html>

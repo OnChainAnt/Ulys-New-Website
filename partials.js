@@ -1,0 +1,82 @@
+// Shared nav + footer for sub-pages. Injects into #site-nav / #site-footer.
+(function () {
+  const WORDMARK = '<svg viewBox="0 0 383 186" aria-hidden="true"><path d="M369.886 129.09c-6.741 0-12.206 5.465-12.206 12.207 0 6.74 5.465 12.205 12.206 12.205 6.742 0 12.207-5.465 12.207-12.205 0-6.742-5.465-12.207-12.207-12.207ZM101.324 39.816l-.02.255v31.035c-3.896-2.274-5.979-4.078-6.327-4.39-11.082-11.103-15.453-17.878-13.845-30.84l.032-.151.02-.343c.057-.494.516-3.942 2.295-7.034 1.834-3.19 4.148-4.49 7.988-4.49 3.616 0 5.132 1.103 6.048 2.063 3.198 3.353 3.945 10.772 3.809 13.895Zm38.125 42.31c-5.286-.45-10.05-1.201-14.288-2.12V40.801c.144-3.383.271-20.028-10.244-31.199-5.913-6.281-14.022-9.601-23.45-9.601C78.605 0 68.205 6.24 62.18 17.569c-3.701 6.961-4.57 13.648-4.752 15.59-2.958 24.487 8.662 38.41 20.823 50.571l.092.092c.655.639 6.733 6.408 18.693 11.919 1.274.587 2.564 1.15 3.872 1.688-1.265 9.255-5.577 16.945-12.861 22.917-8.577 7.034-18.78 9.539-25.467 9.539-9.342 0-17.182-3.432-25.421-11.129-12.275-11.467-13.303-24.823-13.303-36.443V8.046H0v74.267c0 16.998 2.48 36.693 20.873 53.876 12.643 11.812 26.286 17.553 41.708 17.553 14.003 0 29.178-5.588 40.594-14.948 10.918-8.952 18.061-20.98 20.766-34.668 4.995.922 10.171 1.564 15.508 1.936v44.416h24.59V7.552h-24.59v74.574ZM245.085 47.893l-16.328 47.643c-4.226 12.487-8.837 31.889-8.837 31.889h-.384s-4.227-19.21-8.645-31.889l-16.906-47.643h-25.934l35.348 89.138c2.113 5.57 1.152 15.176 1.152 17.097-2.112 8.26-6.724 11.335-14.984 11.335-2.496 0-9.222-.386-10.182-.962h-1.345v19.788c1.729.576 14.793 1.152 17.867 1.152 16.713 0 25.549-6.532 34.002-29.2l39.766-108.348h-24.59ZM316.301 87.66c-15.562-2.882-26.127-4.611-26.127-13.64 0-7.109 5.956-12.295 17.291-12.295 12.101 0 18.633 4.802 20.362 13.64h23.246c-2.499-17.867-16.138-30.162-43.416-30.162-24.014 0-40.535 11.143-40.535 30.546 0 23.245 18.251 27.662 37.46 31.506 16.137 3.072 26.512 4.993 26.512 15.176 0 8.26-6.34 14.023-19.788 14.023-13.063 0-22.476-5.187-24.397-17.482h-23.436c1.536 20.747 18.441 34.771 47.641 34.771 25.359 0 43.8-11.333 43.8-32.851 0-24.971-19.211-29.582-38.613-33.233Z"></path></svg>';
+
+  const X = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>';
+  const TG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.15-3.06-1.99 1.93c-.23.23-.42.42-.83.42Z"/></svg>';
+  const DC = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418Z"/></svg>';
+  const RD = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm6.67 12.36c.03.2.045.404.045.61 0 3.11-3.62 5.633-8.085 5.633-4.465 0-8.085-2.523-8.085-5.633 0-.21.015-.417.048-.62a1.5 1.5 0 1 1 1.65-2.42 7.9 7.9 0 0 1 4.27-1.35l.81-3.81a.315.315 0 0 1 .375-.243l2.67.567a1.05 1.05 0 1 1-.12.6l-2.385-.507-.72 3.396a7.88 7.88 0 0 1 4.215 1.35 1.5 1.5 0 1 1 1.652 2.42Zm-10.35.9a1.05 1.05 0 1 1 2.1 0 1.05 1.05 0 0 1-2.1 0Zm5.865 2.79c-.72.72-2.1.774-2.505.774-.405 0-1.785-.054-2.505-.774a.27.27 0 0 1 .384-.384c.456.456 1.428.618 2.121.618.693 0 1.665-.162 2.121-.618a.271.271 0 0 1 .384.384Zm-.15-1.74a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1Z"/></svg>';
+  const IG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.012 4.85.07 1.17.054 1.805.249 2.227.415.56.217.96.477 1.38.896.42.42.68.82.896 1.38.166.422.361 1.057.415 2.227.058 1.27.07 1.65.07 4.85s-.012 3.58-.07 4.85c-.054 1.17-.249 1.805-.415 2.227-.217.56-.477.96-.896 1.38-.42.42-.82.68-1.38.896-.422.166-1.057.361-2.227.415-1.27.058-1.65.07-4.85.07s-3.58-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.415a3.7 3.7 0 0 1-1.38-.896 3.7 3.7 0 0 1-.896-1.38c-.166-.422-.361-1.057-.415-2.227C2.172 15.58 2.16 15.2 2.16 12s.012-3.58.07-4.85c.054-1.17.249-1.805.415-2.227.217-.56.477-.96.896-1.38.42-.42.82-.68 1.38-.896.422-.166 1.057-.361 2.227-.415C8.42 2.172 8.8 2.16 12 2.16Zm0 1.94c-3.146 0-3.52.012-4.76.069-1.15.052-1.774.244-2.19.406-.55.214-.943.47-1.356.883-.413.413-.669.806-.883 1.356-.162.416-.354 1.04-.406 2.19-.057 1.24-.069 1.614-.069 4.76s.012 3.52.069 4.76c.052 1.15.244 1.774.406 2.19.214.55.47.943.883 1.356.413.413.806.669 1.356.883.416.162 1.04.354 2.19.406 1.24.057 1.614.069 4.76.069s3.52-.012 4.76-.069c1.15-.052 1.774-.244 2.19-.406.55-.214.943-.47 1.356-.883.413-.413.669-.806.883-1.356.162-.416.354-1.04.406-2.19.057-1.24.069-1.614.069-4.76s-.012-3.52-.069-4.76c-.052-1.15-.244-1.774-.406-2.19a3.65 3.65 0 0 0-.883-1.356 3.65 3.65 0 0 0-1.356-.883c-.416-.162-1.04-.354-2.19-.406-1.24-.057-1.614-.069-4.76-.069Zm0 3.303a5.597 5.597 0 1 0 0 11.194 5.597 5.597 0 0 0 0-11.194Zm0 9.231a3.634 3.634 0 1 1 0-7.268 3.634 3.634 0 0 1 0 7.268Zm7.128-9.451a1.308 1.308 0 1 1-2.616 0 1.308 1.308 0 0 1 2.616 0Z"/></svg>';
+
+  const nav = `
+    <div class="navbar-wrap">
+      <nav class="navbar" id="siteNav">
+        <a href="index.html" class="navbar-logo" aria-label="Ulys home"><span class="navbar-wordmark">${WORDMARK}</span></a>
+        <div class="navbar-links">
+          <a href="index.html#fund">Fund</a>
+          <a href="index.html#trade">Trade</a>
+          <a href="index.html#hold">Non-custodial</a>
+          <a href="index.html#intelligence">AI</a>
+          <a href="https://ulys-treasury.vercel.app/" target="_blank" rel="noreferrer">Treasury</a>
+        </div>
+        <div class="navbar-actions">
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light or dark mode" title="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.9 1.9M17.9 17.9l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.2 19.8l1.9-1.9M17.9 6.1l1.9-1.9"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
+          </button>
+          <span class="vsep"></span>
+          <a href="index.html#download" class="navbar-cta">Get the app</a>
+          <span class="vsep"></span>
+          <a href="https://x.com/Ulys_AI" target="_blank" rel="noreferrer" class="navbar-x" aria-label="Ulys on X">${X}</a>
+        </div>
+      </nav>
+    </div>`;
+
+  const footer = `
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-wordmark">${WORDMARK}</span>
+          <p>This is how crypto should work.</p>
+          <a href="index.html#download" class="footer-cta">Get the app <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="news.html">News</a>
+          <a href="https://ulyssupport.zendesk.com/" target="_blank" rel="noreferrer">Help</a>
+          <a href="mailto:hello@ulysholdings.com">Media inquiries</a>
+          <a href="crypto-glossary.html">Crypto glossary</a>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="index.html#fund">Fund</a>
+          <a href="index.html#trade">Trade</a>
+          <a href="index.html#hold">Non-custodial</a>
+          <a href="index.html#intelligence">AI assistant</a>
+          <a href="index.html#download">Download</a>
+        </div>
+        <div class="footer-col footer-social">
+          <h4>Follow</h4>
+          <p>Follow us for market moves, product drops &amp; more.</p>
+          <div class="footer-socials">
+            <a href="https://x.com/Ulys_AI" target="_blank" rel="noreferrer" aria-label="Ulys on X">${X}</a>
+            <a href="https://t.me/JoinUlysApp" target="_blank" rel="noreferrer" aria-label="Ulys on Telegram">${TG}</a>
+            <a href="https://discord.gg/ulysai" target="_blank" rel="noreferrer" aria-label="Ulys on Discord">${DC}</a>
+            <a href="https://www.reddit.com/r/UlysApp/" target="_blank" rel="noreferrer" aria-label="Ulys on Reddit">${RD}</a>
+            <a href="https://www.instagram.com/Ulys.ai" target="_blank" rel="noreferrer" aria-label="Ulys on Instagram">${IG}</a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-legal">The information provided on this website is for educational purposes only and is not investment advice. This is not an offer, a solicitation of an offer, or a recommendation to buy a particular crypto asset. Features and functionality shown are for illustrative purposes only and may be subject to change. We make no guarantees regarding the accuracy, completeness, or applicability of the content presented. Purchasing crypto assets carries a high level of risk, including price volatility, regulatory changes, and security threats. On-chain transactions are irreversible once confirmed, and errors may result in permanent loss. Any links to or use of third-party software through the website or the Ulys non custodial wallet are provided &ldquo;as is&rdquo; without warranty of any kind, either expressed or implied. As always, it is up to you to do your own research. *Updated 6/24/26, subject to change: Deposits via Topper are free up to $3,000 lifetime. After that, a fee applies on all amounts and payment methods.</p>
+      <div class="footer-bottom">
+        <span>© 2026 Ulys Holdings. All Rights Reserved.</span>
+        <span class="footer-policy"><a href="terms-of-service.html">Terms of Service</a><a href="privacy-policy.html">Privacy Policy</a><a href="trademark-disclaimer.html">Trademark Disclaimer</a></span>
+      </div>
+    </footer>`;
+
+  const navSlot = document.getElementById('site-nav');
+  const footSlot = document.getElementById('site-footer');
+  if (navSlot) navSlot.outerHTML = nav;
+  if (footSlot) footSlot.outerHTML = footer;
+})();
