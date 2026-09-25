@@ -268,7 +268,10 @@ void main() {
   const stepEl = document.getElementById('builderStep');
   const backBtn = document.getElementById('builderBack');
   const restartBtn = document.getElementById('builderRestart');
-  const scrollDown = () => { conv.scrollTop = conv.scrollHeight; };
+  const builderEl = document.getElementById('builder');
+  const botBubble = conv.querySelector('.app-bubble.bot');
+  const resetBtn = document.getElementById('appReset');
+  const scrollDown = () => {};
 
   function sentence() {
     let s = pick.action || '';
@@ -310,36 +313,26 @@ void main() {
 
   function finish() {
     updateBubble();
-    label.textContent = 'Order preview';
-    chips.innerHTML = '';
-    stepEl.textContent = '4 of 4';
-    backBtn.style.visibility = 'visible';
-    restartBtn.hidden = false;
     const nm = NAMES[pick.token] || pick.token || '';
     document.getElementById('ocTitle').textContent = `${pick.action || 'Buy'} ${nm} (${pick.token || ''})`;
     document.getElementById('ocAmount').textContent = pick.amount || '';
     document.getElementById('ocCond').textContent = pick.when || '';
+    if (builderEl) builderEl.hidden = true;   // chips give way to the order card
+    if (botBubble) botBubble.hidden = true;
     orderCard.hidden = false;
-    scrollDown();
   }
 
   function reset() {
     for (const k in pick) delete pick[k];
     stepIdx = 0;
     orderCard.hidden = true;
+    if (builderEl) builderEl.hidden = false;
+    if (botBubble) botBubble.hidden = false;
     updateBubble();
     renderStep();
   }
 
   backBtn.addEventListener('click', () => {
-    if (!orderCard.hidden) { // back out of the preview to the "When?" step
-      orderCard.hidden = true;
-      delete pick.when;
-      stepIdx = steps.length - 1;
-      updateBubble();
-      renderStep();
-      return;
-    }
     if (stepIdx === 0) return;
     delete pick[steps[stepIdx].key];
     stepIdx--;
@@ -347,7 +340,8 @@ void main() {
     updateBubble();
     renderStep();
   });
-  restartBtn.addEventListener('click', reset);
+  if (restartBtn) restartBtn.addEventListener('click', reset);
+  if (resetBtn) resetBtn.addEventListener('click', reset);
 
   renderStep();
 })();
