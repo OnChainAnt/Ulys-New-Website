@@ -437,3 +437,45 @@ img { max-width: 100%; display: block; }
 .ph-slider-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 42%; background: #14b8a6; border-radius: 999px; }
 .ph-knob { position: absolute; left: 42%; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: #fff; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
 .ph-btn { width: 100%; padding: 15px; border-radius: 16px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.55); border: none; font-family: inherit; font-size: 15px; font-weight: 600; cursor: default; }
+
+/* hero trust row — clean single inline line with subtle dividers */
+.command-hint.hero-trust {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0;
+  margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line);
+  width: 100%; max-width: 760px;
+}
+.hero-trust span {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.03em; text-transform: uppercase;
+  color: var(--muted); padding: 0; border-right: none; margin: 0; display: inline-flex; align-items: center;
+}
+.hero-trust span:not(:last-child)::after {
+  content: ""; width: 1px; height: 11px; background: var(--line); margin: 0 16px; display: inline-block;
+}
+.hero-trust i { display: none; }
+@media (max-width: 560px) { .hero-trust span:not(:last-child)::after { margin: 0 10px; } }
+
+/* ---- Softer, more blended brand gradient (gentler transitions) ---- */
+:root { --rainbow-blend: linear-gradient(90deg, #9a8fe6 0%, #6ea8ef 22%, #59c7cf 44%, #e9bf6a 63%, #efa0b0 81%, #e0828b 100%); }
+.hero-tagline .grad,
+.eyebrow, .page-header .eyebrow,
+.showcase h2 .grad {
+  background: var(--rainbow-blend);
+  background-size: 150% 100%;
+  background-position: 50% 50%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+/* soften the accent borders/toggles too */
+.command-bar { background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--rainbow-soft) border-box; }
+.tryit { border-image: var(--rainbow-soft) 1; }
+.faq summary i::before, .faq summary i::after { background: var(--rainbow-blend); }
+
+/* ---- Center the top hero ---- */
+.hero-inner { align-items: center; text-align: center; }
+.command { margin-left: auto; margin-right: auto; }
+.command-disclaimer { text-align: center; }
+.command-hint.hero-trust { justify-content: center; margin-left: auto; margin-right: auto; }
+.builder { align-items: center; }
+.builder-chips { justify-content: center; }
+.builder-nav { justify-content: center; }
+.order-card { margin-left: auto; margin-right: auto; }
+.hero-cta { justify-content: center; }
