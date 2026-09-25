@@ -6,17 +6,18 @@
 (function theme() {
   const root = document.documentElement;
   const KEY = 'ulys-theme';
+  // Editorial redesign: LIGHT is the default; toggle switches to a dark variant.
   function apply(t) {
-    if (t === 'light') root.setAttribute('data-theme', 'light');
+    if (t === 'dark') root.setAttribute('data-theme', 'dark');
     else root.removeAttribute('data-theme');
   }
   // sync with any stored preference (init script already ran in <head>)
-  try { apply(localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'); } catch (e) { /* ignore */ }
+  try { apply(localStorage.getItem(KEY) === 'dark' ? 'dark' : 'light'); } catch (e) { /* ignore */ }
   // the toggle may be injected by partials.js, so bind on any click
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('#themeToggle');
     if (!btn) return;
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     apply(next);
     try { localStorage.setItem(KEY, next); } catch (err) { /* ignore */ }
   });
