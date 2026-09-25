@@ -244,56 +244,144 @@ void main() {
   }
 })();
 
-/* ---- Typing animation for the AI command bar ---- */
-(function typewriter() {
+/* ---- AI command bar: rotating examples + interactive order builder ---- */
+(function commandBar() {
   const el = document.getElementById('typed');
   if (!el) return;
 
-  const prompts = [
-    'Deposit $500 to my wallet',
-    'Buy $100 of ETH',
-    "What's trending today?",
-    'Swap half my SOL for BTC',
-    'Show me my best performer',
-    'Send 0.1 BTC to a friend',
-  ];
+  const idle = document.getElementById('commandIdle');
+  const builder = document.getElementById('builder');
+  const orderCard = document.getElementById('orderCard');
+  const tryBtn = document.getElementById('tryIt');
+  const caret = document.querySelector('.caret');
+  const cmd = document.getElementById('command');
+  const send = document.getElementById('commandSend');
 
-  let p = 0, i = 0, deleting = false;
+  // ----- idle: rotating conditional-order examples -----
+  const examples = [
+    'Buy $50 of ETH if the Clarity Act passes by end of 2026',
+    'Buy $250 of PENGU if SpaceX lands on Mars by 2027',
+    'Buy $100 of BTC when it drops 8%',
+    'Buy $15 of SOL every Friday',
+  ];
+  let p = 0, i = 0, deleting = false, typingTimer = null, typingOn = true;
 
   function tick() {
-    const word = prompts[p];
+    if (!typingOn) return;
+    const word = examples[p];
     if (!deleting) {
       el.textContent = word.slice(0, ++i);
-      if (i === word.length) {
-        deleting = true;
-        return setTimeout(tick, 1900);
-      }
+      if (i === word.length) { deleting = true; typingTimer = setTimeout(tick, 2200); return; }
     } else {
       el.textContent = word.slice(0, --i);
-      if (i === 0) {
-        deleting = false;
-        p = (p + 1) % prompts.length;
-      }
+      if (i === 0) { deleting = false; p = (p + 1) % examples.length; }
     }
-    setTimeout(tick, deleting ? 32 : 60 + Math.random() * 40);
+    typingTimer = setTimeout(tick, deleting ? 24 : 46 + Math.random() * 34);
   }
+  function stopTyping() { typingOn = false; clearTimeout(typingTimer); if (caret) caret.style.display = 'none'; }
+  function startTyping() { typingOn = true; if (caret) caret.style.display = ''; i = 0; deleting = false; el.textContent = ''; tick(); }
   tick();
 
-  // Clicking a suggestion chip loads it into the bar
-  document.querySelectorAll('.chip').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const text = chip.dataset.prompt || chip.textContent;
-      document.getElementById('command').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // temporarily hijack the typewriter to show the chosen prompt
-      el.textContent = '';
-      let j = 0;
-      const type = () => {
-        el.textContent = text.slice(0, ++j);
-        if (j < text.length) setTimeout(type, 45);
-      };
-      type();
+  // ----- interactive builder -----
+  const NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', PENGU: 'Pengu', SPCX: 'SpaceX' };
+  const steps = [
+    { key: 'action', label: 'Do what?', options: [
+      { v: 'Buy', dot: '#0be0ed' }, { v: 'Sell', dot: '#f0322e' } ] },
+    { key: 'token', label: 'With what?', options: ['BTC', 'ETH', 'SOL', 'PENGU', 'SPCX'].map((v) => ({ v })) },
+    { key: 'amount', label: 'How much?', options: ['$15', '$50', '$100', '$250', '$500'].map((v) => ({ v })) },
+    { key: 'when', label: 'When?', options: [
+      'when it drops 8%', 'if the Clarity Act passes by end of 2026', 'every Friday', 'if SpaceX lands on Mars by 2027' ].map((v) => ({ v })) },
+  ];
+  const pick = {};
+  let stepIdx = 0;
+
+  const label = document.getElementById('builderLabel');
+  const chips = document.getElementById('builderChips');
+  const stepEl = document.getElementById('builderStep');
+  const backBtn = document.getElementById('builderBack');
+  const restartBtn = document.getElementById('builderRestart');
+
+  function sentence() {
+    let s = pick.action || '';
+    if (pick.amount) s += ` ${pick.amount} of`;
+    if (pick.token) s += ` ${pick.token}`;
+    if (pick.when) s += ` ${pick.when}`;
+    return s.trim();
+  }
+
+  function renderStep() {
+    const step = steps[stepIdx];
+    label.textContent = step.label;
+    stepEl.textContent = `${stepIdx + 1} of 4`;
+    backBtn.style.visibility = stepIdx === 0 ? 'hidden' : 'visible';
+    chips.innerHTML = '';
+    step.options.forEach((opt) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'builder-chip';
+      b.innerHTML = opt.dot ? `<span class="chip-dot" style="background:${opt.dot}"></span>${opt.v}` : opt.v;
+      b.addEventListener('click', () => choose(opt.v));
+      chips.appendChild(b);
     });
+  }
+
+  function choose(v) {
+    pick[steps[stepIdx].key] = v;
+    el.textContent = sentence();
+    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
+    else finish();
+  }
+
+  function enterBuilder() {
+    stopTyping();
+    for (const k in pick) delete pick[k];
+    stepIdx = 0;
+    el.textContent = '';
+    idle.hidden = true;
+    orderCard.hidden = true;
+    builder.hidden = false;
+    restartBtn.hidden = true;
+    tryBtn.classList.add('is-active');
+    renderStep();
+    cmd.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function finish() {
+    el.textContent = sentence();
+    label.textContent = 'Ready when you are.';
+    chips.innerHTML = '';
+    stepEl.textContent = '4 of 4';
+    backBtn.style.visibility = 'visible';
+    restartBtn.hidden = false;
+    // fill + show the summary card
+    document.getElementById('ocLabel').textContent = `${(pick.action || 'Buy').toUpperCase()} ${(NAMES[pick.token] || pick.token || '').toUpperCase()}`;
+    document.getElementById('ocAmount').textContent = pick.amount || '';
+    document.getElementById('ocCond').textContent = (pick.when || '').replace(/^if /, '').replace(/^when /, '');
+    document.getElementById('ocToken').textContent = pick.token || '';
+    orderCard.hidden = false;
+  }
+
+  function exitBuilder() {
+    builder.hidden = true;
+    orderCard.hidden = true;
+    idle.hidden = false;
+    tryBtn.classList.remove('is-active');
+    startTyping();
+  }
+
+  backBtn.addEventListener('click', () => {
+    orderCard.hidden = true;
+    if (stepIdx === 0) { exitBuilder(); return; }
+    delete pick[steps[stepIdx].key];
+    stepIdx--;
+    delete pick[steps[stepIdx].key];
+    el.textContent = sentence();
+    restartBtn.hidden = true;
+    renderStep();
   });
+  restartBtn.addEventListener('click', enterBuilder);
+  tryBtn.addEventListener('click', () => (builder.hidden ? enterBuilder() : exitBuilder()));
+  if (send) send.addEventListener('click', () => { if (builder.hidden) enterBuilder(); });
 })();
 
 /* ---- Scroll reveal ---- */

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=19" />
+  <link rel="stylesheet" href="styles.css?v=20" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
 </head>
 <body>
@@ -56,9 +56,11 @@
       <div class="hero-inner">
         <svg viewBox="0 0 383 186" class="hero-wordmark reveal" role="img" aria-label="Ulys"><path d="M369.886 129.09c-6.741 0-12.206 5.465-12.206 12.207 0 6.74 5.465 12.205 12.206 12.205 6.742 0 12.207-5.465 12.207-12.205 0-6.742-5.465-12.207-12.207-12.207ZM101.324 39.816l-.02.255v31.035c-3.896-2.274-5.979-4.078-6.327-4.39-11.082-11.103-15.453-17.878-13.845-30.84l.032-.151.02-.343c.057-.494.516-3.942 2.295-7.034 1.834-3.19 4.148-4.49 7.988-4.49 3.616 0 5.132 1.103 6.048 2.063 3.198 3.353 3.945 10.772 3.809 13.895Zm38.125 42.31c-5.286-.45-10.05-1.201-14.288-2.12V40.801c.144-3.383.271-20.028-10.244-31.199-5.913-6.281-14.022-9.601-23.45-9.601C78.605 0 68.205 6.24 62.18 17.569c-3.701 6.961-4.57 13.648-4.752 15.59-2.958 24.487 8.662 38.41 20.823 50.571l.092.092c.655.639 6.733 6.408 18.693 11.919 1.274.587 2.564 1.15 3.872 1.688-1.265 9.255-5.577 16.945-12.861 22.917-8.577 7.034-18.78 9.539-25.467 9.539-9.342 0-17.182-3.432-25.421-11.129-12.275-11.467-13.303-24.823-13.303-36.443V8.046H0v74.267c0 16.998 2.48 36.693 20.873 53.876 12.643 11.812 26.286 17.553 41.708 17.553 14.003 0 29.178-5.588 40.594-14.948 10.918-8.952 18.061-20.98 20.766-34.668 4.995.922 10.171 1.564 15.508 1.936v44.416h24.59V7.552h-24.59v74.574ZM245.085 47.893l-16.328 47.643c-4.226 12.487-8.837 31.889-8.837 31.889h-.384s-4.227-19.21-8.645-31.889l-16.906-47.643h-25.934l35.348 89.138c2.113 5.57 1.152 15.176 1.152 17.097-2.112 8.26-6.724 11.335-14.984 11.335-2.496 0-9.222-.386-10.182-.962h-1.345v19.788c1.729.576 14.793 1.152 17.867 1.152 16.713 0 25.549-6.532 34.002-29.2l39.766-108.348h-24.59ZM316.301 87.66c-15.562-2.882-26.127-4.611-26.127-13.64 0-7.109 5.956-12.295 17.291-12.295 12.101 0 18.633 4.802 20.362 13.64h23.246c-2.499-17.867-16.138-30.162-43.416-30.162-24.014 0-40.535 11.143-40.535 30.546 0 23.245 18.251 27.662 37.46 31.506 16.137 3.072 26.512 4.993 26.512 15.176 0 8.26-6.34 14.023-19.788 14.023-13.063 0-22.476-5.187-24.397-17.482h-23.436c1.536 20.747 18.441 34.771 47.641 34.771 25.359 0 43.8-11.333 43.8-32.851 0-24.971-19.211-29.582-38.613-33.233Z"></path></svg>
 
-        <h1 class="hero-tagline reveal">Already <span class="grad">there.</span></h1>
+        <h1 class="hero-tagline reveal">Turn "what if" into<br /><span class="grad">"already there"</span></h1>
 
-        <!-- The centerpiece: AI command bar -->
+        <button class="tryit reveal" id="tryIt" type="button">Try it <span aria-hidden="true">↓</span></button>
+
+        <!-- The centerpiece: AI command bar + interactive order builder -->
         <div class="command reveal" id="command">
           <div class="command-input">
             <div class="command-glow" aria-hidden="true"></div>
@@ -66,13 +68,39 @@
               <div class="command-text">
                 <span id="typed"></span><span class="caret" aria-hidden="true"></span>
               </div>
-              <button class="command-send" aria-label="Send to Ulys">
+              <button class="command-send" id="commandSend" aria-label="Send to Ulys">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
           </div>
-          <div class="command-hint hero-trust">
-            <span>Non-custodial</span><i></i><span>Every token &amp; chain</span><i></i><span>Conditional Orders</span><i></i><span>A prompt away</span>
+
+          <!-- idle: rotating example + disclaimer + trust tags -->
+          <div class="command-idle" id="commandIdle">
+            <p class="command-disclaimer">Illustrative only. No orders placed, no live pricing.</p>
+            <div class="command-hint hero-trust">
+              <span>Non-custodial</span><i></i><span>Every token &amp; chain</span><i></i><span>Conditional Orders</span><i></i><span>A prompt away</span>
+            </div>
+          </div>
+
+          <!-- builder: 4-step wizard (hidden until "Try it") -->
+          <div class="builder" id="builder" hidden>
+            <p class="builder-label" id="builderLabel">Do what?</p>
+            <div class="builder-chips" id="builderChips"></div>
+            <div class="builder-nav">
+              <button type="button" class="builder-back" id="builderBack">← Back</button>
+              <span class="builder-step" id="builderStep">1 of 4</span>
+              <button type="button" class="builder-restart" id="builderRestart" hidden>Start over ↺</button>
+            </div>
+          </div>
+
+          <!-- completion: order summary card (hidden until step 4 done) -->
+          <div class="order-card" id="orderCard" hidden>
+            <p class="order-card-label" id="ocLabel">BUY ETHEREUM</p>
+            <p class="order-card-amount" id="ocAmount">$50</p>
+            <p class="order-card-cond" id="ocCond">Clarity Act passes by end of 2026</p>
+            <div class="order-card-row">
+              <span>Trigger</span><span id="ocToken">ETH</span>
+            </div>
           </div>
         </div>
 
@@ -82,13 +110,25 @@
       </div>
     </section>
 
-    <!-- Token ticker -->
+    <!-- Token ticker (two identical groups → seamless infinite loop) -->
     <section class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-        <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-        <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-        <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+        <div class="ticker-group">
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+        </div>
+        <div class="ticker-group">
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+        </div>
       </div>
     </section>
 
@@ -259,6 +299,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=17"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>
