@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=34" />
+  <link rel="stylesheet" href="styles.css?v=35" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -60,14 +60,77 @@
 
         <p class="tryit-label reveal"><span class="dot"></span> Smart orders, live in the Ulys app</p>
 
-        <!-- The centerpiece: the real app running the smart-order flow -->
+        <!-- The centerpiece: a faithful, interactive rebuild of the app's smart-order flow -->
         <div class="app-demo reveal" id="command">
           <div class="iphone">
             <div class="iphone-screen">
-              <video class="app-video" src="assets/smartorder-demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="A smart order being built in the Ulys app"></video>
+              <div class="uapp" id="uapp">
+                <div class="uapp-status">
+                  <span>9:41</span>
+                  <span class="uapp-sys">
+                    <svg viewBox="0 0 18 12" width="17" height="11"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 16 12" width="15" height="11"><path d="M8 2C5 2 2.5 3.2 1 5l1.4 1.4C3.6 5 5.7 4 8 4s4.4 1 5.6 2.4L15 5C13.5 3.2 11 2 8 2z" fill="currentColor"/><circle cx="8" cy="9.5" r="1.3" fill="currentColor"/></svg>
+                    <svg viewBox="0 0 26 12" width="24" height="11"><rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg>
+                  </span>
+                </div>
+                <button class="uapp-x" id="uappX" type="button" aria-label="Close">
+                  <svg viewBox="0 0 24 24" width="15" height="15"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+
+                <!-- Screen 1: composer -->
+                <section class="uapp-compose" id="scCompose">
+                  <p class="uapp-hint" id="composeHint">Type any asset to buy</p>
+                  <div class="uapp-assets" id="assetRow">
+                    <button class="uasset" type="button" data-name="Bitcoin" data-sym="BTC"><span class="ucoin" style="background:#f7931a">₿</span>Bitcoin</button>
+                    <button class="uasset" type="button" data-name="Ethereum" data-sym="ETH"><span class="ucoin" style="background:#4b5563">◆</span>Ethereum</button>
+                    <button class="uasset" type="button" data-name="Solana" data-sym="SOL"><span class="ucoin" style="background:#14b8a6">◎</span>Solana</button>
+                  </div>
+                  <div class="uapp-suggest" id="suggestRow"></div>
+                  <div class="uapp-inputwrap">
+                    <div class="uapp-input"><span id="composeText">Buy </span><span class="ucaret"></span></div>
+                    <div class="uapp-inputrow">
+                      <span class="uapp-ava"><svg viewBox="0 0 383 186" fill="#111"><path d="M139.449 82.126c-5.286-.45-10.05-1.201-14.288-2.12V40.801c.144-3.383.271-20.028-10.244-31.199-5.913-6.281-14.022-9.601-23.45-9.601C78.605 0 68.205 6.24 62.18 17.569c-3.701 6.961-4.57 13.648-4.752 15.59-2.958 24.487 8.662 38.41 20.823 50.571l.092.092c.655.639 6.733 6.408 18.693 11.919 1.274.587 2.564 1.15 3.872 1.688-1.265 9.255-5.577 16.945-12.861 22.917-8.577 7.034-18.78 9.539-25.467 9.539-9.342 0-17.182-3.432-25.421-11.129-12.275-11.467-13.303-24.823-13.303-36.443V8.046H0v74.267c0 16.998 2.48 36.693 20.873 53.876 12.643 11.812 26.286 17.553 41.708 17.553 14.003 0 29.178-5.588 40.594-14.948 10.918-8.952 18.061-20.98 20.766-34.668 4.995.922 10.171 1.564 15.508 1.936v44.416h24.59V7.552h-24.59v74.574Z"/></svg></span>
+                      <span class="uapp-drop">Ulys ▾</span>
+                      <button class="uapp-send" id="composeSend" type="button" aria-label="Send">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 20V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Screen 2: order card -->
+                <section class="uapp-card" id="scCard" hidden>
+                  <p class="oc-title" id="cTitle">Buy Bitcoin (BTC)</p>
+                  <p class="oc-amount" id="cAmount">$100</p>
+                  <p class="oc-cond" id="cCond">if Clarity Act (H.R.3633) signed into law in 2026</p>
+                  <div class="oc-div"></div>
+                  <div class="oc-toggle" id="cToggle"><button type="button" class="on" data-t="odds">Odds</button><button type="button" data-t="event">Event</button></div>
+                  <p class="oc-odds">Currently at <strong id="cCurrent">6%</strong><br />Buy when odds reach <strong id="cReach">10%</strong></p>
+                  <div class="oc-slider" id="cSlider"><div class="oc-track"></div><div class="oc-fill" id="cFill"></div><div class="oc-knob" id="cKnob"></div></div>
+                  <div class="oc-confirm" id="cConfirm">
+                    <div class="oc-puck" id="cPuck"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 12h14M13 6l6 6-6 6" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+                    <span class="oc-confirm-text" id="cConfirmText">Slide to confirm</span>
+                  </div>
+                  <button class="oc-cancel" id="cCancel" type="button">Cancel</button>
+                </section>
+
+                <!-- Screen 3: confirmed -->
+                <section class="uapp-done" id="scDone" hidden>
+                  <p class="oc-title" id="dTitle">Buy Bitcoin (BTC)</p>
+                  <p class="oc-amount" id="dAmount">$100</p>
+                  <p class="oc-cond" id="dCond">if Clarity Act (H.R.3633) signed into law in 2026</p>
+                  <div class="oc-rows">
+                    <div><span>Odds when placed</span><span id="dPlaced">6%</span></div>
+                    <div><span>Odds now</span><span>6%</span></div>
+                    <div><span>Trigger</span><span id="dTrigger">10%</span></div>
+                  </div>
+                  <p class="oc-allset"><span class="oc-dot"></span> All set. You can monitor progress here anytime.</p>
+                  <button class="oc-view" id="dReset" type="button">Build another</button>
+                </section>
+              </div>
             </div>
           </div>
-          <p class="command-disclaimer">Actual app recording. Illustrative only — no live pricing.</p>
+          <p class="command-disclaimer">A faithful demo of the Ulys app. Illustrative only — no live pricing.</p>
           <div class="command-hint hero-trust">
             <span>Non-custodial</span><i></i><span>Every token &amp; chain</span><i></i><span>Conditional Orders</span><i></i><span>A prompt away</span>
           </div>
@@ -287,6 +350,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=33"></script>
+  <script src="app.js?v=35"></script>
 </body>
 </html>

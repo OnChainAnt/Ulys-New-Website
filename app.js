@@ -245,106 +245,146 @@ void main() {
   }
 })();
 
-/* ---- Interactive order builder, live inside the iPhone app ---- */
-(function appDemo() {
-  const conv = document.getElementById('appConv');
-  const el = document.getElementById('typed');
-  const userBubble = document.getElementById('userBubble');
-  const orderCard = document.getElementById('orderCard');
-  if (!conv || !el) return;
+/* ---- Faithful, interactive rebuild of the Ulys smart-order flow ---- */
+(function uapp() {
+  const root = document.getElementById('uapp');
+  if (!root) return;
+  const $ = (id) => document.getElementById(id);
+  const scCompose = $('scCompose'), scCard = $('scCard'), scDone = $('scDone');
+  const composeText = $('composeText'), assetRow = $('assetRow'), suggestRow = $('suggestRow');
+  const sendBtn = $('composeSend'), hint = $('composeHint');
 
-  const NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', PENGU: 'Pengu', SPCX: 'SpaceX' };
-  const steps = [
-    { key: 'action', label: 'Do what?', options: [{ v: 'Buy', dot: '#0be0ed' }, { v: 'Sell', dot: '#f0322e' }] },
-    { key: 'token', label: 'With what?', options: ['BTC', 'ETH', 'SOL', 'PENGU', 'SPCX'].map((v) => ({ v })) },
-    { key: 'amount', label: 'How much?', options: ['$15', '$50', '$100', '$250', '$500'].map((v) => ({ v })) },
-    { key: 'when', label: 'When?', options: ['when it drops 8%', 'if the Clarity Act passes by end of 2026', 'every Friday', 'if SpaceX lands on Mars by 2027'].map((v) => ({ v })) },
+  const AMOUNTS = ['$15', '$50', '$100', '$250', '$500'];
+  const CONDS = [
+    { t: 'Clarity Act (H.R.3633) signed into law in 2026', o: 6 },
+    { t: 'Bitcoin reaches $150,000 by Dec 31, 2026', o: 12 },
+    { t: 'Fed cuts rates before March 2026', o: 41 },
+    { t: 'SpaceX lands on Mars by 2027', o: 3 },
   ];
-  const pick = {};
-  let stepIdx = 0;
+  const order = { name: '', sym: '', amount: '', cond: '', odds: 6, reach: 10, mode: 'odds' };
+  let stage = 'asset';
 
-  const label = document.getElementById('builderLabel');
-  const chips = document.getElementById('builderChips');
-  const stepEl = document.getElementById('builderStep');
-  const backBtn = document.getElementById('builderBack');
-  const restartBtn = document.getElementById('builderRestart');
-  const builderEl = document.getElementById('builder');
-  const botBubble = conv.querySelector('.app-bubble.bot');
-  const resetBtn = document.getElementById('appReset');
-  const scrollDown = () => {};
-
-  function sentence() {
-    let s = pick.action || '';
-    if (pick.amount) s += ` ${pick.amount} of`;
-    if (pick.token) s += ` ${pick.token}`;
-    if (pick.when) s += ` ${pick.when}`;
-    return s.trim();
-  }
-  function updateBubble() {
-    const s = sentence();
-    if (s) { userBubble.hidden = false; el.textContent = s; }
-    else { userBubble.hidden = true; el.textContent = ''; }
-    scrollDown();
-  }
-
-  function renderStep() {
-    const step = steps[stepIdx];
-    label.textContent = step.label;
-    stepEl.textContent = `${stepIdx + 1} of 4`;
-    backBtn.style.visibility = stepIdx === 0 ? 'hidden' : 'visible';
-    restartBtn.hidden = true;
-    chips.innerHTML = '';
-    step.options.forEach((opt) => {
+  const clearSuggest = () => { suggestRow.innerHTML = ''; suggestRow.className = 'uapp-suggest'; };
+  function chipRow(items, fn) {
+    clearSuggest(); suggestRow.className = 'uapp-suggest row';
+    items.forEach((it) => {
       const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'builder-chip';
-      b.innerHTML = opt.dot ? `<span class="chip-dot" style="background:${opt.dot}"></span>${opt.v}` : opt.v;
-      b.addEventListener('click', () => choose(opt.v));
-      chips.appendChild(b);
+      b.type = 'button'; b.className = 'uasset'; b.textContent = it;
+      b.addEventListener('click', () => fn(it));
+      suggestRow.appendChild(b);
     });
   }
+  function condList() {
+    clearSuggest();
+    CONDS.forEach((c) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'usuggest';
+      b.innerHTML = `<span>${c.t}</span><span class="odds">${c.o}% odds</span>`;
+      b.addEventListener('click', () => pickCond(c));
+      suggestRow.appendChild(b);
+    });
+  }
+  const setText = () => {
+    let s = 'Buy ';
+    if (order.name) s += order.name + ' ';
+    if (order.amount) s += order.amount + ' ';
+    if (order.cond) s += 'if ' + order.cond;
+    composeText.textContent = s;
+  };
 
-  function choose(v) {
-    pick[steps[stepIdx].key] = v;
-    updateBubble();
-    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
-    else finish();
+  // step 1: asset
+  assetRow.querySelectorAll('.uasset').forEach((b) => b.addEventListener('click', () => {
+    order.name = b.dataset.name; order.sym = b.dataset.sym; setText();
+    hint.textContent = 'How much?'; stage = 'amount';
+    chipRow(AMOUNTS, (a) => { order.amount = a; setText(); hint.textContent = 'Add a condition — when should it run?'; stage = 'cond'; condList(); });
+  }));
+  function pickCond(c) {
+    order.cond = c.t; order.odds = c.o; order.reach = Math.min(99, c.o + 4);
+    setText(); clearSuggest(); hint.textContent = 'Looks good — send it'; stage = 'ready';
+    sendBtn.classList.add('active');
   }
 
-  function finish() {
-    updateBubble();
-    const nm = NAMES[pick.token] || pick.token || '';
-    document.getElementById('ocTitle').textContent = `${pick.action || 'Buy'} ${nm} (${pick.token || ''})`;
-    document.getElementById('ocAmount').textContent = pick.amount || '';
-    document.getElementById('ocCond').textContent = pick.when || '';
-    if (builderEl) builderEl.hidden = true;   // chips give way to the order card
-    if (botBubble) botBubble.hidden = true;
-    orderCard.hidden = false;
-  }
+  sendBtn.addEventListener('click', () => { if (stage === 'ready') openCard(); });
 
-  function reset() {
-    for (const k in pick) delete pick[k];
-    stepIdx = 0;
-    orderCard.hidden = true;
-    if (builderEl) builderEl.hidden = false;
-    if (botBubble) botBubble.hidden = false;
-    updateBubble();
-    renderStep();
+  // ---- order card ----
+  const cReach = $('cReach'), cCurrent = $('cCurrent'), cFill = $('cFill'), cKnob = $('cKnob'), cSlider = $('cSlider');
+  const cOdds = document.querySelector('.oc-odds');
+  function openCard() {
+    $('cTitle').textContent = `Buy ${order.name} (${order.sym})`;
+    $('cAmount').textContent = order.amount;
+    $('cCond').textContent = 'if ' + order.cond;
+    cCurrent.textContent = order.odds + '%';
+    setReach(order.reach);
+    scCompose.hidden = true; scDone.hidden = true; scCard.hidden = false;
+    resetPuck();
   }
+  function setReach(v) {
+    order.reach = Math.max(1, Math.min(99, Math.round(v)));
+    cReach.textContent = order.reach + '%';
+    cFill.style.width = order.reach + '%';
+    cKnob.style.left = order.reach + '%';
+  }
+  function sliderFromX(clientX) {
+    const r = cSlider.getBoundingClientRect();
+    setReach(((clientX - r.left) / r.width) * 100);
+  }
+  let sliding = false;
+  cSlider.addEventListener('pointerdown', (e) => { if (order.mode !== 'odds') return; sliding = true; cSlider.setPointerCapture(e.pointerId); sliderFromX(e.clientX); });
+  cSlider.addEventListener('pointermove', (e) => { if (sliding) sliderFromX(e.clientX); });
+  cSlider.addEventListener('pointerup', () => { sliding = false; });
 
-  backBtn.addEventListener('click', () => {
-    if (stepIdx === 0) return;
-    delete pick[steps[stepIdx].key];
-    stepIdx--;
-    delete pick[steps[stepIdx].key];
-    updateBubble();
-    renderStep();
+  // Odds / Event toggle
+  $('cToggle').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    $('cToggle').querySelectorAll('button').forEach((x) => x.classList.remove('on'));
+    b.classList.add('on'); order.mode = b.dataset.t;
+    if (order.mode === 'event') {
+      cSlider.style.display = 'none';
+      cOdds.innerHTML = 'Buy the moment it becomes <strong>official</strong><br />Resolved by the event source';
+    } else {
+      cSlider.style.display = '';
+      cOdds.innerHTML = `Currently at <strong id="cCurrent">${order.odds}%</strong><br />Buy when odds reach <strong id="cReach">${order.reach}%</strong>`;
+    }
+  }));
+
+  // slide to confirm
+  const cConfirm = $('cConfirm'), cPuck = $('cPuck'), cConfirmText = $('cConfirmText');
+  let dragging = false, startX = 0, puckX = 0, maxX = 0;
+  function resetPuck() { cPuck.style.transition = ''; cPuck.style.transform = 'translateX(0)'; cConfirmText.style.opacity = '1'; puckX = 0; }
+  cPuck.addEventListener('pointerdown', (e) => { dragging = true; startX = e.clientX; maxX = cConfirm.clientWidth - cPuck.offsetWidth - 8; cPuck.style.transition = 'none'; cPuck.setPointerCapture(e.pointerId); });
+  cPuck.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    puckX = Math.max(0, Math.min(maxX, e.clientX - startX));
+    cPuck.style.transform = `translateX(${puckX}px)`;
+    cConfirmText.style.opacity = String(1 - puckX / maxX);
   });
-  if (restartBtn) restartBtn.addEventListener('click', reset);
-  if (resetBtn) resetBtn.addEventListener('click', reset);
+  cPuck.addEventListener('pointerup', () => {
+    dragging = false;
+    if (puckX > maxX * 0.82) { cPuck.style.transition = 'transform .18s'; cPuck.style.transform = `translateX(${maxX}px)`; confirm(); }
+    else { cPuck.style.transition = 'transform .25s'; resetPuck(); }
+  });
 
-  renderStep();
+  function confirm() {
+    $('dTitle').textContent = `Buy ${order.name} (${order.sym})`;
+    $('dAmount').textContent = order.amount;
+    $('dCond').textContent = 'if ' + order.cond;
+    $('dPlaced').textContent = order.odds + '%';
+    $('dTrigger').textContent = order.reach + '%';
+    setTimeout(() => { scCard.hidden = true; scDone.hidden = false; }, 220);
+  }
+
+  function resetAll() {
+    order.name = ''; order.sym = ''; order.amount = ''; order.cond = ''; order.mode = 'odds';
+    stage = 'asset'; hint.textContent = 'Type any asset to buy';
+    clearSuggest(); setText(); sendBtn.classList.remove('active');
+    scCard.hidden = true; scDone.hidden = true; scCompose.hidden = false;
+  }
+  $('cCancel').addEventListener('click', resetAll);
+  $('dReset').addEventListener('click', resetAll);
+  $('uappX').addEventListener('click', resetAll);
+
+  resetAll();
 })();
+
 
 /* ---- Scroll reveal ---- */
 (function reveal() {
