@@ -245,53 +245,20 @@ void main() {
   }
 })();
 
-/* ---- AI command bar: rotating examples + interactive order builder ---- */
-(function commandBar() {
+/* ---- Interactive order builder, live inside the iPhone app ---- */
+(function appDemo() {
+  const conv = document.getElementById('appConv');
   const el = document.getElementById('typed');
-  if (!el) return;
-
-  const idle = document.getElementById('commandIdle');
-  const builder = document.getElementById('builder');
+  const userBubble = document.getElementById('userBubble');
   const orderCard = document.getElementById('orderCard');
-  const tryBtn = document.getElementById('tryIt');
-  const caret = document.querySelector('.caret');
-  const cmd = document.getElementById('command');
-  const send = document.getElementById('commandSend');
+  if (!conv || !el) return;
 
-  // ----- idle: rotating conditional-order examples -----
-  const examples = [
-    'Buy $50 of ETH if the Clarity Act passes by end of 2026',
-    'Buy $250 of PENGU if SpaceX lands on Mars by 2027',
-    'Buy $100 of BTC when it drops 8%',
-    'Buy $15 of SOL every Friday',
-  ];
-  let p = 0, i = 0, deleting = false, typingTimer = null, typingOn = true;
-
-  function tick() {
-    if (!typingOn) return;
-    const word = examples[p];
-    if (!deleting) {
-      el.textContent = word.slice(0, ++i);
-      if (i === word.length) { deleting = true; typingTimer = setTimeout(tick, 2200); return; }
-    } else {
-      el.textContent = word.slice(0, --i);
-      if (i === 0) { deleting = false; p = (p + 1) % examples.length; }
-    }
-    typingTimer = setTimeout(tick, deleting ? 24 : 46 + Math.random() * 34);
-  }
-  function stopTyping() { typingOn = false; clearTimeout(typingTimer); if (caret) caret.style.display = 'none'; }
-  function startTyping() { typingOn = true; if (caret) caret.style.display = ''; i = 0; deleting = false; el.textContent = ''; tick(); }
-  tick();
-
-  // ----- interactive builder -----
   const NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', PENGU: 'Pengu', SPCX: 'SpaceX' };
   const steps = [
-    { key: 'action', label: 'Do what?', options: [
-      { v: 'Buy', dot: '#0be0ed' }, { v: 'Sell', dot: '#f0322e' } ] },
+    { key: 'action', label: 'Do what?', options: [{ v: 'Buy', dot: '#0be0ed' }, { v: 'Sell', dot: '#f0322e' }] },
     { key: 'token', label: 'With what?', options: ['BTC', 'ETH', 'SOL', 'PENGU', 'SPCX'].map((v) => ({ v })) },
     { key: 'amount', label: 'How much?', options: ['$15', '$50', '$100', '$250', '$500'].map((v) => ({ v })) },
-    { key: 'when', label: 'When?', options: [
-      'when it drops 8%', 'if the Clarity Act passes by end of 2026', 'every Friday', 'if SpaceX lands on Mars by 2027' ].map((v) => ({ v })) },
+    { key: 'when', label: 'When?', options: ['when it drops 8%', 'if the Clarity Act passes by end of 2026', 'every Friday', 'if SpaceX lands on Mars by 2027'].map((v) => ({ v })) },
   ];
   const pick = {};
   let stepIdx = 0;
@@ -301,6 +268,7 @@ void main() {
   const stepEl = document.getElementById('builderStep');
   const backBtn = document.getElementById('builderBack');
   const restartBtn = document.getElementById('builderRestart');
+  const scrollDown = () => { conv.scrollTop = conv.scrollHeight; };
 
   function sentence() {
     let s = pick.action || '';
@@ -309,12 +277,19 @@ void main() {
     if (pick.when) s += ` ${pick.when}`;
     return s.trim();
   }
+  function updateBubble() {
+    const s = sentence();
+    if (s) { userBubble.hidden = false; el.textContent = s; }
+    else { userBubble.hidden = true; el.textContent = ''; }
+    scrollDown();
+  }
 
   function renderStep() {
     const step = steps[stepIdx];
     label.textContent = step.label;
     stepEl.textContent = `${stepIdx + 1} of 4`;
     backBtn.style.visibility = stepIdx === 0 ? 'hidden' : 'visible';
+    restartBtn.hidden = true;
     chips.innerHTML = '';
     step.options.forEach((opt) => {
       const b = document.createElement('button');
@@ -328,61 +303,53 @@ void main() {
 
   function choose(v) {
     pick[steps[stepIdx].key] = v;
-    el.textContent = sentence();
+    updateBubble();
     if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
     else finish();
   }
 
-  function enterBuilder() {
-    stopTyping();
-    for (const k in pick) delete pick[k];
-    stepIdx = 0;
-    el.textContent = '';
-    idle.hidden = true;
-    orderCard.hidden = true;
-    builder.hidden = false;
-    restartBtn.hidden = true;
-    tryBtn.classList.add('is-active');
-    renderStep();
-    cmd.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
   function finish() {
-    el.textContent = sentence();
-    label.textContent = 'Ready when you are.';
+    updateBubble();
+    label.textContent = 'Order preview';
     chips.innerHTML = '';
     stepEl.textContent = '4 of 4';
     backBtn.style.visibility = 'visible';
     restartBtn.hidden = false;
-    // fill + show the summary card
-    document.getElementById('ocLabel').textContent = `${(pick.action || 'Buy').toUpperCase()} ${(NAMES[pick.token] || pick.token || '').toUpperCase()}`;
+    const nm = NAMES[pick.token] || pick.token || '';
+    document.getElementById('ocTitle').textContent = `${pick.action || 'Buy'} ${nm} (${pick.token || ''})`;
     document.getElementById('ocAmount').textContent = pick.amount || '';
-    document.getElementById('ocCond').textContent = (pick.when || '').replace(/^if /, '').replace(/^when /, '');
-    document.getElementById('ocToken').textContent = pick.token || '';
+    document.getElementById('ocCond').textContent = pick.when || '';
     orderCard.hidden = false;
+    scrollDown();
   }
 
-  function exitBuilder() {
-    builder.hidden = true;
+  function reset() {
+    for (const k in pick) delete pick[k];
+    stepIdx = 0;
     orderCard.hidden = true;
-    idle.hidden = false;
-    tryBtn.classList.remove('is-active');
-    startTyping();
+    updateBubble();
+    renderStep();
   }
 
   backBtn.addEventListener('click', () => {
-    orderCard.hidden = true;
-    if (stepIdx === 0) { exitBuilder(); return; }
+    if (!orderCard.hidden) { // back out of the preview to the "When?" step
+      orderCard.hidden = true;
+      delete pick.when;
+      stepIdx = steps.length - 1;
+      updateBubble();
+      renderStep();
+      return;
+    }
+    if (stepIdx === 0) return;
     delete pick[steps[stepIdx].key];
     stepIdx--;
     delete pick[steps[stepIdx].key];
-    el.textContent = sentence();
-    restartBtn.hidden = true;
+    updateBubble();
     renderStep();
   });
-  restartBtn.addEventListener('click', enterBuilder);
-  tryBtn.addEventListener('click', () => (builder.hidden ? enterBuilder() : exitBuilder()));
-  if (send) send.addEventListener('click', () => { if (builder.hidden) enterBuilder(); });
+  restartBtn.addEventListener('click', reset);
+
+  renderStep();
 })();
 
 /* ---- Scroll reveal ---- */
