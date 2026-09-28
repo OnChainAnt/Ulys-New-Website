@@ -485,3 +485,8 @@ img { max-width: 100%; display: block; }
 .fund-visual img { width: 100%; max-width: 620px; border: none; background: none; border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,.16); }
 :root[data-theme="dark"] .fund-visual img { box-shadow: 0 30px 70px rgba(0,0,0,.5); }
 @media (min-width: 861px) { .fund-grid { grid-template-columns: 1fr 1.15fr; } .fund.reverse .fund-grid { grid-template-columns: 1.15fr 1fr; } }
+
+/* Fix: size wordmark SVGs that partials.js wraps in a <span> (nav + footer) */
+.navbar-wordmark svg { height: 22px; width: auto; display: block; fill: currentColor; }
+.footer-wordmark { display: inline-flex; }
+.footer-wordmark svg { height: 26px; width: auto; display: block; fill: var(--ink); }
