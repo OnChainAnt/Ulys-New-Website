@@ -17,6 +17,7 @@
           <a href="index.html#trade">Trade</a>
           <a href="index.html#hold">Non-custodial</a>
           <a href="index.html#intelligence">AI</a>
+          <a href="season-1.html">Season 1</a>
           <a href="https://ulys-treasury.vercel.app/" target="_blank" rel="noreferrer">Treasury</a>
         </div>
         <div class="navbar-actions">

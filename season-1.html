@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Season 1 — Earn your allocation | Ulys</title>
+  <meta name="description" content="Ulys Season 1 turns everyday activity into points, and points into a fixed, published allocation. A live scoreboard, rewards for consistency, and mechanics you can read up front." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=36" />
+  <script>(function(){try{if(localStorage.getItem("ulys-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+  <style>
+    /* ---- Season 1 page (scoped) ---- */
+    .s1-hero { max-width: var(--maxw); margin: 0 auto; padding: 140px var(--gutter) 0; }
+    .s1-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
+    .s1-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #30d158; box-shadow: 0 0 8px #30d158; }
+    .s1-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 6.4vw, 82px); line-height: 1.02; letter-spacing: -0.03em; margin: 24px 0 0; max-width: 16ch; }
+    .s1-hero h1 .grad { background: var(--rainbow-blend, var(--rainbow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .s1-hero .lede { font-size: clamp(16px, 1.9vw, 20px); color: var(--muted); margin-top: 24px; max-width: 60ch; line-height: 1.6; }
+    .s1-cta { display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
+
+    .s1-stats { max-width: var(--maxw); margin: 64px auto 0; padding: 0 var(--gutter); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+    .s1-stat { padding: 26px 24px 26px 0; border-right: 1px solid var(--line); }
+    .s1-stat:last-child { border-right: none; }
+    .s1-stat b { display: block; font-family: var(--display); font-size: clamp(26px, 3.4vw, 40px); font-weight: 400; letter-spacing: -0.02em; }
+    .s1-stat span { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+    .s1-sec { max-width: var(--maxw); margin: 0 auto; padding: clamp(72px, 11vw, 150px) var(--gutter) 0; }
+    .s1-sec.line { border-top: 1px solid var(--line); margin-top: clamp(72px, 11vw, 150px); }
+    .s1-kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .s1-kicker b { background: var(--rainbow-blend, var(--rainbow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .s1-sec h2 { font-family: var(--display); font-weight: 400; font-size: clamp(28px, 4.4vw, 50px); line-height: 1.04; letter-spacing: -0.025em; margin: 16px 0 0; max-width: 20ch; }
+    .s1-sec .lede { color: var(--muted); font-size: clamp(16px, 1.7vw, 18px); line-height: 1.6; margin-top: 18px; max-width: 52ch; }
+    .s1-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; margin-top: 44px; }
+
+    /* scoreboard */
+    .board { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+    .board-head, .board-row { display: grid; grid-template-columns: 46px 1fr auto auto; gap: 14px; align-items: center; padding: 14px 20px; }
+    .board-head { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
+    .board-row { border-top: 1px solid var(--line-soft); font-size: 15px; }
+    .board-row:first-of-type { border-top: none; }
+    .board-rank { font-family: var(--mono); color: var(--muted); }
+    .board-name { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+    .board-av { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#807bf5,#0be0ed); flex: none; }
+    .board-pts { font-family: var(--mono); font-weight: 600; }
+    .board-streak { font-family: var(--mono); font-size: 13px; color: #ff8a3d; }
+    .board-row.you { background: linear-gradient(90deg, rgba(128,123,245,.14), rgba(11,224,237,.08)); }
+    .board-row.you .board-rank, .board-row.you .board-name { color: var(--ink); font-weight: 700; }
+    .board-you-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
+    .board-you-note b { color: #30d158; }
+
+    /* ways to earn */
+    .earn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 44px; }
+    .earn-card { border: 1px solid var(--line); border-radius: 16px; padding: 24px; background: var(--surface); }
+    .earn-card .pts { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 999px; padding: 4px 12px; display: inline-block; }
+    .earn-card h3 { font-family: var(--display); font-weight: 500; font-size: 20px; margin: 16px 0 8px; }
+    .earn-card p { color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+    .streak-note { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .streak-chip { font-family: var(--mono); font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; color: var(--muted); }
+    .streak-chip b { color: var(--ink); }
+
+    /* mechanics */
+    .formula { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); padding: clamp(28px, 5vw, 44px); text-align: center; }
+    .formula .eq { font-family: var(--display); font-weight: 400; font-size: clamp(20px, 3vw, 30px); letter-spacing: -0.01em; line-height: 1.5; }
+    .formula .eq .hl { background: var(--rainbow-blend, var(--rainbow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .formula .sub { color: var(--muted); font-size: 15px; margin-top: 16px; }
+    .mech-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .mech { border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+    .mech h4 { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .mech p { margin-top: 8px; font-size: 14.5px; color: var(--ink); line-height: 1.5; }
+    .mech p b { font-weight: 600; }
+
+    @media (max-width: 860px) {
+      .s1-stats { grid-template-columns: 1fr 1fr; }
+      .s1-stat:nth-child(2) { border-right: none; }
+      .s1-split { grid-template-columns: 1fr; }
+      .earn-grid, .mech-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-cosmos" aria-hidden="true"><div class="stars stars-1"></div><div class="stars stars-2"></div><div class="vignette"></div></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <!-- Hero -->
+    <section class="s1-hero">
+      <span class="s1-badge"><span class="dot"></span> Season 1 · Live now</span>
+      <h1>Earn your allocation, <span class="grad">out in the open.</span></h1>
+      <p class="lede">Ulys Season 1 turns everyday activity into points — and points into a fixed, published allocation. A live scoreboard, rewards for showing up consistently, and mechanics you can read before you play. No surprise snapshots.</p>
+      <div class="s1-cta">
+        <a href="index.html#download" class="btn-solid lg">Start earning points</a>
+        <a href="#scoreboard" class="btn-ghost lg">See the scoreboard</a>
+      </div>
+    </section>
+
+    <div class="s1-stats">
+      <div class="s1-stat"><b>12,480</b><span>Farmers in season 1</span></div>
+      <div class="s1-stat"><b>3.24M</b><span>Points earned</span></div>
+      <div class="s1-stat"><b>5%</b><span>Supply in the pool</span></div>
+      <div class="s1-stat"><b>41 days</b><span>Left in the season</span></div>
+    </div>
+
+    <!-- 01 · Visible scoreboard -->
+    <section class="s1-sec line" id="scoreboard">
+      <p class="s1-kicker"><b>01 / Visible scoreboard</b></p>
+      <h2>A live scoreboard, not a surprise snapshot.</h2>
+      <p class="lede">Your points and rank update in real time. Know exactly where you stand every day of the season — no hidden snapshot, no guessing what counted.</p>
+      <div class="s1-split">
+        <div class="board" aria-label="Season 1 leaderboard">
+          <div class="board-head"><span>#</span><span>Farmer</span><span>Points</span><span>Streak</span></div>
+          <div class="board-row"><span class="board-rank">1</span><span class="board-name"><span class="board-av"></span>whale.ulys</span><span class="board-pts">148,210</span><span class="board-streak">🔥 88d</span></div>
+          <div class="board-row"><span class="board-rank">2</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span>degen.ulys</span><span class="board-pts">131,940</span><span class="board-streak">🔥 74d</span></div>
+          <div class="board-row"><span class="board-rank">3</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span>steady.ulys</span><span class="board-pts">119,505</span><span class="board-streak">🔥 90d</span></div>
+          <div class="board-row"><span class="board-rank">4</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span>gm.ulys</span><span class="board-pts">96,120</span><span class="board-streak">🔥 51d</span></div>
+          <div class="board-row you"><span class="board-rank">128</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span>you.ulys</span><span class="board-pts">12,940</span><span class="board-streak">🔥 14d</span></div>
+        </div>
+        <div>
+          <p class="board-you-note">Your rank <b>▲ 6 today</b> — keep your streak to climb faster.</p>
+          <p class="lede" style="margin-top:16px">Every point you earn is on screen the moment it lands. There's no end-of-season surprise: the number you see is the number that counts toward your allocation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Consistency -->
+    <section class="s1-sec line">
+      <p class="s1-kicker"><b>02 / Built for consistency</b></p>
+      <h2>Rewards the farmers who keep showing up.</h2>
+      <p class="lede">Season 1 pays for consistency, not one big deposit. Daily activity, streaks and multipliers mean steady farmers out-earn one-time whales.</p>
+      <div class="earn-grid">
+        <div class="earn-card"><span class="pts">+50 pts / day</span><h3>Show up daily</h3><p>Open the app and stay active. Each active day adds to your streak — and your streak multiplies everything.</p></div>
+        <div class="earn-card"><span class="pts">10 pts / $1</span><h3>Trade &amp; swap</h3><p>Earn points on every trade across 130+ tokens. Volume compounds over the season.</p></div>
+        <div class="earn-card"><span class="pts">2 pts / $ / day</span><h3>Hold a balance</h3><p>Keep assets in your non-custodial wallet and earn passively, every day you hold.</p></div>
+        <div class="earn-card"><span class="pts">+2,000 pts</span><h3>Refer a friend</h3><p>Invite a friend who joins Season 1 and you both earn a bonus when they place their first order.</p></div>
+      </div>
+      <div class="streak-note">
+        <span class="s1-kicker" style="text-transform:uppercase">Streak multiplier</span>
+        <span class="streak-chip">7 days <b>1.2×</b></span>
+        <span class="streak-chip">30 days <b>1.5×</b></span>
+        <span class="streak-chip">60 days <b>2×</b></span>
+        <span class="streak-chip">Miss a day, streak resets</span>
+      </div>
+    </section>
+
+    <!-- 03 · Published mechanics -->
+    <section class="s1-sec line">
+      <p class="s1-kicker"><b>03 / Published mechanics</b></p>
+      <h2>Exactly how points become your allocation.</h2>
+      <p class="lede">The rules are published and fixed for the whole season. Your allocation is simply your share of the pool — nothing is decided behind the scenes.</p>
+      <div class="formula" style="margin-top:44px">
+        <p class="eq">Your allocation <span class="hl">=</span> <span class="hl">( your points ÷ total season points )</span> × Season 1 pool</p>
+        <p class="sub">The Season 1 pool is fixed at <b>5% of supply</b> and published on day one. It does not change.</p>
+      </div>
+      <div class="mech-list">
+        <div class="mech"><h4>Fixed pool</h4><p><b>5% of supply</b>, locked for the season. No dilution, no retroactive changes.</p></div>
+        <div class="mech"><h4>Your points = the number on screen</h4><p>Final points are your live scoreboard total at <b>season close</b>. No hidden snapshot.</p></div>
+        <div class="mech"><h4>Claim window</h4><p>Allocation is claimable <b>7 days after</b> the season ends, straight from your wallet.</p></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq">
+      <div class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Season 1 questions.</h2>
+      </div>
+      <div class="faq-list">
+        <details><summary>How do I join Season 1?<i></i></summary><p>Download Ulys and start using your wallet — every active day, trade, hold and referral earns points automatically. There's nothing extra to sign up for.</p></details>
+        <details><summary>When does the season end?<i></i></summary><p>Season 1 runs for a fixed window shown on the live counter above. Your final points are your scoreboard total the moment it closes.</p></details>
+        <details><summary>Can my points go down?<i></i></summary><p>Points you've earned don't disappear, but your streak multiplier resets if you miss an active day — so consistency is what keeps you climbing.</p></details>
+        <details><summary>Is the allocation guaranteed?<i></i></summary><p>The pool size and the points-to-allocation formula are published up front and fixed for the season. Your share is your points divided by the total.</p></details>
+        <details><summary>How do I claim my allocation?<i></i></summary><p>Once the claim window opens (7 days after season close), you claim directly from your non-custodial wallet in the app.</p></details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="cta-inner">
+        <h2>Season 1 is live. Start climbing.</h2>
+        <p class="lede center">Every day you wait is points on the table. Download Ulys and put your streak to work.</p>
+        <div class="s1-cta" style="justify-content:center">
+          <a href="index.html#download" class="btn-solid lg">Start earning points</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="partials.js?v=37"></script>
+  <script src="app.js?v=36"></script>
+</body>
+</html>
