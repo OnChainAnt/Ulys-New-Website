@@ -90,6 +90,20 @@
     .mech p { margin-top: 8px; font-size: 14.5px; color: var(--ink); line-height: 1.5; }
     .mech p b { font-weight: 600; }
 
+    /* final CTA — crypto coins background with dark overlay */
+    .s1-final {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(6,6,8,.74), rgba(6,6,8,.86)),
+        url("assets/season-cta-bg.webp") center / cover no-repeat;
+      border: 1px solid rgba(255,255,255,.14);
+      overflow: hidden;
+    }
+    .s1-final h2 { color: #fff; }
+    .s1-final .lede { color: rgba(255,255,255,.78); }
+    .s1-final .btn-solid { background: #fff; color: #14151a; }
+    .s1-final .btn-solid:hover { opacity: .9; }
+
     @media (max-width: 860px) {
       .s1-stats { grid-template-columns: 1fr 1fr; }
       .s1-stat { padding: 26px 16px 26px 20px; }
@@ -202,7 +216,7 @@
 
     <!-- CTA -->
     <section class="cta">
-      <div class="cta-inner">
+      <div class="cta-inner s1-final">
         <h2>Season 1 is live. Start climbing.</h2>
         <p class="lede center">Every day you wait is points on the table. Download Ulys and put your streak to work.</p>
         <div class="s1-cta" style="justify-content:center">
