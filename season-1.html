@@ -252,14 +252,19 @@
     /* final CTA — looping coins video with dark overlay */
     .s1-final {
       position: relative;
+      /* full-bleed: edge to edge of the screen */
+      width: 100vw; margin-left: calc(50% - 50vw);
+      border-radius: 0; border: 0;
+      border-top: 1px solid rgba(255,255,255,.1); border-bottom: 1px solid rgba(255,255,255,.1);
+      padding-top: clamp(80px, 12vw, 160px); padding-bottom: clamp(80px, 12vw, 160px);
       background: #070709;
-      border: 1px solid rgba(255,255,255,.14);
       overflow: hidden;
       isolation: isolate;
+      clip-path: inset(0); /* keeps the video composited inside the section, under the overlay */
     }
     .s1-final-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
     .s1-final-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(180deg, rgba(6,6,8,.74), rgba(6,6,8,.86)); }
+      background: linear-gradient(180deg, rgba(6,6,8,.84), rgba(6,6,8,.93)); }
     .s1-final > h2, .s1-final > p, .s1-final > .s1-cta { position: relative; z-index: 2; }
     .s1-final h2 { color: #fff; }
     .s1-final .lede { color: rgba(255,255,255,.78); }
@@ -291,7 +296,7 @@
       <h1>From prompt, <span class="tw tw-hero" aria-hidden="true"><span class="tw-ghost">to points.</span><span class="tw-type" data-text="to points."></span></span><span class="sr-only">to points.</span></h1>
       <p class="lede">Ulys Season 1 turns everyday activity into points. Trade, refer friends, share on socials, &amp; more to rank up the leaderboard.</p>
       <div class="s1-cta">
-        <span class="s1-glow"><a href="index.html#download" class="btn-solid lg">Start earning points</a></span>
+        <span class="s1-glow"><a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="btn-solid lg">Start earning points</a></span>
         <a href="#leaderboard" class="btn-ghost lg">See the leaderboard</a>
       </div>
     </section>
@@ -384,7 +389,7 @@
         <h2>Season 1 is live. Start climbing.</h2>
         <p class="lede center">Every day you wait is points on the table. Download Ulys and start stacking.</p>
         <div class="s1-cta" style="justify-content:center">
-          <a href="index.html#download" class="btn-solid lg">Start earning points</a>
+          <a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="btn-solid lg">Start earning points</a>
         </div>
       </div>
     </section>
@@ -624,7 +629,7 @@
     }
   })();
   </script>
-  <script src="partials.js?v=37"></script>
+  <script src="partials.js?v=38"></script>
   <script src="app.js?v=36"></script>
 </body>
 </html>

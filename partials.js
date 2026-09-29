@@ -26,7 +26,7 @@
             <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
           </button>
           <span class="vsep"></span>
-          <a href="index.html#download" class="navbar-cta">Get the app</a>
+          <a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="navbar-cta">Get the app</a>
           <span class="vsep"></span>
           <a href="https://x.com/Ulys_AI" target="_blank" rel="noreferrer" class="navbar-x" aria-label="Ulys on X">${X}</a>
         </div>
@@ -39,7 +39,7 @@
         <div class="footer-brand">
           <span class="footer-wordmark">${WORDMARK}</span>
           <p>This is how crypto should work.</p>
-          <a href="index.html#download" class="footer-cta">Get the app <span aria-hidden="true">→</span></a>
+          <a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="footer-cta">Get the app <span aria-hidden="true">→</span></a>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
