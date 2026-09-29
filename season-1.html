@@ -29,6 +29,25 @@
     .s1-stat:first-child { border-left: none; padding-left: 0; }
     .s1-stat b { display: block; font-family: var(--display); font-size: clamp(28px, 3.2vw, 42px); font-weight: 400; letter-spacing: -0.02em; line-height: 1; }
     .s1-stat span { display: block; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .s1-live { font-variant-numeric: tabular-nums; }
+    .s1-count { font-size: clamp(24px, 2.6vw, 33px); }
+
+    /* Throbbing CTA with soft rainbow glow */
+    .s1-glow { position: relative; z-index: 0; animation: s1Throb 2.6s ease-in-out infinite; }
+    .s1-glow::before {
+      content: ""; position: absolute; inset: -7px; z-index: -1; border-radius: inherit;
+      background: linear-gradient(90deg, #ff8a8a, #ffd08a, #9be59b, #8ac6ff, #c79bff, #ff8a8a);
+      background-size: 300% 100%;
+      filter: blur(15px); opacity: .55;
+      animation: s1Glow 6s linear infinite, s1GlowPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes s1Throb { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+    @keyframes s1Glow { to { background-position: 300% 0; } }
+    @keyframes s1GlowPulse { 0%,100% { opacity: .38; } 50% { opacity: .7; } }
+    @media (prefers-reduced-motion: reduce) {
+      .s1-glow { animation: none; }
+      .s1-glow::before { animation: none; opacity: .45; }
+    }
 
     .s1-sec { max-width: var(--maxw); margin: 0 auto; padding: clamp(72px, 11vw, 150px) var(--gutter) 0; }
     .s1-sec.line { border-top: 1px solid var(--line); margin-top: clamp(72px, 11vw, 150px); }
@@ -129,16 +148,16 @@
       <h1>From prompt, <span class="grad">to points.</span></h1>
       <p class="lede">Ulys Season 1 turns everyday activity into points. Trade, refer friends, share on socials, &amp; more to rank up the leaderboard.</p>
       <div class="s1-cta">
-        <a href="index.html#download" class="btn-solid lg">Start earning points</a>
+        <a href="index.html#download" class="btn-solid lg s1-glow">Start earning points</a>
         <a href="#leaderboard" class="btn-ghost lg">See the leaderboard</a>
       </div>
     </section>
 
     <div class="s1-stats">
-      <div class="s1-stat"><b>12,480</b><span>Traders in Season 1</span></div>
-      <div class="s1-stat"><b>3.24M</b><span>Points earned</span></div>
+      <div class="s1-stat"><b id="statTraders" class="s1-live">12,480</b><span>Traders in Season 1</span></div>
+      <div class="s1-stat"><b id="statPoints" class="s1-live">3,240,000</b><span>Points earned</span></div>
       <div class="s1-stat"><b>90</b><span>Longest streak · days</span></div>
-      <div class="s1-stat"><b>41</b><span>Days left in the season</span></div>
+      <div class="s1-stat"><b id="statCountdown" class="s1-live s1-count">41d 00:00:00</b><span>Left in the season</span></div>
     </div>
 
     <!-- 01 · Visible leaderboard -->
@@ -228,6 +247,43 @@
   </main>
 
   <div id="site-footer"></div>
+  <script>
+  (function () {
+    var elT = document.getElementById('statTraders');
+    var elP = document.getElementById('statPoints');
+    var elC = document.getElementById('statCountdown');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fmt = function (n) { return n.toLocaleString('en-US'); };
+
+    // Live countdown to a fixed season end date
+    var END = new Date('2026-11-09T17:00:00Z').getTime();
+    var pad = function (x) { return String(x).padStart(2, '0'); };
+    function renderCountdown() {
+      if (!elC) return;
+      var d = END - Date.now();
+      if (d < 0) d = 0;
+      var days = Math.floor(d / 86400000);
+      var h = Math.floor((d % 86400000) / 3600000);
+      var m = Math.floor((d % 3600000) / 60000);
+      var s = Math.floor((d % 60000) / 1000);
+      elC.textContent = days + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s);
+    }
+    renderCountdown();
+    setInterval(renderCountdown, 1000);
+
+    if (!reduce) {
+      // Points tick up every second; traders occasionally
+      var traders = 12480, points = 3240000;
+      setInterval(function () {
+        points += Math.floor(Math.random() * 130) + 25;
+        if (elP) elP.textContent = fmt(points);
+      }, 1000);
+      setInterval(function () {
+        if (Math.random() < 0.55) { traders += 1; if (elT) elT.textContent = fmt(traders); }
+      }, 2600);
+    }
+  })();
+  </script>
   <script src="partials.js?v=37"></script>
   <script src="app.js?v=36"></script>
 </body>
