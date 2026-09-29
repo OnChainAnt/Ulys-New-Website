@@ -45,7 +45,7 @@
     .board2-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
     .board2-live .ld { width: 7px; height: 7px; border-radius: 50%; background: #30d158; box-shadow: 0 0 8px #30d158; animation: blink 1.6s infinite; }
     @keyframes blink { 50% { opacity: .35; } }
-    .board2-head, .board2-row { display: grid; grid-template-columns: 92px 1fr 80px 120px; gap: 12px; align-items: center; padding: 15px 24px; }
+    .board2-head, .board2-row { display: grid; grid-template-columns: 58px 1fr 80px 120px; gap: 12px; align-items: center; padding: 15px 24px; }
     .board2-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
     .board2-head .r, .board2-row .b-pts { text-align: right; }
     .board2-row { border-top: 1px solid var(--line-soft); transition: background .15s; }
@@ -65,7 +65,7 @@
     .board2-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
     .board2-note b { color: #30d158; }
     @media (max-width: 640px) {
-      .board2-head, .board2-row { grid-template-columns: 74px 1fr 96px; padding: 13px 16px; }
+      .board2-head, .board2-row { grid-template-columns: 50px 1fr 96px; padding: 13px 16px; }
       .board2-head .s, .b-streak { display: none; }
     }
 
@@ -152,18 +152,18 @@
           <span class="board2-live"><span class="ld"></span> Updating live</span>
         </div>
         <div class="board2-head"><span>Rank</span><span>Trader</span><span class="s">Streak</span><span class="r">Points</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">1</span><span class="chg up">+2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">whale.ulys</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">2</span><span class="chg up">+1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">0xleo.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">3</span><span class="chg down">−1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">degen.ulys</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">4</span><span class="chg flat">—</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span><span class="h">steady.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">119,505</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">5</span><span class="chg up">+4</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#ff80a0)"></span><span class="h">mia.ulys</span></span><span class="b-streak">63d</span><span class="b-pts">108,300</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">6</span><span class="chg up">+1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#807bf5)"></span><span class="h">gm.ulys</span></span><span class="b-streak">51d</span><span class="b-pts">96,120</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">7</span><span class="chg down">−2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#0be0ed)"></span><span class="h">nova.ulys</span></span><span class="b-streak">45d</span><span class="b-pts">88,740</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">8</span><span class="chg up">+3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ff80a0,#0074ff)"></span><span class="h">kai.ulys</span></span><span class="b-streak">39d</span><span class="b-pts">81,015</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">9</span><span class="chg flat">—</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0074ff,#0be0ed)"></span><span class="h">sol.ulys</span></span><span class="b-streak">57d</span><span class="b-pts">74,600</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">10</span><span class="chg up">+5</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#807bf5)"></span><span class="h">vee.ulys</span></span><span class="b-streak">33d</span><span class="b-pts">69,880</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">whale.ulys</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">0xleo.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">degen.ulys</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">4</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span><span class="h">steady.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">119,505</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">5</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#ff80a0)"></span><span class="h">mia.ulys</span></span><span class="b-streak">63d</span><span class="b-pts">108,300</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">6</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#807bf5)"></span><span class="h">gm.ulys</span></span><span class="b-streak">51d</span><span class="b-pts">96,120</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">7</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#0be0ed)"></span><span class="h">nova.ulys</span></span><span class="b-streak">45d</span><span class="b-pts">88,740</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">8</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ff80a0,#0074ff)"></span><span class="h">kai.ulys</span></span><span class="b-streak">39d</span><span class="b-pts">81,015</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">9</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0074ff,#0be0ed)"></span><span class="h">sol.ulys</span></span><span class="b-streak">57d</span><span class="b-pts">74,600</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">10</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#807bf5)"></span><span class="h">vee.ulys</span></span><span class="b-streak">33d</span><span class="b-pts">69,880</span></div>
         <div class="board2-sep">• • •</div>
-        <div class="board2-row you"><span class="b-rank"><span class="n">128</span><span class="chg up">+6</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">you.ulys</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
+        <div class="board2-row you"><span class="b-rank"><span class="n">128</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">you.ulys</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
       </div>
       <p class="board2-note">You're <b>up 6 spots today</b> — keep your streak alive to climb faster.</p>
     </section>
