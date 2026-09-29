@@ -38,21 +38,36 @@
     .s1-sec .lede { color: var(--muted); font-size: clamp(16px, 1.7vw, 18px); line-height: 1.6; margin-top: 18px; max-width: 52ch; }
     .s1-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; margin-top: 44px; }
 
-    /* scoreboard */
-    .board { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
-    .board-head, .board-row { display: grid; grid-template-columns: 46px 1fr auto auto; gap: 14px; align-items: center; padding: 14px 20px; }
-    .board-head { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
-    .board-row { border-top: 1px solid var(--line-soft); font-size: 15px; }
-    .board-row:first-of-type { border-top: none; }
-    .board-rank { font-family: var(--mono); color: var(--muted); }
-    .board-name { display: flex; align-items: center; gap: 10px; font-weight: 500; }
-    .board-av { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#807bf5,#0be0ed); flex: none; }
-    .board-pts { font-family: var(--mono); font-weight: 600; }
-    .board-streak { font-family: var(--mono); font-size: 13px; color: #ff8a3d; }
-    .board-row.you { background: linear-gradient(90deg, rgba(128,123,245,.14), rgba(11,224,237,.08)); }
-    .board-row.you .board-rank, .board-row.you .board-name { color: var(--ink); font-weight: 700; }
-    .board-you-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
-    .board-you-note b { color: #30d158; }
+    /* scoreboard — full-width live standings */
+    .board2 { margin-top: 44px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden; }
+    .board2-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+    .board2-title { font-family: var(--display); font-size: 18px; font-weight: 500; }
+    .board2-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .board2-live .ld { width: 7px; height: 7px; border-radius: 50%; background: #30d158; box-shadow: 0 0 8px #30d158; animation: blink 1.6s infinite; }
+    @keyframes blink { 50% { opacity: .35; } }
+    .board2-head, .board2-row { display: grid; grid-template-columns: 92px 1fr 80px 120px; gap: 12px; align-items: center; padding: 15px 24px; }
+    .board2-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
+    .board2-head .r, .board2-row .b-pts { text-align: right; }
+    .board2-row { border-top: 1px solid var(--line-soft); transition: background .15s; }
+    .board2-row:hover { background: color-mix(in srgb, var(--ink) 3.5%, transparent); }
+    .b-rank { display: inline-flex; align-items: center; gap: 8px; }
+    .b-rank .n { font-family: var(--mono); font-size: 15px; color: var(--muted); min-width: 26px; }
+    .chg { font-family: var(--mono); font-size: 11px; font-weight: 600; }
+    .chg.up { color: #30d158; } .chg.down { color: #f0503c; } .chg.flat { color: var(--faint); }
+    .b-name { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 500; min-width: 0; }
+    .b-name span.h { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .b-av { width: 28px; height: 28px; border-radius: 50%; flex: none; background: linear-gradient(135deg,#807bf5,#0be0ed); }
+    .b-streak { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+    .b-pts { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; }
+    .board2-sep { text-align: center; color: var(--faint); font-family: var(--mono); font-size: 12px; letter-spacing: .5em; padding: 10px 0; border-top: 1px solid var(--line-soft); }
+    .board2-row.you { background: linear-gradient(90deg, rgba(128,123,245,.16), rgba(11,224,237,.09)); }
+    .board2-row.you .b-rank .n, .board2-row.you .b-name { color: var(--ink); font-weight: 700; }
+    .board2-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
+    .board2-note b { color: #30d158; }
+    @media (max-width: 640px) {
+      .board2-head, .board2-row { grid-template-columns: 74px 1fr 96px; padding: 13px 16px; }
+      .board2-head .s, .b-streak { display: none; }
+    }
 
     /* ways to earn */
     .earn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 44px; }
@@ -117,20 +132,26 @@
       <p class="s1-kicker"><b>01 / Visible scoreboard</b></p>
       <h2>A live scoreboard, not a surprise snapshot.</h2>
       <p class="lede">Your points and rank update in real time. Know exactly where you stand every day of the season — no hidden snapshot, no guessing what counted.</p>
-      <div class="s1-split">
-        <div class="board" aria-label="Season 1 leaderboard">
-          <div class="board-head"><span>#</span><span>Trader</span><span>Points</span><span>Streak</span></div>
-          <div class="board-row"><span class="board-rank">1</span><span class="board-name"><span class="board-av"></span>whale.ulys</span><span class="board-pts">148,210</span><span class="board-streak">🔥 88d</span></div>
-          <div class="board-row"><span class="board-rank">2</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span>degen.ulys</span><span class="board-pts">131,940</span><span class="board-streak">🔥 74d</span></div>
-          <div class="board-row"><span class="board-rank">3</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span>steady.ulys</span><span class="board-pts">119,505</span><span class="board-streak">🔥 90d</span></div>
-          <div class="board-row"><span class="board-rank">4</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span>gm.ulys</span><span class="board-pts">96,120</span><span class="board-streak">🔥 51d</span></div>
-          <div class="board-row you"><span class="board-rank">128</span><span class="board-name"><span class="board-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span>you.ulys</span><span class="board-pts">12,940</span><span class="board-streak">🔥 14d</span></div>
+      <div class="board2" aria-label="Season 1 live standings">
+        <div class="board2-top">
+          <span class="board2-title">Season 1 · Live standings</span>
+          <span class="board2-live"><span class="ld"></span> Updating live</span>
         </div>
-        <div>
-          <p class="board-you-note">Your rank <b>▲ 6 today</b> — keep your streak to climb faster.</p>
-          <p class="lede" style="margin-top:16px">Every point you earn is on screen the moment it lands. There's no end-of-season surprise: the number you see is the number you've earned.</p>
-        </div>
+        <div class="board2-head"><span>Rank</span><span>Trader</span><span class="s">Streak</span><span class="r">Points</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">1</span><span class="chg up">+2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">whale.ulys</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">2</span><span class="chg up">+1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">0xleo.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">3</span><span class="chg down">−1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">degen.ulys</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">4</span><span class="chg flat">—</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span><span class="h">steady.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">119,505</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">5</span><span class="chg up">+4</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#ff80a0)"></span><span class="h">mia.ulys</span></span><span class="b-streak">63d</span><span class="b-pts">108,300</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">6</span><span class="chg up">+1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#807bf5)"></span><span class="h">gm.ulys</span></span><span class="b-streak">51d</span><span class="b-pts">96,120</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">7</span><span class="chg down">−2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#0be0ed)"></span><span class="h">nova.ulys</span></span><span class="b-streak">45d</span><span class="b-pts">88,740</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">8</span><span class="chg up">+3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ff80a0,#0074ff)"></span><span class="h">kai.ulys</span></span><span class="b-streak">39d</span><span class="b-pts">81,015</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">9</span><span class="chg flat">—</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0074ff,#0be0ed)"></span><span class="h">sol.ulys</span></span><span class="b-streak">57d</span><span class="b-pts">74,600</span></div>
+        <div class="board2-row"><span class="b-rank"><span class="n">10</span><span class="chg up">+5</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#807bf5)"></span><span class="h">vee.ulys</span></span><span class="b-streak">33d</span><span class="b-pts">69,880</span></div>
+        <div class="board2-sep">• • •</div>
+        <div class="board2-row you"><span class="b-rank"><span class="n">128</span><span class="chg up">+6</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">you.ulys</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
       </div>
+      <p class="board2-note">You're <b>up 6 spots today</b> — keep your streak alive to climb faster.</p>
     </section>
 
     <!-- 02 · Consistency -->
