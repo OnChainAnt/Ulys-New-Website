@@ -11,6 +11,9 @@
     if (t === 'dark') root.setAttribute('data-theme', 'dark');
     else root.removeAttribute('data-theme');
   }
+  // a page can pin its theme (e.g. Season 1 matches dark-only ulys.ai)
+  const locked = root.getAttribute('data-theme-lock');
+  if (locked) { apply(locked); return; }
   // sync with any stored preference (init script already ran in <head>)
   try { apply(localStorage.getItem(KEY) === 'dark' ? 'dark' : 'light'); } catch (e) { /* ignore */ }
   // the toggle may be injected by partials.js, so bind on any click
