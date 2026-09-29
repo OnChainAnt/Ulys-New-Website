@@ -20,7 +20,35 @@
     .s1-lockup-sep { width: 1px; height: 24px; background: var(--line); }
     .s1-lockup-label { font-family: var(--mono); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
     .s1-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 6.4vw, 82px); line-height: 1.02; letter-spacing: -0.03em; margin: 24px 0 0; max-width: 16ch; }
-    .s1-hero h1 .grad { background: var(--rainbow-blend, var(--rainbow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    /* Page background: the diagonal sheen from the ulys.ai homepage (exact in dark, warm analog in light) */
+    body {
+      background: linear-gradient(253.02deg, #e2e1da 10.11%, #f4f3ef 23.72%, #e2e1da 55.17%, #eceae4 89.91%);
+      background-color: #e4e3dc;
+    }
+    [data-theme="dark"] body {
+      background:
+        linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)),
+        linear-gradient(253.02deg, #000 10.11%, #5a5a5a 23.72%, #000 55.17%, #434343 89.91%);
+      background-color: #000;
+    }
+    .bg-cosmos { background: transparent; } /* the shared solid fill would cover the gradient */
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+    /* Typewriter words: a hidden ghost reserves the space (no reflow), the typed layer sits on top */
+    .tw { position: relative; display: inline-block; white-space: nowrap; }
+    .tw-ghost { visibility: hidden; }
+    .tw-type {
+      position: absolute; inset: 0; white-space: nowrap;
+      background: var(--rainbow-blend, var(--rainbow)); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .tw-caret {
+      display: inline-block; width: .06em; height: .8em; margin-left: .05em; vertical-align: -.04em; border-radius: 2px;
+      background: linear-gradient(180deg, #807bf5, #0be0ed);
+      animation: twBlink 1.05s steps(1) infinite; transition: opacity .6s ease;
+    }
+    .tw-caret.is-gone { animation: none; opacity: 0; }
+    @keyframes twBlink { 50% { opacity: 0; } }
     .s1-hero .lede { font-size: clamp(16px, 1.9vw, 20px); color: var(--muted); margin-top: 24px; max-width: 60ch; line-height: 1.6; }
     .s1-cta { display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
 
@@ -75,14 +103,14 @@
 
     /* full-bleed band: edge to edge, rows inset to line up with the page content */
     .board2 {
-      --board-bg: #e8e7e1;
+      --board-bg: rgba(255,255,255,.3);
       --inset: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
       position: relative; width: 100vw; margin: 56px 0 0 calc(50% - 50vw);
       border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
       background: var(--board-bg); overflow: hidden; text-align: left;
       box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
     }
-    [data-theme="dark"] .board2 { --board-bg: #131211; box-shadow: 0 1px 0 rgba(255,255,255,.04) inset; }
+    [data-theme="dark"] .board2 { --board-bg: rgba(255,255,255,.035); box-shadow: 0 1px 0 rgba(255,255,255,.04) inset; }
     .board2 + .board2-note { text-align: center; }
     /* rainbow hairline along the top edge */
     .board2::before {
@@ -129,11 +157,13 @@
     .b-av { position: relative; width: 28px; height: 28px; border-radius: 50%; flex: none; background: linear-gradient(135deg,#807bf5,#0be0ed); }
     /* thin rainbow ring on the top-3 avatars */
     .board2-top3 .b-name { isolation: isolate; }
-    .board2-top3 .b-av { width: 30px; height: 30px; box-shadow: 0 0 0 2px var(--board-bg); }
+    .board2-top3 .b-av { width: 30px; height: 30px; }
+    /* 2px ring with a transparent gap, drawn with a mask so it works on any background */
     .board2-top3 .b-av::before {
-      content: ""; position: absolute; inset: -4px; border-radius: 50%; z-index: -1;
+      content: ""; position: absolute; inset: -4px; border-radius: 50%; padding: 2px;
       background: conic-gradient(from 200deg, #807bf5, #0074ff, #0be0ed, #ffbb00, #ff80a0, #f0322e, #807bf5);
-      opacity: .85;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; opacity: .9;
     }
     .b-streak {
       justify-self: start; font-family: var(--mono); font-size: 11.5px; color: var(--muted);
@@ -141,8 +171,8 @@
     }
     .b-pts { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
     /* slim bar under each total, relative to the leader (width set in JS) */
-    .b-pts .b-bar { display: block; margin: 7px 0 0 auto; width: 72px; height: 3px; border-radius: 3px; background: var(--line-soft); overflow: hidden; }
-    .b-pts .b-bar i { display: block; height: 100%; width: var(--w, 0%); margin-left: auto; border-radius: inherit; background: var(--rainbow); opacity: .75; }
+    .b-pts .b-bar { display: block; margin: 8px 0 0 auto; width: 64px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 6%, transparent); overflow: hidden; }
+    .b-pts .b-bar i { display: block; height: 100%; width: var(--w, 0%); margin-left: auto; border-radius: inherit; background: var(--rainbow); opacity: .38; }
 
     .board2-sep { display: flex; justify-content: center; padding: 12px 0; border-top: 1px solid var(--line-soft); font-size: 0; }
     .board2-sep::before { content: ""; width: 30px; height: 6px; opacity: .8;
@@ -156,9 +186,12 @@
     .board2-row.you .b-rank .n, .board2-row.you .b-name { color: var(--ink); font-weight: 700; }
     .you-tag {
       font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
-      padding: 3px 7px; border-radius: 999px; color: var(--ink);
-      background: linear-gradient(var(--board-bg), var(--board-bg)) padding-box, var(--rainbow) border-box;
-      border: 1px solid transparent;
+      position: relative; padding: 4px 8px; border-radius: 999px; color: var(--ink);
+    }
+    .you-tag::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: var(--rainbow);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
     }
 
     /* Glass glint: one clear diagonal streak sweeping over the top-3 block */
@@ -255,7 +288,7 @@
         <span class="s1-lockup-sep"></span>
         <span class="s1-lockup-label">Season One</span>
       </div>
-      <h1>From prompt, <span class="grad">to points.</span></h1>
+      <h1>From prompt, <span class="tw tw-hero" aria-hidden="true"><span class="tw-ghost">to points.</span><span class="tw-type" data-text="to points."></span></span><span class="sr-only">to points.</span></h1>
       <p class="lede">Ulys Season 1 turns everyday activity into points. Trade, refer friends, share on socials, &amp; more to rank up the leaderboard.</p>
       <div class="s1-cta">
         <span class="s1-glow"><a href="index.html#download" class="btn-solid lg">Start earning points</a></span>
@@ -272,7 +305,7 @@
 
     <!-- 01 · Visible leaderboard -->
     <section class="s1-sec" id="leaderboard">
-      <h2>Climb your way up the leaderboard.</h2>
+      <h2>Climb your way up the <span class="tw" aria-hidden="true"><span class="tw-ghost">leaderboard.</span><span class="tw-type" data-text="leaderboard."></span></span><span class="sr-only">leaderboard.</span></h2>
       <p class="lede">Your points and rank update in real time, so you always know exactly where you stand.</p>
       <div class="board2" aria-label="Season 1 live standings">
         <div class="board2-top">
@@ -300,8 +333,7 @@
 
     <!-- 02 · Consistency -->
     <section class="s1-sec line">
-      <p class="s1-kicker"><b>01 / Built for consistency</b></p>
-      <h2>Rewards the traders who keep showing up.</h2>
+      <h2>Rewards the traders who keep <span class="tw" aria-hidden="true"><span class="tw-ghost">showing up.</span><span class="tw-type" data-text="showing up."></span></span><span class="sr-only">showing up.</span></h2>
       <p class="lede">Season 1 pays for consistency, not one big deposit. Daily activity, streaks and rotating boosts mean steady traders out-earn one-time whales.</p>
       <div class="earn-grid">
         <div class="earn-card"><h3>Show up daily</h3><p>Open the app and stay active. Each active day builds your streak — and the longer your streak, the more your activity is worth.</p></div>
@@ -321,8 +353,7 @@
 
     <!-- 03 · Clear rules -->
     <section class="s1-sec line">
-      <p class="s1-kicker"><b>02 / Clear rules</b></p>
-      <h2>Simple rules, clear rewards.</h2>
+      <h2>Simple rules, <span class="tw" aria-hidden="true"><span class="tw-ghost">clear rewards.</span><span class="tw-type" data-text="clear rewards."></span></span><span class="sr-only">clear rewards.</span></h2>
       <p class="lede">How points are counted is public and easy to follow — what you see on your leaderboard is what you've earned. And when a boost goes live, you'll see it in the app.</p>
       <div class="mech-list" style="margin-top:44px">
         <div class="mech"><h4>What counts is public</h4><p>Every way to earn points is <b>shown in the app</b>.</p></div>
@@ -383,6 +414,42 @@
     }
     renderCountdown();
     setInterval(renderCountdown, 1000);
+
+    // ---- Typewriter words (hero types on load; section headings type when scrolled into view) ----
+    function typeWord(wrap) {
+      if (wrap.getAttribute('data-typed')) return;
+      wrap.setAttribute('data-typed', '1');
+      var el = wrap.querySelector('.tw-type');
+      var full = el.getAttribute('data-text') || '';
+      var isHero = wrap.classList.contains('tw-hero');
+      var txt = document.createTextNode('');
+      var caret = document.createElement('span'); caret.className = 'tw-caret';
+      el.textContent = ''; el.appendChild(txt); el.appendChild(caret);
+      var i = 0;
+      (function step() {
+        txt.data = full.slice(0, ++i);
+        if (i < full.length) {
+          setTimeout(step, 70 + Math.random() * 60);
+        } else if (!isHero) {
+          setTimeout(function () { caret.classList.add('is-gone'); }, 2200);
+        }
+      })();
+    }
+    var tws = document.querySelectorAll('.tw');
+    if (reduce) {
+      [].forEach.call(tws, function (w) { var t = w.querySelector('.tw-type'); t.textContent = t.getAttribute('data-text'); });
+    } else {
+      [].forEach.call(tws, function (w) {
+        if (w.classList.contains('tw-hero')) { setTimeout(function () { typeWord(w); }, 450); return; }
+        if (!('IntersectionObserver' in window)) { typeWord(w); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { io.disconnect(); setTimeout(function () { typeWord(w); }, 200); }
+          });
+        }, { threshold: 1 });
+        io.observe(w);
+      });
+    }
 
     // ---- Leaderboard: slim bar under each total, relative to the leader ----
     var ptsEls = document.querySelectorAll('.board2 .b-pts');
