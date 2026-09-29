@@ -21,14 +21,14 @@
           <a href="https://ulys-treasury.vercel.app/" target="_blank" rel="noreferrer">Treasury</a>
         </div>
         <div class="navbar-actions">
+          <a href="https://x.com/Ulys_AI" target="_blank" rel="noreferrer" class="navbar-x" aria-label="Ulys on X">${X}</a>
+          <span class="vsep"></span>
           <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light or dark mode" title="Toggle theme">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.9 1.9M17.9 17.9l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.2 19.8l1.9-1.9M17.9 6.1l1.9-1.9"/></svg>
             <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
           </button>
           <span class="vsep"></span>
           <a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="navbar-cta">Get the app</a>
-          <span class="vsep"></span>
-          <a href="https://x.com/Ulys_AI" target="_blank" rel="noreferrer" class="navbar-x" aria-label="Ulys on X">${X}</a>
         </div>
       </nav>
     </div>`;
