@@ -93,20 +93,24 @@
     .board2-row.you { background: linear-gradient(90deg, rgba(128,123,245,.16), rgba(11,224,237,.09)); }
     .board2-row.you .b-rank .n, .board2-row.you .b-name { color: var(--ink); font-weight: 700; }
 
-    /* Soft shine that cascades across the top 3 rows */
-    .board2 { --shine-core: rgba(255,255,255,.8); --shine-tint: .08; }
-    [data-theme="dark"] .board2 { --shine-core: rgba(255,255,255,.075); --shine-tint: .07; }
+    /* Soft shine in the brand rainbow (same stops as the gradient text) cascading across the top 3 rows */
+    .board2 { --shine-a: .22; }
+    [data-theme="dark"] .board2 { --shine-a: .2; }
     .board2-row.top { position: relative; overflow: hidden; isolation: isolate; }
     .board2-row.top > * { position: relative; z-index: 1; } /* text stays above the sheen */
     .board2-row.top::after {
-      content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 38%; z-index: 0;
+      content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 46%; z-index: 0;
       pointer-events: none;
       background: linear-gradient(100deg,
         transparent 0%,
-        rgba(128,123,245,var(--shine-tint)) 30%,
-        var(--shine-core) 50%,
-        rgba(11,224,237,var(--shine-tint)) 70%,
+        rgba(128,123,245,var(--shine-a)) 16%,
+        rgba(0,116,255,var(--shine-a)) 30%,
+        rgba(11,224,237,var(--shine-a)) 44%,
+        rgba(255,187,0,var(--shine-a)) 58%,
+        rgba(255,128,160,var(--shine-a)) 72%,
+        rgba(240,50,46,calc(var(--shine-a) * .8)) 86%,
         transparent 100%);
+      filter: blur(6px);
       transform: translateX(-110%) skewX(-18deg);
       animation: boardShine 6.5s cubic-bezier(.45,.05,.35,1) infinite;
     }
