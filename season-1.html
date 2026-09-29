@@ -28,25 +28,36 @@
     .s1-stat { padding: 30px 20px 30px 26px; border-left: 1px solid var(--line); }
     .s1-stat:first-child { border-left: none; padding-left: 0; }
     .s1-stat b { display: block; font-family: var(--display); font-size: clamp(28px, 3.2vw, 42px); font-weight: 400; letter-spacing: -0.02em; line-height: 1; }
-    .s1-stat span { display: block; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .s1-stat > span { display: block; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
     .s1-live { font-variant-numeric: tabular-nums; }
     .s1-count { font-size: clamp(24px, 2.6vw, 33px); }
 
-    /* Throbbing CTA with soft rainbow glow */
-    .s1-glow { position: relative; z-index: 0; animation: s1Throb 2.6s ease-in-out infinite; }
+    /* Slot-machine odometer for the live counters */
+    .odo { display: inline-flex; line-height: 1; font-variant-numeric: normal; }
+    /* each reel window is sized to its current digit, so spacing matches normal text */
+    .odo .odo-d { display: inline-flex; justify-content: center; height: 1em; overflow: hidden;
+      transition: width .35s ease; }
+    .odo .odo-col { flex: none; display: flex; flex-direction: column; will-change: transform;
+      transition: transform .6s cubic-bezier(.16, 1, .3, 1); }
+    .odo .odo-col > span { display: block; height: 1em; text-align: center; }
+    .odo .odo-sep { display: inline-block; }
+
+    /* CTA keeps its original color; a very subtle rainbow glow sits BEHIND it */
+    .s1-glow { position: relative; display: inline-flex; isolation: isolate; }
+    .s1-glow .btn-solid { position: relative; animation: s1Throb 3s ease-in-out infinite; }
     .s1-glow::before {
-      content: ""; position: absolute; inset: -7px; z-index: -1; border-radius: inherit;
+      content: ""; position: absolute; inset: -9px; z-index: -1; border-radius: 14px;
       background: linear-gradient(90deg, #ff8a8a, #ffd08a, #9be59b, #8ac6ff, #c79bff, #ff8a8a);
       background-size: 300% 100%;
-      filter: blur(15px); opacity: .55;
-      animation: s1Glow 6s linear infinite, s1GlowPulse 2.6s ease-in-out infinite;
+      filter: blur(17px); opacity: .16;
+      animation: s1Glow 7s linear infinite, s1GlowPulse 3s ease-in-out infinite;
     }
-    @keyframes s1Throb { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+    @keyframes s1Throb { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
     @keyframes s1Glow { to { background-position: 300% 0; } }
-    @keyframes s1GlowPulse { 0%,100% { opacity: .38; } 50% { opacity: .7; } }
+    @keyframes s1GlowPulse { 0%,100% { opacity: .1; } 50% { opacity: .26; } }
     @media (prefers-reduced-motion: reduce) {
-      .s1-glow { animation: none; }
-      .s1-glow::before { animation: none; opacity: .45; }
+      .s1-glow .btn-solid { animation: none; }
+      .s1-glow::before { animation: none; opacity: .16; }
     }
 
     .s1-sec { max-width: var(--maxw); margin: 0 auto; padding: clamp(72px, 11vw, 150px) var(--gutter) 0; }
@@ -148,7 +159,7 @@
       <h1>From prompt, <span class="grad">to points.</span></h1>
       <p class="lede">Ulys Season 1 turns everyday activity into points. Trade, refer friends, share on socials, &amp; more to rank up the leaderboard.</p>
       <div class="s1-cta">
-        <a href="index.html#download" class="btn-solid lg s1-glow">Start earning points</a>
+        <span class="s1-glow"><a href="index.html#download" class="btn-solid lg">Start earning points</a></span>
         <a href="#leaderboard" class="btn-ghost lg">See the leaderboard</a>
       </div>
     </section>
@@ -163,7 +174,7 @@
     <!-- 01 · Visible leaderboard -->
     <section class="s1-sec line" id="leaderboard">
       <p class="s1-kicker"><b>01 / Visible leaderboard</b></p>
-      <h2>A live leaderboard, not a surprise snapshot.</h2>
+      <h2>Climb your way up the leaderboard.</h2>
       <p class="lede">Your points and rank update in real time. Know exactly where you stand every day of the season — no hidden snapshot, no guessing what counted.</p>
       <div class="board2" aria-label="Season 1 live standings">
         <div class="board2-top">
@@ -255,7 +266,7 @@
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var fmt = function (n) { return n.toLocaleString('en-US'); };
 
-    // Live countdown to a fixed season end date
+    // ---- Live countdown to a fixed season end date ----
     var END = new Date('2026-11-09T17:00:00Z').getTime();
     var pad = function (x) { return String(x).padStart(2, '0'); };
     function renderCountdown() {
@@ -271,16 +282,149 @@
     renderCountdown();
     setInterval(renderCountdown, 1000);
 
-    if (!reduce) {
-      // Points tick up every second; traders occasionally
+    // ---- Slot-machine odometer: each digit rolls upward on change ----
+    var LOOPS = 3; // 0-9 repeated so an upward roll never runs off the reel
+    function Odometer(el, value) {
+      this.el = el;
+      this.el.textContent = '';
+      this.el.classList.add('odo');
+      this.digits = [];   // { d(el), col(el), pos(number), digit(number) }
+      this.str = '';
+      this.measure();
+      this.render(String(value), true);
+    }
+    // Natural width of each digit in em, so reels hug their glyph like regular text
+    Odometer.prototype.measure = function () {
+      var probe = document.createElement('span');
+      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+      this.el.appendChild(probe);
+      var fs = parseFloat(getComputedStyle(this.el).fontSize) || 16;
+      this.widths = [];
+      for (var n = 0; n < 10; n++) {
+        probe.textContent = String(n);
+        this.widths[n] = probe.getBoundingClientRect().width / fs;
+      }
+      this.el.removeChild(probe);
+      for (var i = 0; i < this.digits.length; i++) {
+        var c = this.digits[i];
+        if (c) c.d.style.width = this.widths[c.digit] + 'em';
+      }
+    };
+    Odometer.prototype.makeDigit = function () {
+      var d = document.createElement('span'); d.className = 'odo-d';
+      var col = document.createElement('span'); col.className = 'odo-col';
+      for (var k = 0; k < LOOPS * 10; k++) {
+        var s = document.createElement('span');
+        s.textContent = String(k % 10);
+        col.appendChild(s);
+      }
+      d.appendChild(col);
+      var cell = { d: d, col: col, pos: 0, digit: 0 };
+      // Once a roll settles, silently drop back a whole loop (same digit, so invisible)
+      col.addEventListener('transitionend', function (e) {
+        if (e.propertyName !== 'transform' || cell.pos < 10) return;
+        cell.pos = cell.pos % 10;
+        col.style.transition = 'none';
+        col.style.transform = 'translateY(-' + cell.pos + 'em)';
+        void col.offsetHeight;
+        col.style.transition = '';
+      });
+      return cell;
+    };
+    Odometer.prototype.render = function (str, instant) {
+      // Rebuild structure only when the length/shape changes
+      if (str.length !== this.str.length) {
+        this.el.textContent = '';
+        this.digits = [];
+        for (var i = 0; i < str.length; i++) {
+          var ch = str[i];
+          if (ch >= '0' && ch <= '9') {
+            var dg = this.makeDigit();
+            this.digits.push(dg);
+            this.el.appendChild(dg.d);
+          } else {
+            var sep = document.createElement('span');
+            sep.className = 'odo-sep';
+            sep.textContent = ch;
+            this.digits.push(null);
+            this.el.appendChild(sep);
+          }
+        }
+        instant = true;
+      }
+      var total = str.length;
+      for (var j = 0; j < total; j++) {
+        var cell = this.digits[j];
+        if (!cell) continue;
+        var target = +str[j];
+        cell.d.style.width = this.widths[target] + 'em';
+        if (instant) {
+          cell.col.style.transition = 'none';
+          cell.pos = target;
+          cell.col.style.transform = 'translateY(-' + target + 'em)';
+          void cell.col.offsetHeight;
+          cell.col.style.transition = '';
+        } else if (target !== cell.digit) {
+          var steps = (target - cell.digit + 10) % 10; // always roll upward
+          var now = Date.now();
+          // previous roll has certainly settled: drop back a loop before rolling again
+          if (cell.pos >= 10 && now - (cell.t || 0) > 1000) {
+            cell.col.style.transition = 'none';
+            cell.pos = cell.pos % 10;
+            cell.col.style.transform = 'translateY(-' + cell.pos + 'em)';
+            void cell.col.offsetHeight;
+            cell.col.style.transition = '';
+          }
+          var newPos = cell.pos + steps;
+          cell.t = now;
+          // safety: never scroll past the end of the reel
+          if (newPos > LOOPS * 10 - 1) {
+            cell.col.style.transition = 'none';
+            cell.pos = cell.pos % 10;
+            cell.col.style.transform = 'translateY(-' + cell.pos + 'em)';
+            void cell.col.offsetHeight;
+            cell.col.style.transition = '';
+            newPos = cell.pos + steps;
+          }
+          // stagger: rightmost reels move first, like a slot machine settling
+          cell.col.style.transitionDelay = ((total - 1 - j) * 30) + 'ms';
+          cell.pos = newPos;
+          cell.col.style.transform = 'translateY(-' + newPos + 'em)';
+        }
+        cell.digit = target;
+      }
+      this.str = str;
+    };
+
+    if (!reduce && (elP || elT)) {
       var traders = 12480, points = 3240000;
-      setInterval(function () {
-        points += Math.floor(Math.random() * 130) + 25;
-        if (elP) elP.textContent = fmt(points);
-      }, 1000);
-      setInterval(function () {
-        if (Math.random() < 0.55) { traders += 1; if (elT) elT.textContent = fmt(traders); }
-      }, 2600);
+      var odoP = elP ? new Odometer(elP, fmt(points)) : null;
+      var odoT = elT ? new Odometer(elT, fmt(traders)) : null;
+      // re-measure once the display font has loaded
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          if (odoP) odoP.measure();
+          if (odoT) odoT.measure();
+        });
+      }
+
+      // Points: irregular cadence, deliberately off the countdown's 1s beat
+      (function loopPoints() {
+        setTimeout(function () {
+          points += Math.floor(Math.random() * 140) + 20;
+          if (odoP) odoP.render(fmt(points));
+          loopPoints();
+        }, 1150 + Math.random() * 1300);
+      })();
+
+      // Traders: climbs occasionally
+      (function loopTraders() {
+        setTimeout(function () {
+          traders += 1;
+          if (odoT) odoT.render(fmt(traders));
+          loopTraders();
+        }, 2200 + Math.random() * 2600);
+      })();
     }
   })();
   </script>
