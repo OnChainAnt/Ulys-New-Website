@@ -93,35 +93,32 @@
     .board2-row.you { background: linear-gradient(90deg, rgba(128,123,245,.16), rgba(11,224,237,.09)); }
     .board2-row.you .b-rank .n, .board2-row.you .b-name { color: var(--ink); font-weight: 700; }
 
-    /* Soft shine in the brand rainbow (same stops as the gradient text) cascading across the top 3 rows */
-    .board2 { --shine-a: .22; }
-    [data-theme="dark"] .board2 { --shine-a: .2; }
-    .board2-row.top { position: relative; overflow: hidden; isolation: isolate; }
-    .board2-row.top > * { position: relative; z-index: 1; } /* text stays above the sheen */
-    .board2-row.top::after {
-      content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 46%; z-index: 0;
+    /* Glass glint: one clear diagonal streak sweeping over the top-3 block */
+    .board2 { --glint: rgba(255,255,255,.7); --glint-soft: rgba(255,255,255,.28); --glint-iri: .05; }
+    [data-theme="dark"] .board2 { --glint: rgba(255,255,255,.085); --glint-soft: rgba(255,255,255,.03); --glint-iri: .035; }
+    .board2-top3 { position: relative; overflow: hidden; }
+    .board2-top3::after {
+      content: ""; position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%; z-index: 2;
       pointer-events: none;
-      background: linear-gradient(100deg,
-        transparent 0%,
-        rgba(128,123,245,var(--shine-a)) 16%,
-        rgba(0,116,255,var(--shine-a)) 30%,
-        rgba(11,224,237,var(--shine-a)) 44%,
-        rgba(255,187,0,var(--shine-a)) 58%,
-        rgba(255,128,160,var(--shine-a)) 72%,
-        rgba(240,50,46,calc(var(--shine-a) * .8)) 86%,
-        transparent 100%);
-      filter: blur(6px);
-      transform: translateX(-110%) skewX(-18deg);
-      animation: boardShine 6.5s cubic-bezier(.45,.05,.35,1) infinite;
+      background:
+        /* thin bright core */
+        linear-gradient(105deg, transparent 46%, var(--glint) 50%, transparent 54%),
+        /* wide faint sheen with a hint of iridescence at the edges */
+        linear-gradient(105deg,
+          transparent 18%,
+          rgba(128,123,245,var(--glint-iri)) 30%,
+          var(--glint-soft) 50%,
+          rgba(11,224,237,var(--glint-iri)) 70%,
+          transparent 82%);
+      transform: translateX(-120%);
+      animation: boardGlint 7s cubic-bezier(.5,.1,.3,1) infinite 1.2s;
     }
-    .board2-row.top:nth-child(4)::after { animation-delay: .22s; }
-    .board2-row.top:nth-child(5)::after { animation-delay: .44s; }
-    @keyframes boardShine {
-      0%        { transform: translateX(-110%) skewX(-18deg); }
-      30%, 100% { transform: translateX(300%) skewX(-18deg); }
+    @keyframes boardGlint {
+      0%        { transform: translateX(-120%); }
+      22%, 100% { transform: translateX(320%); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .board2-row.top::after { animation: none; display: none; }
+      .board2-top3::after { animation: none; display: none; }
     }
     .board2-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
     .board2-note b { color: #30d158; }
@@ -216,9 +213,11 @@
           <span class="board2-live"><span class="ld"></span> Updating live</span>
         </div>
         <div class="board2-head"><span>Rank</span><span>Trader</span><span class="s">Streak</span><span class="r">Points</span></div>
-        <div class="board2-row top"><span class="b-rank"><span class="n">1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">whale.ulys</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
-        <div class="board2-row top"><span class="b-rank"><span class="n">2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">0xleo.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
-        <div class="board2-row top"><span class="b-rank"><span class="n">3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">degen.ulys</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
+        <div class="board2-top3">
+          <div class="board2-row"><span class="b-rank"><span class="n">1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">whale.ulys</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
+          <div class="board2-row"><span class="b-rank"><span class="n">2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">0xleo.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
+          <div class="board2-row"><span class="b-rank"><span class="n">3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">degen.ulys</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
+        </div>
         <div class="board2-row"><span class="b-rank"><span class="n">4</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span><span class="h">steady.ulys</span></span><span class="b-streak">90d</span><span class="b-pts">119,505</span></div>
         <div class="board2-row"><span class="b-rank"><span class="n">5</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#ff80a0)"></span><span class="h">mia.ulys</span></span><span class="b-streak">63d</span><span class="b-pts">108,300</span></div>
         <div class="board2-row"><span class="b-rank"><span class="n">6</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#807bf5)"></span><span class="h">gm.ulys</span></span><span class="b-streak">51d</span><span class="b-pts">96,120</span></div>
@@ -285,7 +284,7 @@
         <video class="s1-final-bg" muted loop playsinline preload="none" poster="assets/season-cta-poster.webp" aria-hidden="true" data-src="assets/season-cta-bg.mp4"></video>
         <div class="s1-final-overlay"></div>
         <h2>Season 1 is live. Start climbing.</h2>
-        <p class="lede center">Every day you wait is points on the table. Download Ulys and put your streak to work.</p>
+        <p class="lede center">Every day you wait is points on the table. Download Ulys and start stacking.</p>
         <div class="s1-cta" style="justify-content:center">
           <a href="index.html#download" class="btn-solid lg">Start earning points</a>
         </div>
