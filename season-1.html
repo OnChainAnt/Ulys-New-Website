@@ -151,15 +151,18 @@
     .mech p { margin-top: 8px; font-size: 14.5px; color: var(--ink); line-height: 1.5; }
     .mech p b { font-weight: 600; }
 
-    /* final CTA — crypto coins background with dark overlay */
+    /* final CTA — looping coins video with dark overlay */
     .s1-final {
       position: relative;
-      background:
-        linear-gradient(180deg, rgba(6,6,8,.74), rgba(6,6,8,.86)),
-        url("assets/season-cta-bg.webp") center / cover no-repeat;
+      background: #070709;
       border: 1px solid rgba(255,255,255,.14);
       overflow: hidden;
+      isolation: isolate;
     }
+    .s1-final-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+    .s1-final-overlay { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(180deg, rgba(6,6,8,.74), rgba(6,6,8,.86)); }
+    .s1-final > h2, .s1-final > p, .s1-final > .s1-cta { position: relative; z-index: 2; }
     .s1-final h2 { color: #fff; }
     .s1-final .lede { color: rgba(255,255,255,.78); }
     .s1-final .btn-solid { background: #fff; color: #14151a; }
@@ -279,6 +282,8 @@
     <!-- CTA -->
     <section class="cta">
       <div class="cta-inner s1-final">
+        <video class="s1-final-bg" muted loop playsinline preload="none" poster="assets/season-cta-poster.webp" aria-hidden="true" data-src="assets/season-cta-bg.mp4"></video>
+        <div class="s1-final-overlay"></div>
         <h2>Season 1 is live. Start climbing.</h2>
         <p class="lede center">Every day you wait is points on the table. Download Ulys and put your streak to work.</p>
         <div class="s1-cta" style="justify-content:center">
@@ -312,6 +317,22 @@
     }
     renderCountdown();
     setInterval(renderCountdown, 1000);
+
+    // ---- Final CTA video: load when near the viewport, play only while visible ----
+    var ctaVid = document.querySelector('.s1-final-bg');
+    if (ctaVid && !reduce) {
+      var startVid = function () {
+        if (!ctaVid.src) { ctaVid.src = ctaVid.getAttribute('data-src'); ctaVid.load(); }
+        var p = ctaVid.play(); if (p && p.catch) p.catch(function () {});
+      };
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) startVid(); else if (ctaVid.src) ctaVid.pause(); });
+        }, { rootMargin: '400px 0px' }).observe(ctaVid);
+      } else {
+        startVid();
+      }
+    }
 
     // ---- Slot-machine odometer: each digit rolls upward on change ----
     var LOOPS = 3; // 0-9 repeated so an upward roll never runs off the reel
