@@ -69,30 +69,97 @@
     .s1-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; margin-top: 44px; }
 
     /* leaderboard — full-width live standings */
-    .board2 { --board-bg: #e0dfd8; margin-top: 44px; border: 1px solid var(--line); border-radius: 18px; background: var(--board-bg); overflow: hidden; }
-    [data-theme="dark"] .board2 { --board-bg: #0d0c0b; }
-    .board2-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--line); }
-    .board2-title { font-family: var(--display); font-size: 18px; font-weight: 500; }
-    .board2-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-    .board2-live .ld { width: 7px; height: 7px; border-radius: 50%; background: #30d158; box-shadow: 0 0 8px #30d158; animation: blink 1.6s infinite; }
-    @keyframes blink { 50% { opacity: .35; } }
-    .board2-head, .board2-row { display: grid; grid-template-columns: 58px 1fr 80px 120px; gap: 12px; align-items: center; padding: 15px 24px; }
-    .board2-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
+    /* centered section header */
+    #leaderboard { text-align: center; }
+    #leaderboard h2, #leaderboard .lede { margin-left: auto; margin-right: auto; }
+
+    /* full-bleed band: edge to edge, rows inset to line up with the page content */
+    .board2 {
+      --board-bg: #e8e7e1;
+      --inset: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+      position: relative; width: 100vw; margin: 56px 0 0 calc(50% - 50vw);
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      background: var(--board-bg); overflow: hidden; text-align: left;
+      box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+    }
+    [data-theme="dark"] .board2 { --board-bg: #131211; box-shadow: 0 1px 0 rgba(255,255,255,.04) inset; }
+    .board2 + .board2-note { text-align: center; }
+    /* rainbow hairline along the top edge */
+    .board2::before {
+      content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px; z-index: 3; pointer-events: none;
+      background: linear-gradient(90deg, transparent, #807bf5 18%, #0be0ed 42%, #ffbb00 62%, #ff80a0 82%, transparent);
+      opacity: .55;
+    }
+    .board2-top {
+      position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 22px var(--inset); border-bottom: 1px solid var(--line);
+      background: radial-gradient(120% 180% at 100% 0%, rgba(128,123,245,.07), transparent 55%),
+                  radial-gradient(90% 160% at 0% 0%, rgba(11,224,237,.05), transparent 50%);
+    }
+    .board2-title { font-family: var(--display); font-size: 19px; font-weight: 500; letter-spacing: -.01em; }
+    .board2-live {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 11px 6px 10px; border-radius: 999px;
+      border: 1px solid var(--line); background: color-mix(in srgb, var(--board-bg) 70%, transparent);
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    }
+    .board2-live .ld { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #30d158; }
+    .board2-live .ld::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #30d158; animation: livePing 1.8s cubic-bezier(0,0,.2,1) infinite; }
+    @keyframes livePing { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(3); opacity: 0; } }
+
+    .board2-head, .board2-row { display: grid; grid-template-columns: 58px 1fr 84px 140px; gap: 12px; align-items: center; padding: 15px var(--inset); }
+    .board2-head { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); border-bottom: 1px solid var(--line); }
     .board2-head .r, .board2-row .b-pts { text-align: right; }
-    .board2-row { border-top: 1px solid var(--line-soft); transition: background .15s; }
-    .board2-row:hover { background: color-mix(in srgb, var(--ink) 3.5%, transparent); }
+    .board2-row { position: relative; border-top: 1px solid var(--line-soft); transition: background .2s; }
+    .board2-top3 .board2-row:first-child { border-top: none; }
+    .board2-row:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+
     .b-rank { display: inline-flex; align-items: center; gap: 8px; }
-    .b-rank .n { font-family: var(--mono); font-size: 15px; color: var(--muted); min-width: 26px; }
-    .chg { font-family: var(--mono); font-size: 11px; font-weight: 600; }
-    .chg.up { color: #30d158; } .chg.down { color: #f0503c; } .chg.flat { color: var(--faint); }
-    .b-name { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 500; min-width: 0; }
+    .b-rank .n { font-family: var(--mono); font-size: 14px; color: var(--faint); min-width: 26px; }
+    /* top 3: bigger display numerals, #1 in the brand rainbow */
+    .board2-top3 .b-rank .n { font-family: var(--display); font-size: 22px; letter-spacing: -.02em; color: var(--ink); line-height: 1; }
+    /* #1 gets a soft rainbow glow around its avatar ring */
+    .board2-top3 .board2-row:first-child .b-av::after {
+      content: ""; position: absolute; inset: -8px; border-radius: 50%; z-index: -2;
+      background: conic-gradient(from 200deg, #807bf5, #0074ff, #0be0ed, #ffbb00, #ff80a0, #f0322e, #807bf5);
+      filter: blur(9px); opacity: .45;
+    }
+
+    .b-name { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; min-width: 0; }
     .b-name span.h { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .b-av { width: 28px; height: 28px; border-radius: 50%; flex: none; background: linear-gradient(135deg,#807bf5,#0be0ed); }
-    .b-streak { font-family: var(--mono); font-size: 13px; color: var(--muted); }
-    .b-pts { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; }
-    .board2-sep { text-align: center; color: var(--faint); font-family: var(--mono); font-size: 12px; letter-spacing: .5em; padding: 10px 0; border-top: 1px solid var(--line-soft); }
-    .board2-row.you { background: linear-gradient(90deg, rgba(128,123,245,.16), rgba(11,224,237,.09)); }
+    .b-av { position: relative; width: 28px; height: 28px; border-radius: 50%; flex: none; background: linear-gradient(135deg,#807bf5,#0be0ed); }
+    /* thin rainbow ring on the top-3 avatars */
+    .board2-top3 .b-name { isolation: isolate; }
+    .board2-top3 .b-av { width: 30px; height: 30px; box-shadow: 0 0 0 2px var(--board-bg); }
+    .board2-top3 .b-av::before {
+      content: ""; position: absolute; inset: -4px; border-radius: 50%; z-index: -1;
+      background: conic-gradient(from 200deg, #807bf5, #0074ff, #0be0ed, #ffbb00, #ff80a0, #f0322e, #807bf5);
+      opacity: .85;
+    }
+    .b-streak {
+      justify-self: start; font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+      padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line-soft);
+    }
+    .b-pts { font-family: var(--mono); font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+    /* slim bar under each total, relative to the leader (width set in JS) */
+    .b-pts .b-bar { display: block; margin: 7px 0 0 auto; width: 72px; height: 3px; border-radius: 3px; background: var(--line-soft); overflow: hidden; }
+    .b-pts .b-bar i { display: block; height: 100%; width: var(--w, 0%); margin-left: auto; border-radius: inherit; background: var(--rainbow); opacity: .75; }
+
+    .board2-sep { display: flex; justify-content: center; padding: 12px 0; border-top: 1px solid var(--line-soft); font-size: 0; }
+    .board2-sep::before { content: ""; width: 30px; height: 6px; opacity: .8;
+      background: radial-gradient(circle, var(--faint) 1.5px, transparent 2px) 0 0 / 10px 6px repeat-x; }
+
+    .board2-row.you { background: linear-gradient(90deg, rgba(128,123,245,.13), rgba(11,224,237,.06) 60%, transparent); }
+    .board2-row.you::before {
+      content: ""; position: absolute; left: calc(var(--inset) - 14px); top: 12px; bottom: 12px; width: 3px; border-radius: 3px;
+      background: linear-gradient(180deg, #807bf5, #0be0ed);
+    }
     .board2-row.you .b-rank .n, .board2-row.you .b-name { color: var(--ink); font-weight: 700; }
+    .you-tag {
+      font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      padding: 3px 7px; border-radius: 999px; color: var(--ink);
+      background: linear-gradient(var(--board-bg), var(--board-bg)) padding-box, var(--rainbow) border-box;
+      border: 1px solid transparent;
+    }
 
     /* Glass glint: one clear diagonal streak sweeping over the top-3 block */
     .board2 { --glint: rgba(255,255,255,.7); --glint-soft: rgba(255,255,255,.28); --glint-iri: .05; }
@@ -124,7 +191,7 @@
     .board2-note { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
     .board2-note b { color: #30d158; }
     @media (max-width: 640px) {
-      .board2-head, .board2-row { grid-template-columns: 50px 1fr 96px; padding: 13px 16px; }
+      .board2-head, .board2-row { grid-template-columns: 44px 1fr 110px; padding: 13px var(--inset); }
       .board2-head .s, .b-streak { display: none; }
     }
 
@@ -205,7 +272,6 @@
 
     <!-- 01 · Visible leaderboard -->
     <section class="s1-sec" id="leaderboard">
-      <p class="s1-kicker"><b>01 / Visible leaderboard</b></p>
       <h2>Climb your way up the leaderboard.</h2>
       <p class="lede">Your points and rank update in real time, so you always know exactly where you stand.</p>
       <div class="board2" aria-label="Season 1 live standings">
@@ -227,14 +293,14 @@
         <div class="board2-row"><span class="b-rank"><span class="n">9</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0074ff,#0be0ed)"></span><span class="h">sol.ulys</span></span><span class="b-streak">57d</span><span class="b-pts">74,600</span></div>
         <div class="board2-row"><span class="b-rank"><span class="n">10</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#807bf5)"></span><span class="h">vee.ulys</span></span><span class="b-streak">33d</span><span class="b-pts">69,880</span></div>
         <div class="board2-sep">• • •</div>
-        <div class="board2-row you"><span class="b-rank"><span class="n">128</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">you.ulys</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
+        <div class="board2-row you"><span class="b-rank"><span class="n">128</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">you.ulys</span><span class="you-tag">You</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
       </div>
       <p class="board2-note">You're <b>up 6 spots today</b> — keep your streak alive to climb faster.</p>
     </section>
 
     <!-- 02 · Consistency -->
     <section class="s1-sec line">
-      <p class="s1-kicker"><b>02 / Built for consistency</b></p>
+      <p class="s1-kicker"><b>01 / Built for consistency</b></p>
       <h2>Rewards the traders who keep showing up.</h2>
       <p class="lede">Season 1 pays for consistency, not one big deposit. Daily activity, streaks and rotating boosts mean steady traders out-earn one-time whales.</p>
       <div class="earn-grid">
@@ -255,7 +321,7 @@
 
     <!-- 03 · Clear rules -->
     <section class="s1-sec line">
-      <p class="s1-kicker"><b>03 / Clear rules</b></p>
+      <p class="s1-kicker"><b>02 / Clear rules</b></p>
       <h2>Simple rules, clear rewards.</h2>
       <p class="lede">How points are counted is public and easy to follow — what you see on your leaderboard is what you've earned. And when a boost goes live, you'll see it in the app.</p>
       <div class="mech-list" style="margin-top:44px">
@@ -317,6 +383,17 @@
     }
     renderCountdown();
     setInterval(renderCountdown, 1000);
+
+    // ---- Leaderboard: slim bar under each total, relative to the leader ----
+    var ptsEls = document.querySelectorAll('.board2 .b-pts');
+    var ptsVals = [].map.call(ptsEls, function (el) { return parseInt(el.textContent.replace(/[^\d]/g, ''), 10) || 0; });
+    var ptsMax = Math.max.apply(null, ptsVals.concat(1));
+    [].forEach.call(ptsEls, function (el, i) {
+      var bar = document.createElement('span'); bar.className = 'b-bar'; bar.setAttribute('aria-hidden', 'true');
+      var fill = document.createElement('i');
+      fill.style.setProperty('--w', Math.max(4, Math.round(ptsVals[i] / ptsMax * 100)) + '%');
+      bar.appendChild(fill); el.appendChild(bar);
+    });
 
     // ---- Final CTA video: load when near the viewport, play only while visible ----
     var ctaVid = document.querySelector('.s1-final-bg');
