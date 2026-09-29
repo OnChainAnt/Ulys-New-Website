@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Season 1 — Earn your allocation | Ulys</title>
-  <meta name="description" content="Ulys Season 1 turns everyday activity into points, and points into a fixed, published allocation. A live scoreboard, rewards for consistency, and mechanics you can read up front." />
+  <title>Season 1 — Points are live | Ulys</title>
+  <meta name="description" content="Ulys Season 1 points are live. Everyday activity earns points, a live scoreboard shows exactly where you stand, and the rules reward consistency. Here's how to start earning." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -24,11 +24,11 @@
     .s1-hero .lede { font-size: clamp(16px, 1.9vw, 20px); color: var(--muted); margin-top: 24px; max-width: 60ch; line-height: 1.6; }
     .s1-cta { display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
 
-    .s1-stats { max-width: var(--maxw); margin: 64px auto 0; padding: 0 var(--gutter); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
-    .s1-stat { padding: 26px 24px 26px 0; border-right: 1px solid var(--line); }
-    .s1-stat:last-child { border-right: none; }
-    .s1-stat b { display: block; font-family: var(--display); font-size: clamp(26px, 3.4vw, 40px); font-weight: 400; letter-spacing: -0.02em; }
-    .s1-stat span { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .s1-stats { max-width: var(--maxw); margin: 72px auto 0; padding: 0 var(--gutter); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .s1-stat { padding: 30px 20px 30px 26px; border-left: 1px solid var(--line); }
+    .s1-stat:first-child { border-left: none; padding-left: 0; }
+    .s1-stat b { display: block; font-family: var(--display); font-size: clamp(28px, 3.2vw, 42px); font-weight: 400; letter-spacing: -0.02em; line-height: 1; }
+    .s1-stat span { display: block; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
     .s1-sec { max-width: var(--maxw); margin: 0 auto; padding: clamp(72px, 11vw, 150px) var(--gutter) 0; }
     .s1-sec.line { border-top: 1px solid var(--line); margin-top: clamp(72px, 11vw, 150px); }
@@ -77,7 +77,9 @@
 
     @media (max-width: 860px) {
       .s1-stats { grid-template-columns: 1fr 1fr; }
-      .s1-stat:nth-child(2) { border-right: none; }
+      .s1-stat { padding: 26px 16px 26px 20px; }
+      .s1-stat:nth-child(odd) { border-left: none; padding-left: 0; }
+      .s1-stat:nth-child(3), .s1-stat:nth-child(4) { border-top: 1px solid var(--line); }
       .s1-split { grid-template-columns: 1fr; }
       .earn-grid, .mech-list { grid-template-columns: 1fr; }
     }
@@ -96,7 +98,7 @@
         <span class="s1-lockup-label">Season One</span>
       </div>
       <h1>From prompt, <span class="grad">to points.</span></h1>
-      <p class="lede">Ulys Season 1 turns everyday activity into points — and points into a fixed, published allocation. A live scoreboard, rewards for showing up consistently, and mechanics you can read before you play. No surprise snapshots.</p>
+      <p class="lede">Ulys Season 1 turns everyday activity into points. A live scoreboard, rewards for showing up consistently, and clear rules you can read before you play. No surprise snapshots.</p>
       <div class="s1-cta">
         <a href="index.html#download" class="btn-solid lg">Start earning points</a>
         <a href="#scoreboard" class="btn-ghost lg">See the scoreboard</a>
@@ -104,10 +106,10 @@
     </section>
 
     <div class="s1-stats">
-      <div class="s1-stat"><b>12,480</b><span>Traders in season 1</span></div>
+      <div class="s1-stat"><b>12,480</b><span>Traders in Season 1</span></div>
       <div class="s1-stat"><b>3.24M</b><span>Points earned</span></div>
-      <div class="s1-stat"><b>5%</b><span>Supply in the pool</span></div>
-      <div class="s1-stat"><b>41 days</b><span>Left in the season</span></div>
+      <div class="s1-stat"><b>90</b><span>Longest streak · days</span></div>
+      <div class="s1-stat"><b>41</b><span>Days left in the season</span></div>
     </div>
 
     <!-- 01 · Visible scoreboard -->
@@ -126,7 +128,7 @@
         </div>
         <div>
           <p class="board-you-note">Your rank <b>▲ 6 today</b> — keep your streak to climb faster.</p>
-          <p class="lede" style="margin-top:16px">Every point you earn is on screen the moment it lands. There's no end-of-season surprise: the number you see is the number that counts toward your allocation.</p>
+          <p class="lede" style="margin-top:16px">Every point you earn is on screen the moment it lands. There's no end-of-season surprise: the number you see is the number you've earned.</p>
         </div>
       </div>
     </section>
@@ -151,19 +153,15 @@
       </div>
     </section>
 
-    <!-- 03 · Published mechanics -->
+    <!-- 03 · Clear rules -->
     <section class="s1-sec line">
-      <p class="s1-kicker"><b>03 / Published mechanics</b></p>
-      <h2>Exactly how points become your allocation.</h2>
-      <p class="lede">The rules are published and fixed for the whole season. Your allocation is simply your share of the pool — nothing is decided behind the scenes.</p>
-      <div class="formula" style="margin-top:44px">
-        <p class="eq">Your allocation <span class="hl">=</span> <span class="hl">( your points ÷ total season points )</span> × Season 1 pool</p>
-        <p class="sub">The Season 1 pool is fixed at <b>5% of supply</b> and published on day one. It does not change.</p>
-      </div>
-      <div class="mech-list">
-        <div class="mech"><h4>Fixed pool</h4><p><b>5% of supply</b>, locked for the season. No dilution, no retroactive changes.</p></div>
-        <div class="mech"><h4>Your points = the number on screen</h4><p>Final points are your live scoreboard total at <b>season close</b>. No hidden snapshot.</p></div>
-        <div class="mech"><h4>Claim window</h4><p>Allocation is claimable <b>7 days after</b> the season ends, straight from your wallet.</p></div>
+      <p class="s1-kicker"><b>03 / Clear rules</b></p>
+      <h2>The rules are published up front.</h2>
+      <p class="lede">How points are counted is public and fixed for the whole season — no hidden snapshot, no moving the goalposts. What you see on your scoreboard is what you've earned.</p>
+      <div class="mech-list" style="margin-top:44px">
+        <div class="mech"><h4>What counts is public</h4><p>Every way to earn points is listed up front — <b>no secret criteria.</b></p></div>
+        <div class="mech"><h4>Points are what's on screen</h4><p>Your total is your live scoreboard number, with <b>no hidden end-of-season snapshot.</b></p></div>
+        <div class="mech"><h4>Fixed for the season</h4><p>The ways to earn and the multipliers are set on <b>day one</b> and don't change.</p></div>
       </div>
     </section>
 
@@ -177,8 +175,7 @@
         <details><summary>How do I join Season 1?<i></i></summary><p>Download Ulys and start using your wallet — every active day, trade, hold and referral earns points automatically. There's nothing extra to sign up for.</p></details>
         <details><summary>When does the season end?<i></i></summary><p>Season 1 runs for a fixed window shown on the live counter above. Your final points are your scoreboard total the moment it closes.</p></details>
         <details><summary>Can my points go down?<i></i></summary><p>Points you've earned don't disappear, but your streak multiplier resets if you miss an active day — so consistency is what keeps you climbing.</p></details>
-        <details><summary>Is the allocation guaranteed?<i></i></summary><p>The pool size and the points-to-allocation formula are published up front and fixed for the season. Your share is your points divided by the total.</p></details>
-        <details><summary>How do I claim my allocation?<i></i></summary><p>Once the claim window opens (7 days after season close), you claim directly from your non-custodial wallet in the app.</p></details>
+        <details><summary>How is my rank calculated?<i></i></summary><p>Your rank is simply your total points versus everyone else, updated live. Climb by earning more and keeping your streak alive.</p></details>
       </div>
     </section>
 
