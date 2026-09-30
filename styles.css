@@ -150,7 +150,7 @@ img { max-width: 100%; display: block; }
 /* command bar */
 .command { width: 100%; max-width: 620px; }
 .command-input {
-  position: relative; border-radius: 15.5px;
+  position: relative; display: flow-root; border-radius: 15.5px; /* flow-root: keeps the 1.5px ring visible top + bottom */
   box-shadow: rgba(11, 224, 237, 0.55) 0px 0px 20px -6px, rgba(128, 123, 245, 0.45) 0px 0px 34px -10px, rgba(255, 128, 160, 0.3) 0px 0px 48px -14px;
 }
 .command-glow {
