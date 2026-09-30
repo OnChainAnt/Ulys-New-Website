@@ -25,8 +25,11 @@
   --display: "Neue Haas Display", "Helvetica Neue", Arial, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --body: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --rainbow: linear-gradient(90deg, #807bf5 0%, #0074ff 18%, #0be0ed 38%, #ffbb00 56%, #ff80a0 74%, #f0322e 100%);
-  --rainbow-soft: linear-gradient(90deg, rgba(128,123,245,.7), rgba(0,116,255,.65), rgba(11,224,237,.6), rgba(255,187,0,.6), rgba(255,128,160,.65), rgba(240,50,46,.65));
+  /* Brand gradients — identical to ulys.ai (bg-gradient-spectrum / bg-gradient-spectrum-soft) */
+  --spectrum: linear-gradient(123.07deg, rgb(240, 50, 46) -1.64%, rgb(241, 58, 58) -0.04%, rgb(251, 108, 131) 10.05%, rgb(255, 128, 160) 14.64%, rgb(255, 152, 94) 19.03%, rgb(255, 170, 43) 23.03%, rgb(255, 182, 11) 26.02%, rgb(255, 187, 0) 27.62%, rgb(246, 188, 8) 30.22%, rgb(222, 191, 31) 34.21%, rgb(184, 197, 68) 39.41%, rgb(131, 205, 120) 45.3%, rgb(64, 215, 185) 51.89%, rgb(11, 224, 237) 56.68%, rgb(9, 212, 238) 60.58%, rgb(6, 181, 244) 67.67%, rgb(1, 131, 252) 77.05%, rgb(0, 116, 255) 79.55%, rgb(1, 116, 254) 79.75%, rgb(48, 118, 251) 84.05%, rgb(85, 121, 248) 88.14%, rgb(112, 122, 246) 91.93%, rgb(128, 123, 245) 95.33%, rgb(134, 124, 245) 97.93%);
+  --spectrum-soft: linear-gradient(123.07deg, rgb(244, 112, 109) 0%, rgb(255, 207, 76) 25%, rgb(84, 233, 242) 50%, rgb(76, 158, 255) 75%, rgb(166, 163, 248) 100%);
+  --rainbow: var(--spectrum);
+  --rainbow-soft: var(--spectrum-soft);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 :root[data-theme="dark"] {
@@ -146,12 +149,18 @@ img { max-width: 100%; display: block; }
 
 /* command bar */
 .command { width: 100%; max-width: 620px; }
-.command-input { position: relative; }
-.command-glow { position: absolute; inset: -1px; border-radius: 14px; background: var(--rainbow-soft); filter: blur(18px); opacity: .16; z-index: 0; }
+.command-input {
+  position: relative; border-radius: 15.5px;
+  box-shadow: rgba(11, 224, 237, 0.55) 0px 0px 20px -6px, rgba(128, 123, 245, 0.45) 0px 0px 34px -10px, rgba(255, 128, 160, 0.3) 0px 0px 48px -14px;
+}
+.command-glow {
+  position: absolute; inset: 0; border-radius: 15.5px; z-index: 0;
+  background-image: var(--spectrum-soft); background-size: 200% 200%; animation: gradient-animation 5s infinite; opacity: .7;
+}
 .command-bar {
   position: relative; z-index: 1; display: flex; align-items: center; gap: 14px;
   min-height: 62px; padding: 8px 8px 8px 20px; border-radius: 14px;
-  background: var(--surface); border: 1px solid var(--line);
+  margin: 1.5px; background: var(--surface); border: 0;
 }
 .command-text { flex: 1; text-align: left; font-size: clamp(15px, 2.2vw, 18px); font-weight: 500; color: var(--ink); overflow: hidden; white-space: nowrap; }
 .caret { display: inline-block; width: 2px; height: 1.1em; background: var(--ink); margin-left: 2px; vertical-align: text-bottom; animation: caret 1s step-end infinite; }
@@ -380,12 +389,6 @@ img { max-width: 100%; display: block; }
 .showcase h2 .grad {
   background: var(--rainbow); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-/* command bar — rainbow border + slightly stronger glow (brand centerpiece) */
-.command-bar {
-  border: 1px solid transparent;
-  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--rainbow) border-box;
-}
-.command-glow { opacity: .3; }
 /* Try it — rainbow underline */
 .tryit { border-bottom: 2px solid transparent; border-image: var(--rainbow) 1; }
 /* FAQ toggles pick up the gradient */
@@ -454,18 +457,20 @@ img { max-width: 100%; display: block; }
 .hero-trust i { display: none; }
 @media (max-width: 560px) { .hero-trust span:not(:last-child)::after { margin: 0 10px; } }
 
-/* ---- Softer, more blended brand gradient (gentler transitions) ---- */
-:root { --rainbow-blend: linear-gradient(90deg, #9a8fe6 0%, #6ea8ef 22%, #59c7cf 44%, #e9bf6a 63%, #efa0b0 81%, #e0828b 100%); }
+/* ---- Gradient text: identical to ulys.ai (spectrum, 200% size, 5s pan) ---- */
+:root { --rainbow-blend: var(--spectrum); }
+@keyframes gradient-animation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.grad-text,
 .hero-tagline .grad,
 .eyebrow, .page-header .eyebrow,
 .showcase h2 .grad {
-  background: var(--rainbow-blend);
-  background-size: 150% 100%;
-  background-position: 50% 50%;
+  background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+@media (prefers-reduced-motion: reduce) {
+  .grad-text, .hero-tagline .grad, .eyebrow, .page-header .eyebrow, .showcase h2 .grad, .command-glow { animation: none; }
+}
 /* soften the accent borders/toggles too */
-.command-bar { background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--rainbow-soft) border-box; }
 .tryit { border-image: var(--rainbow-soft) 1; }
 .faq summary i::before, .faq summary i::after { background: var(--rainbow-blend); }
 
