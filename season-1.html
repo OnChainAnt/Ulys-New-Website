@@ -38,7 +38,7 @@
     .tw { position: relative; display: inline-block; white-space: nowrap; }
     .tw-ghost { visibility: hidden; }
     .tw-type {
-      position: absolute; inset: 0; white-space: nowrap;
+      position: absolute; inset: -.15em 0 -.3em 0; padding-top: .15em; white-space: nowrap; /* room for descenders */
       background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite; -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .tw-caret {
@@ -472,9 +472,9 @@
     }
     .boost-fill {
       position: absolute; inset: 0; border-radius: inherit;
-      background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
+      background: #fff;
       clip-path: inset(0 calc(100% - var(--p)) 0 0 round 999px);
-      filter: drop-shadow(0 0 8px rgba(128, 123, 245, .55));
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, .55)) drop-shadow(0 0 14px rgba(255, 255, 255, .2));
       transition: opacity .5s ease;
     }
     .boost-head {
