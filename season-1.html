@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Season 1 live data: set content to the JSON endpoint (shape documented in the script at the bottom of this page) -->
+  <meta name="ulys-season1-api" content="" />
   <title>Season 1 — Points are live | Ulys</title>
   <meta name="description" content="Ulys Season 1 points are live. Everyday activity earns points, a live leaderboard shows exactly where you stand, and the rules reward consistency. Here's how to start earning." />
   <link rel="stylesheet" href="styles.css?v=40" />
@@ -222,7 +224,7 @@
     .board2-note b { color: #30d158; }
     @media (max-width: 640px) {
       .board2-head, .board2-row { grid-template-columns: 44px 1fr 110px; padding: 13px var(--inset); }
-      .board2-head .s, .b-streak { display: none; }
+      .board2-head .s, .b-streak, .sk-streak { display: none; }
     }
 
     /* ways to earn */
@@ -426,6 +428,26 @@
       .s1-prompt-ring { animation: none; }
       .s1-prompt-caret { display: none; }
     }
+  
+    /* ===== Live data states (leaderboard + stats) ===== */
+    .board2-live .ld { transition: background .3s; }
+    .board2-live[data-state="loading"] .ld,
+    .board2-live[data-state="soon"] .ld { background: var(--faint); }
+    .board2-live[data-state="loading"] .ld::after,
+    .board2-live[data-state="soon"] .ld::after { display: none; }
+    .board2-live[data-state="reconnecting"] .ld { background: #ffbb00; }
+    .board2-live[data-state="reconnecting"] .ld::after { background: #ffbb00; }
+    /* loading placeholders */
+    .board2-row.is-skeleton:hover { background: none; }
+    .sk { display: block; height: 10px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 9%, transparent); animation: skPulse 1.4s ease-in-out infinite; }
+    .sk-rank { width: 14px; } .sk-av { width: 28px; height: 28px; border-radius: 50%; flex: none; }
+    .sk-name { width: min(140px, 40%); } .sk-streak { width: 38px; height: 20px; border-radius: 999px; } .sk-pts { width: 72px; margin-left: auto; }
+    .board2-top3:empty + .board2-rest .board2-row:first-child { border-top: none; }
+    .board2.is-awaiting .sk { animation: none; opacity: .6; }
+    @keyframes skPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    /* empty / not-yet-connected message */
+    .board2-empty { padding: 40px 24px; text-align: center; color: var(--muted); font-size: 15px; }
+    @media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
   </style>
 </head>
 <body>
@@ -484,10 +506,10 @@
     </section>
 
     <div class="s1-stats">
-      <div class="s1-stat"><b id="statTraders" class="s1-live">12,480</b><span>Traders in Season 1</span></div>
-      <div class="s1-stat"><b id="statPoints" class="s1-live">3,240,000</b><span>Points earned</span></div>
-      <div class="s1-stat"><b>90</b><span>Longest streak · days</span></div>
-      <div class="s1-stat"><b id="statCountdown" class="s1-live s1-count">41d 00:00:00</b><span>Left in the season</span></div>
+      <div class="s1-stat"><b id="statTraders" class="s1-live">—</b><span>Traders in Season 1</span></div>
+      <div class="s1-stat"><b id="statPoints" class="s1-live">—</b><span>Points earned</span></div>
+      <div class="s1-stat"><b id="statStreak">—</b><span>Longest streak · days</span></div>
+      <div class="s1-stat"><b id="statCountdown" class="s1-live s1-count">—</b><span>Left in the season</span></div>
     </div>
 
     <!-- 01 · Visible leaderboard -->
@@ -497,25 +519,14 @@
       <div class="board2" aria-label="Season 1 live standings">
         <div class="board2-top">
           <span class="board2-title">Season 1 · Live standings</span>
-          <span class="board2-live"><span class="ld"></span> Updating live</span>
+          <span class="board2-live" id="boardStatus" data-state="loading"><span class="ld"></span> <span class="board2-live-text">Loading</span></span>
         </div>
         <div class="board2-head"><span>Rank</span><span>Trader</span><span class="s">Streak</span><span class="r">Points</span></div>
-        <div class="board2-top3">
-          <div class="board2-row"><span class="b-rank"><span class="n">1</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">degen33</span></span><span class="b-streak">88d</span><span class="b-pts">148,210</span></div>
-          <div class="board2-row"><span class="b-rank"><span class="n">2</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#ff80a0)"></span><span class="h">jakesol</span></span><span class="b-streak">90d</span><span class="b-pts">141,050</span></div>
-          <div class="board2-row"><span class="b-rank"><span class="n">3</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#0074ff)"></span><span class="h">0xmira</span></span><span class="b-streak">74d</span><span class="b-pts">131,940</span></div>
-        </div>
-        <div class="board2-row"><span class="b-rank"><span class="n">4</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#ffbb00)"></span><span class="h">steadyeddie</span></span><span class="b-streak">90d</span><span class="b-pts">119,505</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">5</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#ff80a0)"></span><span class="h">miatrades</span></span><span class="b-streak">63d</span><span class="b-pts">108,300</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">6</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0be0ed,#807bf5)"></span><span class="h">gmgm_</span></span><span class="b-streak">51d</span><span class="b-pts">96,120</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">7</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ffbb00,#0be0ed)"></span><span class="h">nova_eth</span></span><span class="b-streak">45d</span><span class="b-pts">88,740</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">8</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#ff80a0,#0074ff)"></span><span class="h">kaibtc</span></span><span class="b-streak">39d</span><span class="b-pts">81,015</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">9</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#0074ff,#0be0ed)"></span><span class="h">solsurfer</span></span><span class="b-streak">57d</span><span class="b-pts">74,600</span></div>
-        <div class="board2-row"><span class="b-rank"><span class="n">10</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#f0322e,#807bf5)"></span><span class="h">vee77</span></span><span class="b-streak">33d</span><span class="b-pts">69,880</span></div>
-        <div class="board2-sep">• • •</div>
-        <div class="board2-row you"><span class="b-rank"><span class="n">128</span></span><span class="b-name"><span class="b-av" style="background:linear-gradient(135deg,#807bf5,#0be0ed)"></span><span class="h">satstacker</span><span class="you-tag">You</span></span><span class="b-streak">14d</span><span class="b-pts">12,940</span></div>
+        <div class="board2-top3" id="boardTop3"></div>
+        <div class="board2-rest" id="boardRest"></div>
+        <div class="board2-viewer" id="boardViewer" hidden></div>
       </div>
-      <p class="board2-note">You're <b>up 6 spots today</b> — keep your streak alive to climb faster.</p>
+      <p class="board2-note" id="boardNote" hidden></p>
     </section>
 
     <!-- 02 · Consistency -->
@@ -609,11 +620,11 @@
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var fmt = function (n) { return n.toLocaleString('en-US'); };
 
-    // ---- Live countdown to a fixed season end date ----
-    var END = new Date('2026-11-09T17:00:00Z').getTime();
+    // ---- Countdown to the season end (endsAt comes from the live data) ----
+    var END = null, countdownTimer = null;
     var pad = function (x) { return String(x).padStart(2, '0'); };
     function renderCountdown() {
-      if (!elC) return;
+      if (!elC || END === null) return;
       var d = END - Date.now();
       if (d < 0) d = 0;
       var days = Math.floor(d / 86400000);
@@ -622,8 +633,13 @@
       var s = Math.floor((d % 60000) / 1000);
       elC.textContent = days + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s);
     }
-    renderCountdown();
-    setInterval(renderCountdown, 1000);
+    function setSeasonEnd(iso) {
+      var t = Date.parse(iso);
+      if (isNaN(t)) return;
+      END = t;
+      renderCountdown();
+      if (!countdownTimer) countdownTimer = setInterval(renderCountdown, 1000);
+    }
 
     // ---- Prompt bar: types example prompts, holds, fades, then types the next ----
     (function promptBar() {
@@ -691,17 +707,6 @@
         io.observe(w);
       });
     }
-
-    // ---- Leaderboard: slim bar under each total, relative to the leader ----
-    var ptsEls = document.querySelectorAll('.board2 .b-pts');
-    var ptsVals = [].map.call(ptsEls, function (el) { return parseInt(el.textContent.replace(/[^\d]/g, ''), 10) || 0; });
-    var ptsMax = Math.max.apply(null, ptsVals.concat(1));
-    [].forEach.call(ptsEls, function (el, i) {
-      var bar = document.createElement('span'); bar.className = 'b-bar'; bar.setAttribute('aria-hidden', 'true');
-      var fill = document.createElement('i');
-      fill.style.setProperty('--w', Math.max(4, Math.round(ptsVals[i] / ptsMax * 100)) + '%');
-      bar.appendChild(fill); el.appendChild(bar);
-    });
 
     // ---- Final CTA video: load when near the viewport, play only while visible ----
     var ctaVid = document.querySelector('.s1-final-bg');
@@ -833,35 +838,179 @@
       this.str = str;
     };
 
-    if (!reduce && (elP || elT)) {
-      var traders = 12480, points = 3240000;
-      var odoP = elP ? new Odometer(elP, fmt(points)) : null;
-      var odoT = elT ? new Odometer(elT, fmt(traders)) : null;
-      // re-measure once the display font has loaded
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(function () {
-          if (odoP) odoP.measure();
-          if (odoT) odoT.measure();
-        });
+    // ===================== Season 1 live data =====================
+    // Set <meta name="ulys-season1-api" content="..."> in the <head> to an endpoint
+    // (CORS-enabled for this site) that returns JSON shaped like this:
+    //
+    // {
+    //   "endsAt": "2026-11-30T17:00:00Z",       // when Season 1 closes (drives the countdown)
+    //   "stats": {
+    //     "traders": 0,                           // traders in Season 1
+    //     "pointsEarned": 0,                      // total points earned
+    //     "longestStreakDays": 0                  // longest active streak, in days
+    //   },
+    //   "leaderboard": [                          // top 10, ordered by rank
+    //     { "rank": 1, "handle": "name", "streakDays": 0, "points": 0 }
+    //   ],
+    //   "viewer": {                               // optional: the signed-in trader, if known
+    //     "rank": 0, "handle": "name", "streakDays": 0, "points": 0,
+    //     "rankChangeToday": 0                    // optional: positive = places climbed today
+    //   }
+    // }
+    //
+    // The page fetches on load, then every 15s while the tab is visible.
+    // Data can also be pushed in directly: window.UlysSeason1.render(data)
+    var metaApi = document.querySelector('meta[name="ulys-season1-api"]');
+    var API = metaApi ? metaApi.getAttribute('content').trim() : '';
+    var POLL_MS = 15000;
+    var elS = document.getElementById('statStreak');
+    var boardEl = document.querySelector('.board2');
+    var statusEl = document.getElementById('boardStatus');
+    var top3El = document.getElementById('boardTop3');
+    var restEl = document.getElementById('boardRest');
+    var viewerEl = document.getElementById('boardViewer');
+    var noteEl = document.getElementById('boardNote');
+    var odoT = null, odoP = null, hasData = false, pollTimer = null;
+
+    function node(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+    function num(v) { var n = Number(v); return isFinite(n) && n >= 0 ? Math.round(n) : null; }
+    function setStatus(state, label) {
+      if (!statusEl) return;
+      statusEl.setAttribute('data-state', state);
+      statusEl.querySelector('.board2-live-text').textContent = label;
+    }
+
+    // stats: odometer roll on change (plain text for reduced motion)
+    function setCounter(el, odo, value) {
+      if (!el || value === null) return odo;
+      var str = fmt(value);
+      if (reduce) { el.textContent = str; return odo; }
+      if (!odo) return new Odometer(el, str);
+      odo.render(str);
+      return odo;
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { if (odoT) odoT.measure(); if (odoP) odoP.measure(); });
+    }
+
+    // stable avatar gradient per handle (brand spectrum pairs)
+    var AV = [['#807bf5', '#0be0ed'], ['#ffbb00', '#ff80a0'], ['#0be0ed', '#0074ff'], ['#f0322e', '#ffbb00'], ['#807bf5', '#ff80a0'],
+              ['#0be0ed', '#807bf5'], ['#ffbb00', '#0be0ed'], ['#ff80a0', '#0074ff'], ['#0074ff', '#0be0ed'], ['#f0322e', '#807bf5']];
+    function avatarFor(handle) {
+      var h = 0;
+      for (var i = 0; i < handle.length; i++) h = (h * 31 + handle.charCodeAt(i)) >>> 0;
+      var c = AV[h % AV.length];
+      return 'linear-gradient(135deg,' + c[0] + ',' + c[1] + ')';
+    }
+
+    // rows are built with DOM APIs (textContent), so handles from the API can't inject markup
+    function buildRow(entry, leaderPts, you) {
+      var row = node('div', 'board2-row' + (you ? ' you' : ''));
+      var rank = node('span', 'b-rank');
+      rank.appendChild(node('span', 'n', String(num(entry.rank))));
+      row.appendChild(rank);
+      var name = node('span', 'b-name');
+      var av = node('span', 'b-av');
+      av.style.background = avatarFor(entry.handle);
+      name.appendChild(av);
+      name.appendChild(node('span', 'h', entry.handle));
+      if (you) name.appendChild(node('span', 'you-tag', 'You'));
+      row.appendChild(name);
+      var streak = num(entry.streakDays);
+      row.appendChild(node('span', 'b-streak', streak === null ? '—' : streak + 'd'));
+      var pts = node('span', 'b-pts', fmt(num(entry.points)));
+      var bar = node('span', 'b-bar');
+      bar.setAttribute('aria-hidden', 'true');
+      var fill = node('i');
+      fill.style.setProperty('--w', Math.max(4, Math.round(num(entry.points) / leaderPts * 100)) + '%');
+      bar.appendChild(fill);
+      pts.appendChild(bar);
+      row.appendChild(pts);
+      return row;
+    }
+    function skeletonRow() {
+      var row = node('div', 'board2-row is-skeleton');
+      row.setAttribute('aria-hidden', 'true');
+      var rank = node('span', 'b-rank'); rank.appendChild(node('span', 'sk sk-rank')); row.appendChild(rank);
+      var name = node('span', 'b-name'); name.appendChild(node('span', 'sk sk-av')); name.appendChild(node('span', 'sk sk-name')); row.appendChild(name);
+      row.appendChild(node('span', 'sk sk-streak'));
+      row.appendChild(node('span', 'sk sk-pts'));
+      return row;
+    }
+    function showSkeleton() {
+      top3El.textContent = ''; restEl.textContent = '';
+      for (var i = 0; i < 10; i++) restEl.appendChild(skeletonRow());
+    }
+    function validEntry(e) { return e && typeof e.handle === 'string' && e.handle && num(e.rank) !== null && num(e.points) !== null; }
+
+    function renderBoard(list, viewer) {
+      top3El.textContent = ''; restEl.textContent = ''; viewerEl.textContent = '';
+      viewerEl.hidden = true; noteEl.hidden = true;
+      if (!list.length) {
+        restEl.appendChild(node('div', 'board2-empty', 'Standings will appear here as traders earn points.'));
+        return;
       }
+      var leader = Math.max.apply(null, list.map(function (e) { return num(e.points); }).concat(1));
+      var v = validEntry(viewer) ? viewer : null;
+      list.forEach(function (e, i) {
+        var you = !!v && num(v.rank) === num(e.rank) && v.handle === e.handle;
+        (i < 3 ? top3El : restEl).appendChild(buildRow(e, leader, you));
+      });
+      if (v && num(v.rank) > num(list[list.length - 1].rank)) {
+        viewerEl.appendChild(node('div', 'board2-sep', '• • •'));
+        viewerEl.appendChild(buildRow(v, leader, true));
+        viewerEl.hidden = false;
+      }
+      var change = v ? num(v.rankChangeToday) : null;
+      if (change) {
+        noteEl.textContent = '';
+        noteEl.appendChild(document.createTextNode('You’re '));
+        noteEl.appendChild(node('b', null, 'up ' + change + (change === 1 ? ' spot' : ' spots') + ' today'));
+        noteEl.appendChild(document.createTextNode(' — keep your streak alive to climb faster.'));
+        noteEl.hidden = false;
+      }
+    }
 
-      // Points: irregular cadence, deliberately off the countdown's 1s beat
-      (function loopPoints() {
-        setTimeout(function () {
-          points += Math.floor(Math.random() * 140) + 20;
-          if (odoP) odoP.render(fmt(points));
-          loopPoints();
-        }, 1150 + Math.random() * 1300);
-      })();
+    function render(data) {
+      if (!data || typeof data !== 'object') return;
+      hasData = true;
+      boardEl.classList.remove('is-awaiting');
+      if (data.endsAt) setSeasonEnd(data.endsAt);
+      var st = data.stats || {};
+      odoT = setCounter(elT, odoT, num(st.traders));
+      odoP = setCounter(elP, odoP, num(st.pointsEarned));
+      var streak = num(st.longestStreakDays);
+      if (elS && streak !== null) elS.textContent = fmt(streak);
+      if (Array.isArray(data.leaderboard)) renderBoard(data.leaderboard.filter(validEntry).slice(0, 10), data.viewer);
+      setStatus('live', 'Updating live');
+    }
 
-      // Traders: climbs occasionally
-      (function loopTraders() {
-        setTimeout(function () {
-          traders += 1;
-          if (odoT) odoT.render(fmt(traders));
-          loopTraders();
-        }, 2200 + Math.random() * 2600);
-      })();
+    function schedule() {
+      clearTimeout(pollTimer);
+      pollTimer = setTimeout(function () { if (document.hidden) schedule(); else load(); }, POLL_MS);
+    }
+    function load() {
+      fetch(API, { cache: 'no-store', headers: { Accept: 'application/json' } })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(render)
+        .catch(function () { setStatus('reconnecting', hasData ? 'Reconnecting' : 'Connecting'); })
+        .then(schedule);
+    }
+
+    window.UlysSeason1 = { render: render };
+    showSkeleton();
+    if (API) {
+      setStatus('loading', 'Loading');
+      load();
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+    } else {
+      boardEl.classList.add('is-awaiting');
+      setStatus('soon', 'Live standings coming soon');
     }
   })();
   </script>
