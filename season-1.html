@@ -533,10 +533,6 @@
     /* ===== Smart orders ===== */
     .so-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(28px, 5vw, 64px); align-items: center; max-width: 1000px; margin: 52px auto 0; text-align: left; }
     .so-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 26px; }
-    .so-steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }
-    .so-num { grid-row: span 2; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; padding-top: 4px;
-      background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
-      -webkit-background-clip: text; background-clip: text; color: transparent; }
     .so-steps h3 { margin: 0; font-family: var(--display); font-weight: 500; font-size: 19px; letter-spacing: -.01em; }
     .so-steps p { margin: 6px 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
 
@@ -602,7 +598,7 @@
       .so-demo { order: -1; max-width: 520px; width: 100%; margin: 0 auto; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .so-num, .so-bonus::before, .so-bonus::after, .so-bonus-text, .so-status-dot::after { animation: none; }
+      .so-bonus::before, .so-bonus::after, .so-bonus-text, .so-status-dot::after { animation: none; }
     }
   </style>
 </head>
@@ -729,9 +725,9 @@
       <p class="lede">Smart orders trigger on real-world events and live odds. Set your idea once, and if you're right and your order triggers, you earn a Season 1 points bonus.</p>
       <div class="so-grid">
         <ol class="so-steps">
-          <li><span class="so-num">01</span><h3>Set your trigger</h3><p>Pick what to buy or sell and the event or odds that should set it off. Type it the way you'd say it.</p></li>
-          <li><span class="so-num">02</span><h3>Ulys watches the odds</h3><p>Your order waits in your non-custodial wallet until the condition is met. No checking charts at 3am.</p></li>
-          <li><span class="so-num">03</span><h3>Called it? Bonus points.</h3><p>When your trigger hits and the order fills, a points bonus is added to your Season 1 total.</p></li>
+          <li><h3>Set your trigger</h3><p>Pick what to buy or sell and the event or odds that should set it off. Type it the way you'd say it.</p></li>
+          <li><h3>Ulys watches the odds</h3><p>Your order waits in your non-custodial wallet until the condition is met. No checking charts at 3am.</p></li>
+          <li><h3>Called it? Bonus points.</h3><p>When your trigger hits and the order fills, a points bonus is added to your Season 1 total.</p></li>
         </ol>
         <div class="so-demo" aria-label="Example smart order">
           <div class="so-card">
