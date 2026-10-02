@@ -557,6 +557,11 @@
     .so-island { position: absolute; top: calc(clamp(6px, .8vw, 9px) + 3.2%); left: 50%; transform: translateX(-50%);
       width: 30%; aspect-ratio: 3.3 / 1; border-radius: 999px; background: #000; }
     .so-phone-b { margin-top: clamp(36px, 6vw, 72px); }
+    /* phones dissolve into the background toward the bottom */
+    .so-phone {
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,.35) 78%, transparent 97%);
+              mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,.35) 78%, transparent 97%);
+    }
 
     @media (max-width: 860px) {
       .so-grid { grid-template-columns: 1fr; }
