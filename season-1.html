@@ -722,15 +722,15 @@
       </div>
     </section>
 
-    <!-- Smart orders: event/odds-triggered orders; being right earns a points bonus -->
+    <!-- Smart orders: Polymarket event/odds-triggered orders; a triggered order earns a points multiplier on that trade -->
     <section class="s1-sec line" id="smart-orders">
       <h2>Call it early. Get <span class="tw" aria-hidden="true"><span class="tw-ghost">rewarded.</span><span class="tw-type" data-text="rewarded."></span></span><span class="sr-only">rewarded.</span></h2>
-      <p class="lede">Smart orders trigger on real-world events and live odds from Polymarket. Set your idea once, and if you're right and your order triggers, you earn a Season 1 points bonus.</p>
+      <p class="lede">Smart orders trigger on real-world events and live odds from Polymarket. Set your idea once, and if you're right and your order triggers, that trade earns a points multiplier.</p>
       <div class="so-grid">
         <ol class="so-steps">
           <li><h3>Set your trigger</h3><p>Pick what to buy or sell and the Polymarket event or odds that should set it off. Type it the way you'd say it.</p></li>
           <li><h3>Ulys watches the odds</h3><p>Your order waits in your non-custodial wallet until the condition is met. No checking the news &amp; charts at 3am.</p></li>
-          <li><h3>Called it? Bonus points.</h3><p>When your trigger hits and the order fills, a points bonus is added to your Season 1 total.</p></li>
+          <li><h3>Called it? Multiply your points.</h3><p>When your trigger hits and the order fills, the points you earn on that trade are multiplied.</p></li>
         </ol>
         <div class="so-demo" aria-label="Example smart order">
           <div class="so-card">
@@ -764,7 +764,7 @@
             </div>
             <div class="so-result">
               <span class="so-chip so-filled"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Order filled</span>
-              <span class="so-chip so-bonus"><span class="so-bonus-text">Points bonus</span></span>
+              <span class="so-chip so-bonus"><span class="so-bonus-text">Points multiplier</span></span>
             </div>
           </div>
           <div class="so-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
@@ -1000,7 +1000,7 @@
       }
     })();
 
-    // ---- Smart order demo: odds drift toward the trigger, the order fires, a points bonus pops ----
+    // ---- Smart order demo: odds drift toward the trigger, the order fires, the trade's points multiplier pops ----
     (function smartOrders() {
       var card = document.querySelector('.so-card');
       if (!card) return;
