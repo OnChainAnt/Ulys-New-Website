@@ -529,6 +529,81 @@
       .s1-stats { grid-template-columns: 1fr 1fr; }
       .s1-stat:last-child { grid-column: 1 / -1; border-left: none; }
     }
+  
+    /* ===== Smart orders ===== */
+    .so-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(28px, 5vw, 64px); align-items: center; max-width: 1000px; margin: 52px auto 0; text-align: left; }
+    .so-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 26px; }
+    .so-steps li { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; }
+    .so-num { grid-row: span 2; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; padding-top: 4px;
+      background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
+      -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .so-steps h3 { margin: 0; font-family: var(--display); font-weight: 500; font-size: 19px; letter-spacing: -.01em; }
+    .so-steps p { margin: 6px 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+    .so-demo { position: relative; }
+    .so-card {
+      position: relative; padding: 22px 22px 20px; border-radius: 22px; background: #161616;
+      border: 1px solid rgba(255,255,255,.09); box-shadow: 0 30px 70px -36px rgba(0,0,0,.85);
+      transition: opacity .45s ease, transform .45s ease;
+    }
+    .so-card.is-swapping { opacity: 0; transform: translateY(6px); }
+    .so-card-top { display: flex; align-items: center; justify-content: space-between; }
+    .so-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+    .so-status { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px 5px 9px; border-radius: 999px; font-size: 12px;
+      border: 1px solid rgba(255,255,255,.1); color: var(--muted); transition: color .3s, border-color .3s, background .3s; }
+    .so-status-dot { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #ffbb00; }
+    .so-status-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: livePing 1.8s cubic-bezier(0,0,.2,1) infinite; }
+    .so-status[data-state="triggered"] { color: #30d158; border-color: rgba(48,209,88,.35); background: rgba(48,209,88,.08); }
+    .so-status[data-state="triggered"] .so-status-dot { background: #30d158; }
+    .so-action { margin-top: 16px; font-family: var(--display); font-size: clamp(24px, 2.6vw, 30px); letter-spacing: -.025em; line-height: 1.1; color: #fff; }
+    .so-cond { margin-top: 6px; font-size: 15px; color: rgb(211, 209, 203); letter-spacing: -.01em; }
+
+    .so-chart { position: relative; height: 120px; margin-top: 18px; border-radius: 12px; overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)); }
+    .so-chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .so-line { stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+    .so-threshold { stroke: rgba(255,255,255,.28); stroke-width: 1; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+    .so-threshold-label { position: absolute; left: 8px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); transform: translateY(-120%); }
+    .so-dot { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #fff;
+      box-shadow: 0 0 8px 2px rgba(255,255,255,.55), 0 0 22px 6px rgba(128,123,245,.35); opacity: 0; transition: opacity .2s; }
+
+    .so-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; }
+    .so-meta > span { display: flex; flex-direction: column; gap: 3px; }
+    .so-meta-r { align-items: flex-end; }
+    .so-meta-k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+    .so-meta b { font-family: var(--display); font-weight: 400; font-size: 20px; letter-spacing: -.02em; color: #fff; font-variant-numeric: tabular-nums; }
+
+    .so-result { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; min-height: 34px; }
+    .so-chip { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13.5px;
+      opacity: 0; transform: translateY(8px) scale(.96); transition: opacity .4s ease, transform .5s cubic-bezier(.2,1.3,.4,1); }
+    .so-chip svg { width: 15px; height: 15px; }
+    .so-filled { color: #30d158; background: rgba(48,209,88,.1); border: 1px solid rgba(48,209,88,.3); }
+    .so-bonus { position: relative; color: #fff; }
+    .so-bonus::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+      background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+    }
+    .so-bonus::after { content: ""; position: absolute; inset: -6px; border-radius: inherit; z-index: -1; opacity: .35; filter: blur(12px);
+      background-image: var(--spectrum-soft); background-size: 200% 200%; animation: gradient-animation 5s infinite; }
+    .so-bonus-text { background-image: var(--spectrum); background-size: 200% 200%; animation: gradient-animation 5s infinite;
+      -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 500; }
+    .so-card.is-triggered .so-chip { opacity: 1; transform: none; }
+    .so-card.is-triggered .so-bonus { transition-delay: .25s; }
+    .so-spark { position: absolute; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; animation: soSpark .8s ease-out forwards; }
+    @keyframes soSpark { from { transform: translate(0, 0) scale(1); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0; } }
+
+    .so-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+    .so-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.18); transition: background .3s, width .3s; }
+    .so-dots span.is-on { width: 18px; border-radius: 999px; background-image: var(--spectrum); }
+
+    @media (max-width: 860px) {
+      .so-grid { grid-template-columns: 1fr; }
+      .so-demo { order: -1; max-width: 520px; width: 100%; margin: 0 auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .so-num, .so-bonus::before, .so-bonus::after, .so-bonus-text, .so-status-dot::after { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -645,6 +720,56 @@
           <li class="boost-item" data-at="62.5" data-mult="2"><span class="boost-mult">2.0×</span><span class="boost-name">Streak multipliers</span></li>
           <li class="boost-item" data-at="87.5" data-mult="2.5"><span class="boost-mult">2.5×</span><span class="boost-name">New drops all season</span></li>
         </ol>
+      </div>
+    </section>
+
+    <!-- Smart orders: event/odds-triggered orders; being right earns a points bonus -->
+    <section class="s1-sec line" id="smart-orders">
+      <h2>Call it early. Get <span class="tw" aria-hidden="true"><span class="tw-ghost">rewarded.</span><span class="tw-type" data-text="rewarded."></span></span><span class="sr-only">rewarded.</span></h2>
+      <p class="lede">Smart orders trigger on real-world events and live odds. Set your idea once, and if you're right and your order triggers, you earn a Season 1 points bonus.</p>
+      <div class="so-grid">
+        <ol class="so-steps">
+          <li><span class="so-num">01</span><h3>Set your trigger</h3><p>Pick what to buy or sell and the event or odds that should set it off. Type it the way you'd say it.</p></li>
+          <li><span class="so-num">02</span><h3>Ulys watches the odds</h3><p>Your order waits in your non-custodial wallet until the condition is met. No checking charts at 3am.</p></li>
+          <li><span class="so-num">03</span><h3>Called it? Bonus points.</h3><p>When your trigger hits and the order fills, a points bonus is added to your Season 1 total.</p></li>
+        </ol>
+        <div class="so-demo" aria-label="Example smart order">
+          <div class="so-card">
+            <div class="so-card-top">
+              <span class="so-label">Smart order</span>
+              <span class="so-status" data-state="watching"><span class="so-status-dot"></span><span class="so-status-text">Watching</span></span>
+            </div>
+            <div class="so-action">Buy $250 of BTC</div>
+            <div class="so-cond">if US–Iran war odds drop below 4%</div>
+            <div class="so-chart">
+              <svg viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="soLine" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#f0322e"/><stop offset=".22" stop-color="#ff80a0"/><stop offset=".4" stop-color="#ffbb00"/>
+                    <stop offset=".58" stop-color="#0be0ed"/><stop offset=".8" stop-color="#0074ff"/><stop offset="1" stop-color="#807bf5"/>
+                  </linearGradient>
+                  <linearGradient id="soArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#807bf5" stop-opacity=".22"/><stop offset="1" stop-color="#807bf5" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path class="so-area" d="" fill="url(#soArea)"/>
+                <line class="so-threshold" x1="0" x2="320" y1="60" y2="60"/>
+                <path class="so-line" d="" fill="none" stroke="url(#soLine)"/>
+              </svg>
+              <span class="so-threshold-label">4%</span>
+              <span class="so-dot"></span>
+            </div>
+            <div class="so-meta">
+              <span><span class="so-meta-k">Current odds</span><b class="so-odds">11.4%</b></span>
+              <span class="so-meta-r"><span class="so-meta-k">Trigger</span><b class="so-trigger">&lt; 4%</b></span>
+            </div>
+            <div class="so-result">
+              <span class="so-chip so-filled"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Order filled</span>
+              <span class="so-chip so-bonus"><span class="so-bonus-text">Points bonus</span></span>
+            </div>
+          </div>
+          <div class="so-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
+        </div>
       </div>
     </section>
 
@@ -871,6 +996,123 @@
       window.addEventListener('resize', function () { if (running) measure(); });
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) play(); else pause(); }); }, { threshold: 0.25 }).observe(root);
+      } else {
+        play();
+      }
+    })();
+
+    // ---- Smart order demo: odds drift toward the trigger, the order fires, a points bonus pops ----
+    (function smartOrders() {
+      var card = document.querySelector('.so-card');
+      if (!card) return;
+      var EX = [
+        { action: 'Buy $250 of BTC', cond: 'if US–Iran war odds drop below 4%', start: 11.4, threshold: 4, end: 3.6, dir: 'down' },
+        { action: 'Buy $50 of ETH', cond: 'if Clarity Act odds rise above 80%', start: 58, threshold: 80, end: 82.5, dir: 'up' },
+        { action: 'Buy $100 of SOL', cond: 'if Fed rate-cut odds rise above 70%', start: 44, threshold: 70, end: 72.8, dir: 'up' }
+      ];
+      var $ = function (sel) { return card.querySelector(sel); };
+      var actionEl = $('.so-action'), condEl = $('.so-cond'), statusEl = $('.so-status'), statusText = $('.so-status-text');
+      var oddsEl = $('.so-odds'), trigEl = $('.so-trigger'), lineEl = $('.so-line'), areaEl = $('.so-area');
+      var thrEl = $('.so-threshold'), thrLabel = $('.so-threshold-label'), dotEl = $('.so-dot'), bonusEl = $('.so-bonus');
+      var dots = [].slice.call(document.querySelectorAll('.so-dots span'));
+      var VW = 320, VH = 120, PT = 14, PB = 14, N = 48;
+      var idx = 0, series = [], yMin = 0, yMax = 1;
+      var pct = function (v) { return v.toFixed(1) + '%'; };
+      var Y = function (v) { return VH - PB - (v - yMin) / (yMax - yMin) * (VH - PT - PB); };
+
+      function genSeries(ex) {
+        var rng = Math.abs(ex.start - ex.threshold), out = [], prev = ex.start;
+        for (var i = 0; i < N; i++) {
+          var t = i / (N - 1);
+          var v = ex.start + (ex.end - ex.start) * Math.pow(t, 1.7) + (Math.random() - 0.5) * rng * 0.34 * (1 - t * 0.7);
+          if (i > 0) v = prev * 0.55 + v * 0.45;                    // smooth like a real odds line
+          if (i < N - 3) v = ex.dir === 'down' ? Math.max(v, ex.threshold + rng * 0.07) : Math.min(v, ex.threshold - rng * 0.07);
+          out.push(v); prev = v;
+        }
+        out[N - 1] = ex.end;
+        return out;
+      }
+      function load(i) {
+        var ex = EX[i];
+        series = genSeries(ex);
+        var lo = Math.min.apply(null, series.concat(ex.threshold)), hi = Math.max.apply(null, series.concat(ex.threshold));
+        var pad = (hi - lo) * 0.12; yMin = lo - pad; yMax = hi + pad;
+        actionEl.textContent = ex.action; condEl.textContent = ex.cond;
+        trigEl.textContent = (ex.dir === 'down' ? '< ' : '> ') + ex.threshold + '%';
+        var ty = Y(ex.threshold);
+        thrEl.setAttribute('y1', ty); thrEl.setAttribute('y2', ty);
+        thrLabel.textContent = ex.threshold + '%'; thrLabel.style.top = (ty / VH * 100) + '%';
+        card.classList.remove('is-triggered');
+        statusEl.setAttribute('data-state', 'watching'); statusText.textContent = 'Watching';
+        dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); });
+        draw(0);
+      }
+      function draw(p) {
+        var f = p * (N - 1), k = Math.floor(f), frac = f - k, pts = [];
+        for (var i = 0; i <= k; i++) pts.push([i / (N - 1) * VW, Y(series[i])]);
+        if (k < N - 1) {
+          var v = series[k] + (series[k + 1] - series[k]) * frac;
+          pts.push([(k + frac) / (N - 1) * VW, Y(v)]);
+        }
+        var d = pts.map(function (q, i) { return (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' ');
+        lineEl.setAttribute('d', d);
+        var last = pts[pts.length - 1];
+        areaEl.setAttribute('d', d + ' L' + last[0].toFixed(1) + ' ' + VH + ' L0 ' + VH + ' Z');
+        dotEl.style.left = (last[0] / VW * 100) + '%';
+        dotEl.style.top = (last[1] / VH * 100) + '%';
+        dotEl.style.opacity = 1;
+        var cur = k < N - 1 ? series[k] + (series[k + 1] - series[k]) * frac : series[N - 1];
+        oddsEl.textContent = pct(cur);
+        return cur;
+      }
+      function trigger() {
+        card.classList.add('is-triggered');
+        statusEl.setAttribute('data-state', 'triggered'); statusText.textContent = 'Triggered';
+        if (reduce) return;
+        var COLORS = ['#f0322e', '#ff80a0', '#ffbb00', '#83cd78', '#0be0ed', '#0074ff', '#807bf5'];
+        setTimeout(function () {
+          var c = card.getBoundingClientRect(), b = bonusEl.getBoundingClientRect();
+          var cx = b.left - c.left + b.width / 2, cy = b.top - c.top + b.height / 2;
+          for (var i = 0; i < 16; i++) {
+            var sp = document.createElement('span'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 34;
+            sp.className = 'so-spark';
+            sp.style.left = (cx - 2.5) + 'px'; sp.style.top = (cy - 2.5) + 'px';
+            sp.style.background = COLORS[i % COLORS.length];
+            sp.style.boxShadow = '0 0 6px ' + COLORS[i % COLORS.length];
+            sp.style.setProperty('--dx', Math.cos(a) * r + 'px'); sp.style.setProperty('--dy', Math.sin(a) * r + 'px');
+            card.appendChild(sp);
+            setTimeout(function (n) { return function () { n.remove(); }; }(sp), 900);
+          }
+        }, 300);
+      }
+
+      if (reduce) { load(0); draw(1); trigger(); return; }
+
+      var DRAW = 4600, HOLD = 2800, SWAP = 450;
+      var start = 0, fired = false, raf = 0, running = false, phase = 'draw';
+      function frame(now) {
+        if (!start) start = now;
+        var t = now - start;
+        if (phase === 'draw') {
+          var cur = draw(Math.min(1, t / DRAW));
+          var ex = EX[idx];
+          if (!fired && (ex.dir === 'down' ? cur <= ex.threshold : cur >= ex.threshold)) { fired = true; trigger(); }
+          if (t >= DRAW) { phase = 'hold'; start = now; }
+        } else if (phase === 'hold') {
+          if (t >= HOLD) { phase = 'swap'; start = now; card.classList.add('is-swapping'); }
+        } else if (phase === 'swap') {
+          if (t >= SWAP) {
+            idx = (idx + 1) % EX.length; fired = false; load(idx);
+            card.classList.remove('is-swapping'); phase = 'draw'; start = now;
+          }
+        }
+        if (running) raf = requestAnimationFrame(frame);
+      }
+      load(0);
+      function play() { if (running) return; running = true; start = 0; raf = requestAnimationFrame(frame); }
+      function pause() { running = false; cancelAnimationFrame(raf); }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) play(); else pause(); }); }, { threshold: 0.3 }).observe(card);
       } else {
         play();
       }
