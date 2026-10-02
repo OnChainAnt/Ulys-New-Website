@@ -603,6 +603,20 @@
   
     /* No divider lines between sections (spacing stays) */
     .s1-sec.line, .faq.section { border-top: none; }
+  
+    /* Boosts: follow on X */
+    .boost-follow { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.07); }
+    .boost-follow p { margin: 0; font-size: 15px; color: var(--muted); text-wrap: balance; }
+    .boost-follow-btn {
+      flex: none; display: inline-flex; align-items: center; gap: 9px; height: 42px; padding: 0 20px; border-radius: 999px;
+      background: #fff; color: #0d0d0d; font-size: 15px; font-weight: 600; text-decoration: none; transition: opacity .2s, transform .2s;
+    }
+    .boost-follow-btn svg { width: 15px; height: 15px; }
+    .boost-follow-btn:hover { opacity: .88; transform: translateY(-1px); }
+    @media (max-width: 640px) {
+      .boost-follow { flex-direction: column; text-align: center; }
+    }
   </style>
 </head>
 <body>
@@ -719,6 +733,13 @@
           <li class="boost-item" data-at="62.5" data-mult="2"><span class="boost-mult">2.0×</span><span class="boost-name">Streak multipliers</span></li>
           <li class="boost-item" data-at="87.5" data-mult="2.5"><span class="boost-mult">2.5×</span><span class="boost-name">New drops all season</span></li>
         </ol>
+        <div class="boost-follow">
+          <p>Follow on X to stay updated on the latest boosts.</p>
+          <a class="boost-follow-btn" href="https://x.com/Ulys_AI/" target="_blank" rel="noopener noreferrer" aria-label="Follow Ulys on X">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+            Follow
+          </a>
+        </div>
       </div>
     </section>
 
