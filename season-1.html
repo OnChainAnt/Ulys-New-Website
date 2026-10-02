@@ -827,6 +827,9 @@
       renderCountdown();
       if (!countdownTimer) countdownTimer = setInterval(renderCountdown, 1000);
     }
+    // Season 1 ends Dec 1, 2026 at 12:00 AM EST (UTC-5). Live data's endsAt overrides this.
+    var SEASON_END = '2026-12-01T05:00:00Z';
+    setSeasonEnd(SEASON_END);
 
     // ---- Prompt bar: types example prompts, holds, fades, then types the next ----
     (function promptBar() {
