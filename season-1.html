@@ -521,6 +521,14 @@
     @media (prefers-reduced-motion: reduce) {
       .boost-fill, .boost-node.is-on, .boost-item::before, .boost-item.is-on .boost-mult, .boost-total-val { animation: none; }
     }
+  
+    /* Longest streak is hidden for now: 3 stats across; on phones the countdown spans the second row */
+    .s1-stat[hidden] { display: none; }
+    .s1-stats { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 860px) {
+      .s1-stats { grid-template-columns: 1fr 1fr; }
+      .s1-stat:last-child { grid-column: 1 / -1; border-left: none; }
+    }
   </style>
 </head>
 <body>
@@ -581,7 +589,7 @@
     <div class="s1-stats">
       <div class="s1-stat"><b id="statTraders" class="s1-live">—</b><span>Traders in Season 1</span></div>
       <div class="s1-stat"><b id="statPoints" class="s1-live">—</b><span>Points earned</span></div>
-      <div class="s1-stat"><b id="statStreak">—</b><span>Longest streak · days</span></div>
+      <div class="s1-stat" hidden><b id="statStreak">—</b><span>Longest streak · days</span></div>
       <div class="s1-stat"><b id="statCountdown" class="s1-live s1-count">—</b><span>Left in the season</span></div>
     </div>
 
