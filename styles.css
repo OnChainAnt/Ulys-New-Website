@@ -1230,3 +1230,32 @@ img { max-width: 100%; display: block; }
 
 /* story chat fills top → bottom */
 .s-chat .s-thread { justify-content: flex-start; top: 70px; }
+
+/* ============================================================
+   Basket weights use the brand spectrum everywhere (bars, % dots, sliders)
+   coral → gold → cyan → blue → violet, matching the glow
+   ============================================================ */
+:root { --w1: #f4706d; --w2: #ffcf4c; --w3: #54e9f2; --w4: #4c9eff; --w5: #a6a3f8; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(1) { background: linear-gradient(90deg, var(--w1), var(--w2)) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(2) { background: linear-gradient(90deg, var(--w2), var(--w3)) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(3) { background: linear-gradient(90deg, var(--w3), var(--w4)) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(4) { background: linear-gradient(90deg, var(--w4), var(--w5)) !important; }
+:is(.bk-rows, .s-rows, .n-rows) > li:nth-child(1) :is(.bk-pct, .s-pct, .n-pct) i { background: var(--w1) !important; }
+:is(.bk-rows, .s-rows, .n-rows) > li:nth-child(2) :is(.bk-pct, .s-pct, .n-pct) i { background: var(--w2) !important; }
+:is(.bk-rows, .s-rows, .n-rows) > li:nth-child(3) :is(.bk-pct, .s-pct, .n-pct) i { background: var(--w3) !important; }
+:is(.bk-rows, .s-rows, .n-rows) > li:nth-child(4) :is(.bk-pct, .s-pct, .n-pct) i { background: var(--w4) !important; }
+/* weight sliders: the filled part of each track follows the same order */
+.s-slide:nth-child(1) .s-range { --c: var(--w1) !important; }
+.s-slide:nth-child(2) .s-range { --c: var(--w2) !important; }
+.s-slide:nth-child(3) .s-range { --c: var(--w3) !important; }
+.s-slide:nth-child(4) .s-range { --c: var(--w4) !important; }
+/* loading placeholders keep their neutral grey (not the spectrum) */
+.basket-card.is-skeleton .bk-bar > span { background: rgba(255,255,255,.08) !important; }
+.basket-card.is-thinking .bk-bar > span { background: linear-gradient(90deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.16) 50%, rgba(255,255,255,.06) 100%) !important; background-size: 200% 100% !important; }
+/* weight segments: solid brand colors (no gradient inside a segment) */
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(1) { background: var(--w1) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(2) { background: var(--w2) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(3) { background: var(--w3) !important; }
+:is(.bk-bar, .s-bar, .n-bar) > span:nth-child(4) { background: var(--w4) !important; }
+.basket-card.is-skeleton .bk-bar > span { background: rgba(255,255,255,.08) !important; }
+.basket-card.is-thinking .bk-bar > span { background: linear-gradient(90deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.16) 50%, rgba(255,255,255,.06) 100%) !important; background-size: 200% 100% !important; }
