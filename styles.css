@@ -1213,3 +1213,6 @@ img { max-width: 100%; display: block; }
 .trig-val { margin-top: 10px; }
 .trig-chart { height: 84px; margin-top: 4px; }
 .trig-order { margin-top: 12px; }
+
+/* closing CTA, dark mode: deeper warm charcoal */
+:root[data-theme="dark"] .cta-inner { --surface: #151412; background-color: #151412; }
