@@ -1264,3 +1264,7 @@ img { max-width: 100%; display: block; }
 .command-input, .command-glow, .command-bar { border-radius: 0; }
 .command-input .brk { inset: -12px; z-index: 2; }
 .command-input .brk i { width: 12px; height: 12px; border-color: var(--faint); opacity: .9; }
+
+/* hero headline: the Ulys wordmark in place of the word "Ulys" (letters match the cap height, sit on the baseline) */
+.h-logo { display: inline-block; }
+.h-logo svg { height: .87em; width: auto; vertical-align: -.15em; fill: currentColor; overflow: visible; }
