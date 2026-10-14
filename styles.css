@@ -1031,3 +1031,31 @@ img { max-width: 100%; display: block; }
 
 /* Ulys mark in the corner of the engine stage (where a video control would sit) */
 .n-mark { position: absolute; right: 26px; bottom: 26px; z-index: 2; width: 34px; height: auto; opacity: .9; }
+
+/* smaller Ulys mark in the engine stage */
+.n-mark { width: 22px; right: 24px; bottom: 24px; }
+
+/* ---- Engine section: light mode (warm off-white panels, ink text; the phone stays dark) ---- */
+:root:not([data-theme="dark"]) .neural {
+  --ink: #1a1a19; --muted: rgba(26,26,25,.62); --faint: rgba(26,26,25,.44);
+  color: #1a1a19; background: rgba(26,26,25,.1); border-color: rgba(26,26,25,.1);
+}
+:root:not([data-theme="dark"]) .neural-text { background: #eeede7; }
+:root:not([data-theme="dark"]) .neural-stage { background: #f7f6f3; }
+:root:not([data-theme="dark"]) .neural .brk i { border-color: rgba(26,26,25,.3); }
+:root:not([data-theme="dark"]) .neural-copy h2 { color: #1a1a19; }
+:root:not([data-theme="dark"]) .neural-copy h2 .dim { color: rgba(26,26,25,.42); }
+:root:not([data-theme="dark"]) .neural-lede { color: rgba(26,26,25,.62); }
+:root:not([data-theme="dark"]) .neural-steps li { color: rgba(26,26,25,.38); }
+:root:not([data-theme="dark"]) .neural-steps li.done { color: rgba(26,26,25,.62); }
+:root:not([data-theme="dark"]) .neural-steps li.on { color: #1a1a19; }
+:root:not([data-theme="dark"]) .neural-steps li.on::before { box-shadow: none; }
+:root:not([data-theme="dark"]) .jbtn { border-color: rgba(26,26,25,.16); }
+:root:not([data-theme="dark"]) .jbtn span, :root:not([data-theme="dark"]) .jbtn i { background: #1f1f1e; color: #f2f1ee; }
+:root:not([data-theme="dark"]) .jbtn i { border-left-color: rgba(255,255,255,.18); }
+:root:not([data-theme="dark"]) .jbtn:hover span, :root:not([data-theme="dark"]) .jbtn:hover i { background: #000; }
+:root:not([data-theme="dark"]) .n-mark { filter: invert(1); opacity: .85; }
+:root:not([data-theme="dark"]) .neural-phone .bk-phone::before { opacity: .18; }
+
+.bk-bubble.n-bubble:not([hidden]) { animation: none; }
+.n-mark { right: 42px; bottom: 40px; }

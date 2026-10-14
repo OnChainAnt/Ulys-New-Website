@@ -825,6 +825,9 @@ const tuneWeights = (function tune() {
   function frame(dt) {
     clock += dt;
     ctx.clearRect(0, 0, W, H);
+    // light/dark palette (re-read every frame so the theme toggle applies live)
+    const L = document.documentElement.getAttribute('data-theme') !== 'dark';
+    const ink = (a) => (L ? `rgba(26,26,25,${a})` : `rgba(255,255,255,${a})`);
     const out = layers[layers.length - 1];
 
     // hairline connections between layers
@@ -832,7 +835,7 @@ const tuneWeights = (function tune() {
     for (let li = 0; li < layers.length - 1; li++) {
       layers[li].forEach((a, i) => layers[li + 1].forEach((b, j) => {
         const h = heat.get(key(li, i, j)) || 0;
-        ctx.strokeStyle = `rgba(255,255,255,${0.045 + h * 0.4})`;
+        ctx.strokeStyle = ink((L ? 0.07 : 0.045) + h * 0.4);
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         if (h) heat.set(key(li, i, j), Math.max(0, h - dt * 1.6));
       }));
@@ -840,7 +843,7 @@ const tuneWeights = (function tune() {
     // output → phone row hairlines
     out.forEach((o, k) => {
       const s = slot(k), h = heat.get(`o${k}`) || 0;
-      ctx.strokeStyle = `rgba(255,255,255,${0.06 + h * 0.35})`;
+      ctx.strokeStyle = ink((L ? 0.09 : 0.06) + h * 0.35);
       ctx.setLineDash([2, 6]);
       ctx.beginPath(); ctx.moveTo(o.x, o.y);
       if (mobile) ctx.bezierCurveTo(o.x, o.y + 80, s.x, s.y - 80, s.x - s.r, s.y);
@@ -851,11 +854,11 @@ const tuneWeights = (function tune() {
     // nodes
     layers.forEach((L) => L.forEach((n) => {
       ctx.beginPath(); ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#0b0b0d'; ctx.fill();
-      ctx.strokeStyle = `rgba(255,255,255,${0.32 + n.g * 0.68})`; ctx.lineWidth = 1; ctx.stroke();
+      ctx.fillStyle = L ? '#f7f6f3' : '#0b0b0d'; ctx.fill();
+      ctx.strokeStyle = ink(0.32 + n.g * 0.68); ctx.lineWidth = 1; ctx.stroke();
       if (n.g > 0.02) {
-        ctx.beginPath(); ctx.arc(n.x, n.y, 1.6 + n.g * 1.4, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${n.g})`; ctx.fill();
-        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 16); g.addColorStop(0, `rgba(200,240,255,${n.g * 0.28})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.beginPath(); ctx.arc(n.x, n.y, 1.6 + n.g * 1.4, 0, Math.PI * 2); ctx.fillStyle = ink(n.g); ctx.fill();
+        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 16); g.addColorStop(0, L ? `rgba(60,120,220,${n.g * 0.18})` : `rgba(200,240,255,${n.g * 0.28})`); g.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, Math.PI * 2); ctx.fill();
       }
       n.g = Math.max(0, n.g - dt * 1.5);
@@ -879,7 +882,7 @@ const tuneWeights = (function tune() {
       }
       const a = layers[p.li][p.path[p.li]], b = layers[p.li + 1][p.path[p.li + 1]];
       const e = ease(p.t), x = a.x + (b.x - a.x) * e, y = a.y + (b.y - a.y) * e;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, 7); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(190,235,255,.7)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 7); g.addColorStop(0, L ? 'rgba(26,26,25,1)' : 'rgba(255,255,255,1)'); g.addColorStop(0.35, L ? 'rgba(70,120,215,.45)' : 'rgba(190,235,255,.7)'); g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
       return true;
     });
@@ -892,7 +895,7 @@ const tuneWeights = (function tune() {
       if (mobile) { const u = 1 - e; x = u * u * u * a.x + 3 * u * u * e * a.x + 3 * u * e * e * s.x + e * e * e * s.x; y = u * u * u * a.y + 3 * u * u * e * (a.y + 80) + 3 * u * e * e * (s.y - 80) + e * e * e * s.y; }
       else { const mx = a.x + (s.x - a.x) * 0.5, u = 1 - e; x = u * u * u * a.x + 3 * u * u * e * mx + 3 * u * e * e * mx + e * e * e * s.x; y = u * u * u * a.y + 3 * u * u * e * a.y + 3 * u * e * e * s.y + e * e * e * s.y; }
       const r = 11 + (s.r - 11) * e;
-      ctx.save(); ctx.beginPath(); ctx.arc(x, y, r + 1.5, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.save(); ctx.beginPath(); ctx.arc(x, y, r + 1.5, 0, Math.PI * 2); ctx.strokeStyle = ink(L ? 0.35 : 0.5); ctx.lineWidth = 1; ctx.stroke();
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip();
       ctx.fillStyle = '#1a1a1f'; ctx.fillRect(x - r, y - r, r * 2, r * 2);
       if (o.img && o.img.complete && o.img.naturalWidth) ctx.drawImage(o.img, x - r, y - r, r * 2, r * 2);
@@ -905,7 +908,7 @@ const tuneWeights = (function tune() {
     if (typed) {
       ctx.save();
       ctx.font = `400 ${W < 520 ? 12 : 14}px "IBM Plex Mono", ui-monospace, monospace`;
-      ctx.fillStyle = `rgba(242,241,238,${textAlpha})`; ctx.textBaseline = 'middle';
+      ctx.fillStyle = L ? `rgba(26,26,25,${textAlpha})` : `rgba(242,241,238,${textAlpha})`; ctx.textBaseline = 'middle';
       const maxW = layers[layers.length - 1][0].x - textAt.x;
       // wrap to two lines if needed
       const words = typed.split(' '); let line = '', lines = [];
@@ -916,7 +919,7 @@ const tuneWeights = (function tune() {
       if (phase === 1 && Math.floor(clock * 2) % 2 === 0) { const lw = ctx.measureText(lines[lines.length - 1]).width; ctx.fillRect(textAt.x + lw + 3, y0 + (lines.length - 1) * lh - 8, 2, 16); }
       // a faint guide from the text into the input layer
       const gy = y0 + (lines.length - 1) * lh + 14;
-      ctx.strokeStyle = `rgba(255,255,255,${0.07 * textAlpha + 0.03})`; ctx.setLineDash([2, 6]);
+      ctx.strokeStyle = ink(0.07 * textAlpha + 0.03); ctx.setLineDash([2, 6]);
       layers[0].forEach((n) => { ctx.beginPath(); ctx.moveTo(textAt.x + 4, gy); ctx.lineTo(n.x, n.y - 5); ctx.stroke(); });
       ctx.setLineDash([]);
       ctx.restore();
