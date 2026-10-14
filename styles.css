@@ -1206,3 +1206,10 @@ img { max-width: 100%; display: block; }
 .keys-stack img + img { margin-left: -8px; }
 .keys-tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .keys-tag span { color: #2fb457; }
+
+/* Smart Orders: trigger panel built into the card (no box-in-a-box), aligned with the copy */
+.bcard-visual.trig { display: block; padding-top: 0; }
+.trig-box { width: 100%; max-width: none; border: 0; border-top: 1px solid var(--line); background: none; padding: 20px 0 0; }
+.trig-val { margin-top: 10px; }
+.trig-chart { height: 84px; margin-top: 4px; }
+.trig-order { margin-top: 12px; }
