@@ -1259,3 +1259,8 @@ img { max-width: 100%; display: block; }
 :is(.bk-bar, .s-bar, .n-bar) > span:nth-child(4) { background: var(--w4) !important; }
 .basket-card.is-skeleton .bk-bar > span { background: rgba(255,255,255,.08) !important; }
 .basket-card.is-thinking .bk-bar > span { background: linear-gradient(90deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.16) 50%, rgba(255,255,255,.06) 100%) !important; background-size: 200% 100% !important; }
+
+/* hero prompt bar: square edges + corner brackets just outside it */
+.command-input, .command-glow, .command-bar { border-radius: 0; }
+.command-input .brk { inset: -12px; z-index: 2; }
+.command-input .brk i { width: 12px; height: 12px; border-color: var(--faint); opacity: .9; }
