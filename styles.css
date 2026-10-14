@@ -1191,3 +1191,18 @@ img { max-width: 100%; display: block; }
 .vault-tag { animation: none; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .vault-orbit, .vault-core::after { animation: none; } }
 .v-orb { width: 15%; margin: -7.5% 0 0 -7.5%; transform: rotate(var(--a)) translateX(333%) rotate(calc(-1 * var(--a))); }
+
+/* Smart Orders + Your keys cards: no forced height / no gap between copy and visual */
+.bento .bcard:not(.wide) { min-height: 0; }
+.bcard-visual.trig, .bcard-visual.vault { margin-top: clamp(24px, 3vw, 36px); min-height: 0; padding: 0 0 clamp(28px, 3.4vw, 44px); }
+/* reset to "Watching" instantly (no lingering green) */
+.trig-num, .trig-status, .trig-path, .trig-dot { transition: none; }
+
+/* Your keys card: static, clean — a small logo stack + one line, pinned to the bottom */
+.bcard-visual.keys { align-self: stretch; width: 100%; height: auto; min-height: 0; display: block; margin-top: auto; padding: 28px 0 clamp(28px, 3.4vw, 44px); }
+.keys-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--line); }
+.keys-stack { display: inline-flex; }
+.keys-stack img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #1a1a1f; box-shadow: 0 0 0 2px var(--surface); }
+.keys-stack img + img { margin-left: -8px; }
+.keys-tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.keys-tag span { color: #2fb457; }
