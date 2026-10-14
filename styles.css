@@ -857,3 +857,6 @@ img { max-width: 100%; display: block; }
   .story-step, .story-screen, .story-link, .s-sheet, .s-copied, .s-steps li, .s-chat .s-mini, .s-copybtn em { transition: none !important; }
 }
 @media (max-width: 560px) { .story-link { display: none; } }
+
+/* Homepage: full-bleed layout (jtx-style) — thin side margins instead of a centered column */
+.home { --maxw: 1920px; --gutter: clamp(16px, 2.6vw, 44px); }
