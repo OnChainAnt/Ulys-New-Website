@@ -1084,3 +1084,17 @@ img { max-width: 100%; display: block; }
 .cta-inner h2 { color: #f2f1ee; }
 .cta-inner .lede { color: rgba(242,241,238,.62); }
 .cta-inner .brk i { border-color: rgba(242,241,238,.35); }
+
+/* warm neutral charcoal (no blue cast) */
+.cta-inner { --surface: #1f1e1c; background-color: #1f1e1c; }
+
+/* Closing CTA — light mode: soft white card, faint ink dots */
+:root:not([data-theme="dark"]) .cta-inner {
+  --surface: #faf9f6; --ink: #1a1a19; --muted: rgba(26,26,25,.62); --faint: rgba(26,26,25,.44); --line: rgba(26,26,25,.16);
+  --btn: #1f1f1e; --btn-ink: #f2f1ee;
+  background-color: #faf9f6; border-color: rgba(26,26,25,.1); color: #1a1a19;
+}
+:root:not([data-theme="dark"]) .cta-inner::before { background-image: radial-gradient(rgba(26,26,25,.14) 1px, transparent 1.4px); }
+:root:not([data-theme="dark"]) .cta-inner h2 { color: #1a1a19; }
+:root:not([data-theme="dark"]) .cta-inner .lede { color: rgba(26,26,25,.62); }
+:root:not([data-theme="dark"]) .cta-inner .brk i { border-color: rgba(26,26,25,.32); }
