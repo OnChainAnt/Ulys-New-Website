@@ -1028,3 +1028,6 @@ img { max-width: 100%; display: block; }
 .tw-cta > span { grid-area: 1 / 1; text-align: left; white-space: nowrap; }
 .tw-cta .tw-ghost { visibility: hidden; }
 .tw-cta .tw-typed::after { content: ""; display: inline-block; width: .06em; height: .9em; margin-left: .06em; vertical-align: -.08em; background: currentColor; animation: caret 1s step-end infinite; }
+
+/* Ulys mark in the corner of the engine stage (where a video control would sit) */
+.n-mark { position: absolute; right: 26px; bottom: 26px; z-index: 2; width: 34px; height: auto; opacity: .9; }
