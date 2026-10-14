@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=61" />
+  <link rel="stylesheet" href="styles.css?v=64" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')!=='light')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body class="home">
@@ -132,20 +132,24 @@
     <!-- ===== Below the hero: jtx-style blueprint layout ===== -->
     <div class="below">
 
-    <!-- Neural engine: ideas flow through a brain-like network into the app -->
+    <!-- Neural engine: split panel like jtx.com — text left, animation "video" right -->
     <section class="neural" id="engine" aria-label="Ulys turns an idea into a basket">
-      <canvas class="neural-canvas" aria-hidden="true"></canvas>
-      <div class="neural-inner">
-        <div class="neural-head">
-          <p class="mlabel"><span class="sq"></span>Inside Ulys</p>
+      <div class="neural-text">
+        <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="neural-copy">
           <h2>Ideas in.<br /><span class="dim">Baskets out.</span></h2>
-          <p class="neural-lede">Every idea runs through Ulys. It reads what you mean, maps it to the tokens and stocks that move with it, and builds your basket in seconds.</p>
+          <p class="neural-lede">Every idea runs through Ulys. It reads what you mean, explores the idea with you, maps it to the tokens and stocks that move with it, and builds your basket in seconds.</p>
           <ol class="neural-steps" aria-hidden="true">
             <li>Reading intent</li><li>Mapping assets</li><li>Weighting</li><li>Basket ready</li>
           </ol>
+          <a class="jbtn" href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961"><span>Get the app</span><i aria-hidden="true">+</i></a>
         </div>
+      </div>
+      <div class="neural-stage">
+        <canvas class="neural-canvas" aria-hidden="true"></canvas>
+        <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <div class="neural-brain" aria-hidden="true"></div>
-        <div class="neural-phone" aria-hidden="true">
+<div class="neural-phone" aria-hidden="true">
           <div class="bk-phone">
             <div class="bk-screen"><div class="bk-screen-inner n-screen">
               <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
@@ -165,6 +169,7 @@
             <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
           </div>
         </div>
+        <button class="n-pause" type="button" aria-label="Pause animation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="5" width="3" height="14" rx=".5"/><rect x="14" y="5" width="3" height="14" rx=".5"/></svg></button>
       </div>
     </section>
 
@@ -393,12 +398,14 @@
     <!-- Final CTA -->
     <section class="cta" id="download">
       <div class="cta-inner reveal">
+        <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <h2>Your next idea is<br />one tap away.</h2>
         <p class="lede center">Get Ulys on the Apple App Store and turn what you believe into a basket in seconds.</p>
         <div class="store-badges">
-          <a href="#" class="store-badge">
+          <a href="https://apps.apple.com/us/app/ulys-smart-crypto-wallet/id6477800961" class="store-badge">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.53c-.02-2.05 1.67-3.03 1.75-3.08-.95-1.4-2.44-1.59-2.97-1.61-1.26-.13-2.47.74-3.11.74-.64 0-1.63-.72-2.68-.7-1.38.02-2.65.8-3.36 2.03-1.43 2.49-.37 6.17 1.03 8.19.68.99 1.5 2.1 2.56 2.06 1.03-.04 1.42-.66 2.66-.66 1.24 0 1.59.66 2.68.64 1.11-.02 1.81-1 2.49-1.99.78-1.14 1.11-2.25 1.12-2.31-.02-.01-2.15-.83-2.17-3.29Zm-2.04-6.03c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.86 2.48.9.07 1.83-.46 2.39-1.12Z"/></svg>
             <span><small>Download on the</small>App Store</span>
+            <i class="sb-plus" aria-hidden="true">+</i>
           </a>
         </div>
       </div>
@@ -465,6 +472,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=49"></script>
+  <script src="app.js?v=50"></script>
 </body>
 </html>

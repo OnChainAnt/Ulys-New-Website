@@ -693,6 +693,8 @@ const tuneWeights = (function tune() {
   const cv = sec.querySelector('.neural-canvas');
   const ctx = cv.getContext('2d');
   const netEl = sec.querySelector('.neural-brain');
+  const stage = sec.querySelector('.neural-stage');
+  const pauseBtn = sec.querySelector('.n-pause');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const steps = [...sec.querySelectorAll('.neural-steps li')];
   const bubble = sec.querySelector('.n-bubble');
@@ -731,24 +733,24 @@ const tuneWeights = (function tune() {
   // ---------- geometry: layers of nodes ----------
   let W = 0, H = 0, layers = [], textAt = { x: 0, y: 0 }, mobile = false;
   function build() {
-    const sr = sec.getBoundingClientRect();
+    const sr = stage.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = sr.width; H = sr.height; mobile = W < 900;
+    W = sr.width; H = sr.height; mobile = false;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const r = netEl.getBoundingClientRect();
     const x0 = r.left - sr.left, y0 = r.top - sr.top, w = r.width, h = r.height;
-    const sizes = [5, 8, 8, 4];
+    const sizes = [3, 5, 4];
     // leave room on the left for the idea text (desktop); on phones the text sits above
-    const left = mobile ? x0 + w * 0.1 : x0 + w * 0.42, right = mobile ? x0 + w * 0.9 : x0 + w * 0.98;
-    const top = y0 + h * (mobile ? 0.26 : 0.1), bot = y0 + h * (mobile ? 0.96 : 0.9);
+    const left = x0 + w * 0.06, right = x0 + w * 0.94;
+    const top = y0 + h * 0.3, bot = y0 + h * 0.95;
     layers = sizes.map((n, li) => {
       const x = left + ((right - left) * li) / (sizes.length - 1);
-      const span = (bot - top) * (n / 8);
+      const span = (bot - top) * (n / 5);
       const cy = (top + bot) / 2;
       return Array.from({ length: n }, (_, k) => ({ x, y: n === 1 ? cy : cy - span / 2 + (span * k) / (n - 1), g: 0 }));
     });
-    textAt = mobile ? { x: x0 + w * 0.06, y: y0 + h * 0.1 } : { x: x0, y: (top + bot) / 2 };
+    textAt = { x: x0 + w * 0.06, y: y0 + h * 0.04 };
   }
 
   // ---------- moving things ----------
@@ -791,7 +793,7 @@ const tuneWeights = (function tune() {
     segs[k].style.width = `calc(${p.pct}% - ${(4 * (n - 1)) / n}px)`;
   }
   function slot(k) {
-    const ic = rows[k].querySelector('.n-ic').getBoundingClientRect(), sr = sec.getBoundingClientRect();
+    const ic = rows[k].querySelector('.n-ic').getBoundingClientRect(), sr = stage.getBoundingClientRect();
     return { x: ic.left - sr.left + ic.width / 2, y: ic.top - sr.top + ic.height / 2, r: ic.width / 2 };
   }
 
@@ -803,7 +805,7 @@ const tuneWeights = (function tune() {
     if (phase === 0) { resetPhone(); textAlpha = 1; typeIdea(idea.text); phase = 1; t = 0; }
     else if (phase === 1 && t > idea.text.length * 0.038 + 0.5) {
       bubble.textContent = idea.text; bubble.classList.add('in'); setStep(0);
-      for (let i = 0; i < 10; i++) setTimeout(() => firePulse(), i * 90);
+      for (let i = 0; i < 6; i++) setTimeout(() => firePulse(), i * 120);
       phase = 2; t = 0;
     } else if (phase === 2 && t > 1.4) {
       setStep(1); title.textContent = idea.title;
@@ -902,27 +904,26 @@ const tuneWeights = (function tune() {
     // the idea, typed out in mono on the left
     if (typed) {
       ctx.save();
-      ctx.font = `400 ${mobile ? 13 : 15}px "IBM Plex Mono", ui-monospace, monospace`;
+      ctx.font = `400 ${W < 520 ? 12 : 14}px "IBM Plex Mono", ui-monospace, monospace`;
       ctx.fillStyle = `rgba(242,241,238,${textAlpha})`; ctx.textBaseline = 'middle';
-      const maxW = mobile ? W * 0.8 : layers[0][0].x - textAt.x - 40;
+      const maxW = layers[layers.length - 1][0].x - textAt.x;
       // wrap to two lines if needed
       const words = typed.split(' '); let line = '', lines = [];
       words.forEach((w) => { const t2 = line ? `${line} ${w}` : w; if (ctx.measureText(t2).width > maxW && line) { lines.push(line); line = w; } else line = t2; });
       lines.push(line);
-      const lh = mobile ? 18 : 22, y0 = textAt.y - ((lines.length - 1) * lh) / 2;
+      const lh = W < 520 ? 17 : 21, y0 = textAt.y + lh / 2;
       lines.forEach((ln, i) => ctx.fillText(ln, textAt.x, y0 + i * lh));
       if (phase === 1 && Math.floor(clock * 2) % 2 === 0) { const lw = ctx.measureText(lines[lines.length - 1]).width; ctx.fillRect(textAt.x + lw + 3, y0 + (lines.length - 1) * lh - 8, 2, 16); }
       // a faint guide from the text into the input layer
-      if (!mobile) {
-        ctx.strokeStyle = `rgba(255,255,255,${0.08 * textAlpha + 0.03})`; ctx.setLineDash([2, 6]);
-        layers[0].forEach((n) => { ctx.beginPath(); ctx.moveTo(layers[0][0].x - 40, textAt.y); ctx.lineTo(n.x - 4, n.y); ctx.stroke(); });
-        ctx.setLineDash([]);
-      }
+      const gy = y0 + (lines.length - 1) * lh + 14;
+      ctx.strokeStyle = `rgba(255,255,255,${0.07 * textAlpha + 0.03})`; ctx.setLineDash([2, 6]);
+      layers[0].forEach((n) => { ctx.beginPath(); ctx.moveTo(textAt.x + 4, gy); ctx.lineTo(n.x, n.y - 5); ctx.stroke(); });
+      ctx.setLineDash([]);
       ctx.restore();
     }
 
     // gentle idle activity
-    idle += dt; if (idle > 0.6) { idle = 0; firePulse(); }
+    idle += dt; if (idle > 1.1) { idle = 0; firePulse(); }
     cycle(dt);
   }
 
@@ -940,10 +941,20 @@ const tuneWeights = (function tune() {
   const loop = (now) => { const dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now; frame(dt); if (running) raf = requestAnimationFrame(loop); };
   build();
   if (reduce) { still(); window.addEventListener('resize', () => { build(); still(); }); return; }
-  new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting && !running) { running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
-    else if (!e.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
-  }), { threshold: 0.05 }).observe(sec);
+  let visible = false, paused = false;
+  const sync = () => {
+    const want = visible && !paused;
+    if (want && !running) { running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
+    else if (!want && running) { running = false; cancelAnimationFrame(raf); }
+  };
+  new IntersectionObserver((es) => es.forEach((e) => { visible = e.isIntersecting; sync(); }), { threshold: 0.05 }).observe(stage);
+  if (pauseBtn) pauseBtn.addEventListener('click', () => {
+    paused = !paused; sync();
+    pauseBtn.setAttribute('aria-label', paused ? 'Play animation' : 'Pause animation');
+    pauseBtn.innerHTML = paused
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 5.5v13l11-6.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="5" width="3" height="14" rx=".5"/><rect x="14" y="5" width="3" height="14" rx=".5"/></svg>';
+  });
   let rt = 0;
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); pulses = []; outs = []; heat = new Map(); phase = 0; }, 150); });
 })();
