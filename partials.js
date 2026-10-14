@@ -13,10 +13,10 @@
       <nav class="navbar" id="siteNav">
         <a href="index.html" class="navbar-logo" aria-label="Ulys home"><span class="navbar-wordmark">${WORDMARK}</span></a>
         <div class="navbar-links">
-          <a href="index.html#fund">Fund</a>
-          <a href="index.html#trade">Trade</a>
-          <a href="index.html#hold">Non-custodial</a>
-          <a href="index.html#intelligence">AI</a>
+          <a href="index.html#ideas">Ideas</a>
+          <a href="index.html#share">Share</a>
+          <a href="index.html#assets">Any asset</a>
+          <a href="index.html#smart-orders">Smart Orders</a>
           <a href="season-1.html">Season 1</a>
           <a href="https://ulys-treasury.vercel.app/" target="_blank" rel="noreferrer">Treasury</a>
         </div>
@@ -51,10 +51,10 @@
         </div>
         <div class="footer-col">
           <h4>Product</h4>
-          <a href="index.html#fund">Fund</a>
-          <a href="index.html#trade">Trade</a>
-          <a href="index.html#hold">Non-custodial</a>
-          <a href="index.html#intelligence">AI assistant</a>
+          <a href="index.html#ideas">Idea baskets</a>
+          <a href="index.html#share">Copy an idea</a>
+          <a href="index.html#assets">Any asset</a>
+          <a href="index.html#smart-orders">Smart Orders</a>
           <a href="index.html#download">Download</a>
         </div>
         <div class="footer-col footer-social">

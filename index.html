@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=40" />
+  <link rel="stylesheet" href="styles.css?v=52" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')!=='light')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
@@ -28,10 +28,10 @@
       </a>
 
       <div class="navbar-links">
-        <a href="#fund">Fund</a>
-        <a href="#trade">Trade</a>
-        <a href="#hold">Hold</a>
-        <a href="#intelligence">AI</a>
+        <a href="#ideas">Ideas</a>
+        <a href="#share">Share</a>
+        <a href="#assets">Any asset</a>
+        <a href="#smart-orders">Smart Orders</a>
         <a href="season-1.html">Season 1</a>
         <a href="https://ulys-treasury.vercel.app/" target="_blank" rel="noreferrer">Treasury</a>
       </div>
@@ -57,50 +57,46 @@
       <div class="hero-inner">
         <svg viewBox="0 0 383 186" class="hero-wordmark reveal" role="img" aria-label="Ulys"><path d="M369.886 129.09c-6.741 0-12.206 5.465-12.206 12.207 0 6.74 5.465 12.205 12.206 12.205 6.742 0 12.207-5.465 12.207-12.205 0-6.742-5.465-12.207-12.207-12.207ZM101.324 39.816l-.02.255v31.035c-3.896-2.274-5.979-4.078-6.327-4.39-11.082-11.103-15.453-17.878-13.845-30.84l.032-.151.02-.343c.057-.494.516-3.942 2.295-7.034 1.834-3.19 4.148-4.49 7.988-4.49 3.616 0 5.132 1.103 6.048 2.063 3.198 3.353 3.945 10.772 3.809 13.895Zm38.125 42.31c-5.286-.45-10.05-1.201-14.288-2.12V40.801c.144-3.383.271-20.028-10.244-31.199-5.913-6.281-14.022-9.601-23.45-9.601C78.605 0 68.205 6.24 62.18 17.569c-3.701 6.961-4.57 13.648-4.752 15.59-2.958 24.487 8.662 38.41 20.823 50.571l.092.092c.655.639 6.733 6.408 18.693 11.919 1.274.587 2.564 1.15 3.872 1.688-1.265 9.255-5.577 16.945-12.861 22.917-8.577 7.034-18.78 9.539-25.467 9.539-9.342 0-17.182-3.432-25.421-11.129-12.275-11.467-13.303-24.823-13.303-36.443V8.046H0v74.267c0 16.998 2.48 36.693 20.873 53.876 12.643 11.812 26.286 17.553 41.708 17.553 14.003 0 29.178-5.588 40.594-14.948 10.918-8.952 18.061-20.98 20.766-34.668 4.995.922 10.171 1.564 15.508 1.936v44.416h24.59V7.552h-24.59v74.574ZM245.085 47.893l-16.328 47.643c-4.226 12.487-8.837 31.889-8.837 31.889h-.384s-4.227-19.21-8.645-31.889l-16.906-47.643h-25.934l35.348 89.138c2.113 5.57 1.152 15.176 1.152 17.097-2.112 8.26-6.724 11.335-14.984 11.335-2.496 0-9.222-.386-10.182-.962h-1.345v19.788c1.729.576 14.793 1.152 17.867 1.152 16.713 0 25.549-6.532 34.002-29.2l39.766-108.348h-24.59ZM316.301 87.66c-15.562-2.882-26.127-4.611-26.127-13.64 0-7.109 5.956-12.295 17.291-12.295 12.101 0 18.633 4.802 20.362 13.64h23.246c-2.499-17.867-16.138-30.162-43.416-30.162-24.014 0-40.535 11.143-40.535 30.546 0 23.245 18.251 27.662 37.46 31.506 16.137 3.072 26.512 4.993 26.512 15.176 0 8.26-6.34 14.023-19.788 14.023-13.063 0-22.476-5.187-24.397-17.482h-23.436c1.536 20.747 18.441 34.771 47.641 34.771 25.359 0 43.8-11.333 43.8-32.851 0-24.971-19.211-29.582-38.613-33.233Z"></path></svg>
 
-        <h1 class="hero-tagline reveal">Turn "what if" into<br /><span class="grad">"already there"</span></h1>
+        <h1 class="hero-tagline reveal">Tell Ulys your idea.<br /><span class="grad">It builds the trade.</span></h1>
 
-        <button class="tryit reveal" id="tryIt" type="button">Try it <span aria-hidden="true">↓</span></button>
-
-        <!-- The centerpiece: AI command bar + interactive order builder -->
-        <div class="command reveal" id="command">
-          <div class="command-input">
-            <div class="command-glow" aria-hidden="true"></div>
-            <div class="command-bar">
-              <div class="command-text">
-                <span id="typed"></span><span class="caret" aria-hidden="true"></span>
+        <!-- The centerpiece: type an idea, Ulys builds a basket for it -->
+        <div class="hero-demo reveal">
+          <div class="command" id="command">
+            <div class="command-input">
+              <div class="command-glow" aria-hidden="true"></div>
+              <div class="command-bar">
+                <div class="command-text">
+                  <span id="typed"></span><span class="caret" aria-hidden="true"></span>
+                </div>
+                <button class="command-send" id="commandSend" aria-label="Send to Ulys">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
               </div>
-              <button class="command-send" id="commandSend" aria-label="Send to Ulys">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
             </div>
-          </div>
 
-          <!-- idle: rotating example + disclaimer + trust tags -->
-          <div class="command-idle" id="commandIdle">
-            <p class="command-disclaimer">Illustrative only. No orders placed, no live pricing.</p>
             <div class="command-hint hero-trust">
-              <span>Non-custodial</span><i></i><span>Every token &amp; chain</span><i></i><span>Conditional Orders</span><i></i><span>A prompt away</span>
+              <span>Non-custodial</span><i></i><span>Every token &amp; chain</span><i></i><span>Bring your ideas</span><i></i><span>Ulys builds the trade</span>
             </div>
           </div>
 
-          <!-- builder: 4-step wizard (hidden until "Try it") -->
-          <div class="builder" id="builder" hidden>
-            <p class="builder-label" id="builderLabel">Do what?</p>
-            <div class="builder-chips" id="builderChips"></div>
-            <div class="builder-nav">
-              <button type="button" class="builder-back" id="builderBack">← Back</button>
-              <span class="builder-step" id="builderStep">1 of 4</span>
-              <button type="button" class="builder-restart" id="builderRestart" hidden>Start over ↺</button>
+          <!-- the basket Ulys builds from the idea (filled by app.js) -->
+          <div class="basket-stage">
+            <p class="basket-status" id="basketStatus" aria-live="polite"></p>
+            <!-- 3-phone carousel: app.js clones this phone once per idea -->
+            <div class="bk-carousel" id="bkCarousel">
+            <div class="bk-phone">
+              <div class="bk-screen">
+                <div class="bk-screen-inner">
+                  <div class="bk-statusbar" aria-hidden="true">
+                    <span>9:41</span>
+                    <span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span>
+                  </div>
+                  <p class="bk-bubble" hidden></p>
+                  <div class="basket-card is-skeleton"></div>
+                </div>
+              </div>
+              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" />
             </div>
-          </div>
-
-          <!-- completion: order summary card (hidden until step 4 done) -->
-          <div class="order-card" id="orderCard" hidden>
-            <p class="order-card-label" id="ocLabel">BUY ETHEREUM</p>
-            <p class="order-card-amount" id="ocAmount">$50</p>
-            <p class="order-card-cond" id="ocCond">Clarity Act passes by end of 2026</p>
-            <div class="order-card-row">
-              <span>Trigger</span><span id="ocToken">ETH</span>
             </div>
           </div>
         </div>
@@ -115,117 +111,236 @@
     <section class="ticker" aria-hidden="true">
       <div class="ticker-track">
         <div class="ticker-group">
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
         </div>
         <div class="ticker-group">
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
-          <span>Every Chain. Every Token. A prompt away.</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
+          <span>Season 1 is live | Earn points on every trade</span><span class="tick-sep">✦</span>
         </div>
       </div>
     </section>
 
-    <!-- Smart Orders — first section under the hero -->
-    <section class="section fund smart" id="smart-orders">
-      <div class="fund-grid">
-        <div class="section-head reveal">
-          <p class="eyebrow">Smart Orders</p>
-          <h2>Trade the moment it comes true.</h2>
-          <p class="lede">Describe a condition in plain language — a price, a real-world event, or the odds of it happening — and Ulys places the order automatically the instant it triggers. No screens, no timing the market.</p>
-          <ul class="smart-points">
-            <li><span>01</span> Set a target by price move, event, or prediction-market odds</li>
-            <li><span>02</span> Ulys watches the market and conditions 24/7</li>
-            <li><span>03</span> Your order executes the moment the trigger is met</li>
-          </ul>
+    <!-- ===== Below the hero: jtx-style blueprint layout ===== -->
+    <div class="below">
+
+    <!-- Pinned, scroll-driven story: one phone, four steps -->
+    <section class="story" id="ideas" style="--steps:4">
+      <span class="story-anchor" id="share" style="--k:2" aria-hidden="true"></span>
+      <div class="story-stage">
+        <div class="story-copy">
+          <p class="mlabel"><span class="sq"></span>How idea trading works</p>
+          <h2 class="story-h"><span class="dim">From a hunch</span> to a basket you own.</h2>
+          <div class="story-steps">
+          <article class="story-step is-active" data-i="0">
+            <p class="story-num">{01}</p>
+            <h3>Say the idea.</h3>
+            <p>Describe what you believe in plain words. Ulys researches it, picks the tokens and stocks behind it, and builds a basket you can buy in one tap.</p>
+          </article>
+          <article class="story-step" data-i="1">
+            <p class="story-num">{02}</p>
+            <h3>Tune every weight.</h3>
+            <p>Want more of one pick? Slide it up. Ulys rebalances the rest so your basket always adds up to 100%. Go ahead, drag a slider.</p>
+          </article>
+          <article class="story-step" data-i="2">
+            <p class="story-num">{03}</p>
+            <h3>Share it with a link.</h3>
+            <p>Every basket gets its own link. Drop it in a group chat, post it on X, or send it to one friend.</p>
+          </article>
+          <article class="story-step" data-i="3">
+            <p class="story-num">{04}</p>
+            <h3>Anyone can copy it.</h3>
+            <p>Friends open your link, see every pick and weight, and copy the idea into their own wallet in one tap.</p>
+          </article>
+          </div>
+          <div class="story-progress" aria-label="Steps"><button type="button" data-i="0" class="is-active">Idea</button><button type="button" data-i="1">Tune</button><button type="button" data-i="2">Share</button><button type="button" data-i="3">Copy</button></div>
         </div>
-        <div class="fund-visual reveal">
-          <img class="smart-shot" src="assets/smartorder.webp" alt="Ulys smart order — Buy Ethereum $200 if Fed rates increase by 4%, executing when the odds reach 30%" loading="lazy" />
+        <div class="story-visual">
+          <span class="bp-cross" aria-hidden="true"></span>
+          <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="story-link" aria-hidden="true">
+            <span class="s-link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span>
+            <span><b>Vintage Cards Onchain</b><small>ulys.ai/idea/vintage-cards</small></span>
+          </div>
+          <div class="bk-phone story-phone">
+            <div class="bk-screen">
+                <div class="bk-screen-inner story-screen s-chat is-active" data-i="0" aria-hidden="true">
+                  <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                  <p class="bk-bubble">Robots are taking over factories</p>
+              <ul class="s-steps">
+                <li><i></i>Read your idea</li>
+                <li><i></i>Scanned tokens and stocks</li>
+                <li><i></i>Picked the strongest four</li>
+                <li><i></i>Weighted your basket</li>
+              </ul>
+              <div class="s-mini">
+                <div class="s-mini-head"><span class="s-orb" style="--c1:#9aa4b2;--c2:#ff8a3d"></span><div><b>Robotics Revolution</b><small class="up">▲ 1.94% today</small></div></div>
+                <div class="bk-bar s-bar"><span style="width:calc(35% - 3px);background:#76b900"></span><span style="width:calc(25% - 3px);background:#e82127"></span><span style="width:calc(20% - 3px);background:#2ec5d3"></span><span style="width:calc(20% - 3px);background:#c9c9c9"></span></div>
+                <ul class="s-rows">
+                  <li><span class="bk-icon" style="background:#76b900">N</span><b>NVIDIA<em>NVDA</em></b><span class="s-pct"><i style="background:#76b900"></i>35%</span></li>
+                  <li><span class="bk-icon" style="background:#e82127">T</span><b>Tesla<em>TSLA</em></b><span class="s-pct"><i style="background:#e82127"></i>25%</span></li>
+                  <li><span class="bk-icon" style="background:#0e6b73">p</span><b>peaq<em>PEAQ</em></b><span class="s-pct"><i style="background:#2ec5d3"></i>20%</span></li>
+                  <li><span class="bk-icon" style="background:#222;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)">R</span><b>Render<em>RENDER</em></b><span class="s-pct"><i style="background:#c9c9c9"></i>20%</span></li>
+                </ul>
+                <span class="bk-invest s-btn">Invest in this idea</span>
+              </div>
+                </div>
+                <div class="bk-screen-inner story-screen s-tune" data-i="1">
+                  <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                  <div class="s-top"><span class="s-back">‹</span><div><b>Edit weights</b><small>Vintage Cards Onchain</small></div><span class="s-done">Done</span></div>
+                  <div class="bk-bar s-bar s-tune-bar" aria-hidden="true"></div>
+                  <div class="s-sliders"></div>
+                  <div class="s-total"><span>Total</span><b>100%</b></div>
+                  <span class="bk-invest s-btn" aria-hidden="true">Save basket</span>
+                </div>
+                <div class="bk-screen-inner story-screen s-share" data-i="2" aria-hidden="true">
+                  <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                  <div class="s-under">
+                    <div class="s-mini dimmed"><div class="s-mini-head"><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><div><b>Vintage Cards Onchain</b><small class="down">▼ 4.44% today</small></div></div>
+                    <div class="bk-bar s-bar"><span style="width:calc(35% - 3px);background:#ef8a3c"></span><span style="width:calc(30% - 3px);background:#7fb2f0"></span><span style="width:calc(20% - 3px);background:#b8893a"></span><span style="width:calc(15% - 3px);background:#8b3dff"></span></div></div>
+                  </div>
+                  <div class="s-sheet">
+                    <span class="s-grab"></span>
+                    <div class="s-sheet-head"><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><div><b>Vintage Cards Onchain</b><small>ulys.ai/idea/vintage-cards</small></div><span class="s-x">✕</span></div>
+                    <div class="s-people"><span><i style="background:linear-gradient(135deg,#f472b6,#a855f7)">M</i>Maya</span><span><i style="background:linear-gradient(135deg,#60a5fa,#2563eb)">J</i>Jordan</span><span><i style="background:linear-gradient(135deg,#34d399,#059669)">S</i>Sam</span><span><i style="background:linear-gradient(135deg,#fbbf24,#f97316)">A</i>Alex</span></div>
+                    <div class="s-apps"><span><i style="background:#34c759"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21l3.6-1.9c1 .3 2.2.4 3.4.4 5.5 0 10-3.8 10-8.5S17.5 3 12 3Z"/></svg></i>Messages</span><span><i style="background:#000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Z"/></svg></i>X</span><span><i style="background:#2aabee"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71l-4.15-3.06-1.99 1.93c-.23.23-.42.42-.83.42Z"/></svg></i>Telegram</span><span><i style="background:#3a3a3e"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></i>Copy link</span></div>
+                    <div class="s-copied"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Link copied</div>
+                  </div>
+                </div>
+                <div class="bk-screen-inner story-screen s-copy" data-i="3" aria-hidden="true">
+                  <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                  <p class="s-kicker">Shared with you</p>
+              <div class="s-who"><span class="s-avatar">M</span><div><b>Maya's idea</b><small>Sent you a basket link</small></div></div>
+              <div class="s-mini">
+                <div class="s-mini-head"><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><div><b>Vintage Cards Onchain</b><small class="down">▼ 4.44% today</small></div></div>
+                <div class="bk-bar s-bar"><span style="width:calc(35% - 3px);background:#ef8a3c"></span><span style="width:calc(30% - 3px);background:#7fb2f0"></span><span style="width:calc(20% - 3px);background:#b8893a"></span><span style="width:calc(15% - 3px);background:#8b3dff"></span></div>
+                <ul class="s-rows">
+                  <li><span class="bk-icon" style="background:#2f7de1">C</span><b>Collector Crypt<em>CARDS</em></b><span class="s-pct"><i style="background:#ef8a3c"></i>35%</span></li>
+                  <li><span class="bk-icon" style="background:#fff;color:#e53238">e</span><b>eBay<em>EBAY</em></b><span class="s-pct"><i style="background:#7fb2f0"></i>30%</span></li>
+                  <li><span class="bk-icon" style="background:#111;color:#d4a64a;box-shadow:inset 0 0 0 2px #b8893a">G</span><b>GameStop<em>GME</em></b><span class="s-pct"><i style="background:#b8893a"></i>20%</span></li>
+                  <li><span class="bk-icon" style="background:linear-gradient(135deg,#00d6a3,#9945ff)">S</span><b>Solana<em>SOL</em></b><span class="s-pct"><i style="background:#8b3dff"></i>15%</span></li>
+                </ul>
+                <span class="bk-invest s-btn s-copybtn"><em>Copy this idea</em><em>Copied to your wallet ✓</em></span>
+                <p class="s-note">Same picks, same weights. Tune them before you buy.</p>
+              </div>
+                </div>
+            </div>
+            <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
-    <section class="section fund" id="fund">
-      <div class="fund-grid">
-        <div class="section-head reveal">
-          <p class="eyebrow">Fund</p>
-          <h2>Fast, flexible deposits.</h2>
-          <p class="lede">Open and fund your account instantly with almost any method — debit, credit, Apple&nbsp;Pay or direct bank transfer. No fees.*</p>
-        </div>
-        <div class="fund-visual reveal">
-          <img src="assets/deposit-gradient.svg" alt="Ulys deposit screen with Apple Pay, credit card, debit card and Google Pay options" loading="lazy" />
-        </div>
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- Bento: everything else an idea needs -->
+    <section class="section bento-wrap" id="assets">
+      <div class="bento-head reveal">
+        <p class="mlabel"><span class="sq"></span>Built around your ideas</p>
+        <h2 class="lit">Everything else an idea needs, in one wallet.</h2>
+      </div>
+      <div class="bento">
+        <article class="bcard wide reveal">
+          <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="bcard-copy">
+            <p class="tag">[ Any asset ]</p>
+            <h3>Any token. Any stock.<br />Any chain.</h3>
+            <p>Ideas don't stop at one chain. Ulys builds baskets across any chain, tokens, and tokenized stocks. From Ethereum, Solana, Base and more.</p>
+            <div class="s-chains"><span>Tokenized stocks</span><span>Bitcoin</span><span>Ethereum</span><span>Solana</span><span>Base</span><span>Arbitrum</span><span>BNB Chain</span></div>
+          </div>
+          <div class="bcard-visual">
+            <div class="bk-phone" role="img" aria-label="Ulys app: searching across tokens and tokenized stocks on many chains">
+              <div class="bk-screen"><div class="bk-screen-inner s-search" aria-hidden="true">
+                <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                <div class="s-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search tokens, stocks, chains</div>
+              <div class="s-tabs"><span class="on">All</span><span>Tokens</span><span>Stocks</span><span>Chains</span></div>
+              <ul class="s-list">
+                <li><span class="bk-icon" style="background:#f7931a">₿</span><b>Bitcoin<em>BTC</em></b><span class="s-tag">Bitcoin</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#76b900">N</span><b>NVIDIA<em>NVDA</em></b><span class="s-tag stock">Stock</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#627eea">Ξ</span><b>Ethereum<em>ETH</em></b><span class="s-tag">Ethereum</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#e82127">T</span><b>Tesla<em>TSLA</em></b><span class="s-tag stock">Stock</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#f8a404;color:#3b2200">B</span><b>Bonk<em>BONK</em></b><span class="s-tag">Solana</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#1a1a1a;box-shadow:inset 0 0 0 2px #0052ff">A</span><b>Aerodrome<em>AERO</em></b><span class="s-tag">Base</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#e6e6e6;color:#111">A</span><b>Apple<em>AAPL</em></b><span class="s-tag stock">Stock</span><span class="s-add">+</span></li>
+                <li><span class="bk-icon" style="background:#3d9b35">P</span><b>Pepe<em>PEPE</em></b><span class="s-tag">Ethereum</span><span class="s-add">+</span></li>
+              </ul>
+              </div></div>
+              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+            </div>
+          </div>
+        </article>
+
+        <article class="bcard reveal" id="smart-orders">
+          <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="bcard-copy">
+            <p class="tag">[ Smart Orders ]</p>
+            <h3>Trade the moment it comes true.</h3>
+            <p>Put a trigger on any trade. Set it by a price, a real-world event or the odds of it happening, and Ulys places the order the instant it triggers.</p>
+          </div>
+          <div class="bcard-visual pair">
+            <div class="bk-phone back">
+              <div class="bk-screen"><img src="assets/smart-orders-watching.webp" width="923" height="2000" loading="lazy" decoding="async" alt="Ulys app: a list of smart orders being watched, each showing the price it fires at" /></div>
+              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+            </div>
+            <div class="bk-phone front">
+              <div class="bk-screen"><img src="assets/smart-order-setup.webp" width="923" height="2000" loading="lazy" decoding="async" alt="Ulys app: setting up a smart order to buy $200 of Ethereum if Fed rates decrease, triggered by the odds" /></div>
+              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+            </div>
+          </div>
+        </article>
+
+        <article class="bcard reveal" id="hold">
+          <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="bcard-copy">
+            <p class="tag">[ Non-custodial ]</p>
+            <h3>Your ideas.<br />Your keys.</h3>
+            <p>Every basket lives in a non-custodial wallet only you control, without the stress of storing a full seed phrase. Fund it with Apple&nbsp;Pay, card or bank. No fees.*</p>
+          </div>
+          <div class="bcard-visual">
+            <div class="bk-phone" role="img" aria-label="Ulys app: a portfolio of idea baskets in a non-custodial wallet">
+              <div class="bk-screen"><div class="bk-screen-inner s-port" aria-hidden="true">
+                <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+                <p class="s-kicker">Your ideas</p>
+              <p class="s-total-big">$12,480<span>.52</span></p>
+              <p class="s-delta up">▲ $412.18 (3.4%) today</p>
+              <div class="s-actions"><span><i style="background:linear-gradient(135deg,#34d36b,#0fb3a0)">+</i>Buy</span><span><i style="background:linear-gradient(135deg,#ff8a3d,#ff4d6d)">−</i>Sell</span><span><i style="background:linear-gradient(135deg,#c6e33a,#34c759)">↓</i>Receive</span><span><i style="background:linear-gradient(135deg,#c084fc,#7c5cff)">↗</i>Send</span></div>
+              <ul class="s-ideas">
+                <li><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><b>Vintage Cards Onchain<em>4 assets</em></b><span class="s-val">$4,210.40<small class="down">▼ 4.44%</small></span></li>
+                <li><span class="s-orb" style="--c1:#30d1c4;--c2:#7b6cf6"></span><b>AI Agents Onchain<em>4 assets</em></b><span class="s-val">$3,880.12<small class="up">▲ 3.12%</small></span></li>
+                <li><span class="s-orb" style="--c1:#53d337;--c2:#1493ff"></span><b>Sports Betting Boom<em>4 assets</em></b><span class="s-val">$2,640.00<small class="up">▲ 2.36%</small></span></li>
+                <li><span class="s-orb" style="--c1:#9aa4b2;--c2:#ff8a3d"></span><b>Robotics Revolution<em>4 assets</em></b><span class="s-val">$1,750.00<small class="up">▲ 1.94%</small></span></li>
+              </ul>
+              <p class="s-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Non-custodial · Your keys</p>
+              </div></div>
+              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
-    <!-- Hold -->
-    <section class="section fund reverse" id="hold">
-      <div class="fund-grid">
-        <div class="section-head reveal">
-          <p class="eyebrow">Non-Custodial</p>
-          <h2>What's yours is yours.</h2>
-          <p class="lede">Take control of your crypto with one non-custodial wallet for all your holdings.</p>
-          <p class="lede sub">Secure your crypto assets in a non-custodial wallet, with your own keys — without the stress of storing a full seed phrase.</p>
-        </div>
-        <div class="fund-visual reveal">
-          <img src="assets/portfolio-gradient.svg" alt="Ulys portfolio screen showing total balance and holdings" loading="lazy" />
-        </div>
-      </div>
-    </section>
+    <div class="rule" aria-hidden="true"></div>
 
-    <!-- AI assistant -->
-    <section class="section fund" id="intelligence">
-      <div class="fund-grid">
-        <div class="section-head reveal">
-          <p class="eyebrow">AI assistant</p>
-          <h2>The first wallet that thinks.</h2>
-          <p class="lede">Your AI powered assistant provides real-time insights and instant execution.</p>
-          <p class="lede sub">Make informed trading decisions based on proprietary insight into market sentiment and the momentum of leading tokens.</p>
-        </div>
-        <div class="fund-visual reveal">
-          <img src="assets/gainers-gradient.svg" alt="Ulys AI assistant screen showing today's top gainers" loading="lazy" />
-        </div>
-      </div>
-    </section>
-
-    <!-- Earn -->
-    <section class="section fund reverse" id="earn">
-      <div class="fund-grid">
-        <div class="section-head reveal">
-          <p class="eyebrow">Earn</p>
-          <h2>Coming 2026: More ways to grow.</h2>
-          <p class="lede">Access earning opportunities with the flip of a switch.</p>
-          <p class="lede sub">Discover curated opportunities to earn rewards or yield on your assets. No DeFi expertise required.</p>
-        </div>
-        <div class="fund-visual reveal">
-          <img src="assets/earn-gradient.svg" alt="Ulys earn screen showing Aave USDC yield" loading="lazy" />
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Big intelligence showcase -->
-    <section class="showcase">
+    <!-- Idea prompts, drifting -->
+    <section class="showcase ideas-mq">
       <div class="showcase-inner reveal">
-        <h2>Talk to your money.<br /><span class="grad">It talks back.</span></h2>
-        <p class="lede center">Skip the menus. Tell Ulys what you want and watch it happen — deposits, swaps, portfolio moves and market reads, all from one command bar.</p>
-        <div class="chips">
-          <button class="chip" data-prompt="Deposit $500 to my wallet">Deposit $500 to my wallet</button>
-          <button class="chip" data-prompt="Buy $100 of ETH">Buy $100 of ETH</button>
-          <button class="chip" data-prompt="What's trending today?">What's trending today?</button>
-          <button class="chip" data-prompt="Swap half my SOL for BTC">Swap half my SOL for BTC</button>
-          <button class="chip" data-prompt="Show me my best performer">Show me my best performer</button>
-        </div>
+        <p class="mlabel center"><span class="sq"></span>Need a starting point?</p>
+        <h2>Start with an idea.<br /><span class="grad">Ulys does the rest.</span></h2>
+        <p class="lede center">If you can say it, Ulys can build it. A theme, a hunch, a headline.</p>
       </div>
+      <div class="mq" aria-hidden="true"><div class="mq-track"><span class="chip">Robots are taking over factories</span><span class="chip">Gold is the new bitcoin</span><span class="chip">Memecoins on Solana</span><span class="chip">Space is the next frontier</span><span class="chip">AI agents are going to run the internet</span><span class="chip">Sports betting is going mainstream</span><span class="chip">Robots are taking over factories</span><span class="chip">Gold is the new bitcoin</span><span class="chip">Memecoins on Solana</span><span class="chip">Space is the next frontier</span><span class="chip">AI agents are going to run the internet</span><span class="chip">Sports betting is going mainstream</span></div></div>
+      <div class="mq rev" aria-hidden="true"><div class="mq-track"><span class="chip">Vintage trading cards are moving onchain</span><span class="chip">Stablecoins go mainstream</span><span class="chip">Nuclear energy powers AI</span><span class="chip">Bitcoin hits a new high this year</span><span class="chip">Prediction markets are the new polls</span><span class="chip">GLP-1 drugs change everything</span><span class="chip">Vintage trading cards are moving onchain</span><span class="chip">Stablecoins go mainstream</span><span class="chip">Nuclear energy powers AI</span><span class="chip">Bitcoin hits a new high this year</span><span class="chip">Prediction markets are the new polls</span><span class="chip">GLP-1 drugs change everything</span></div></div>
     </section>
+
+    <div class="rule" aria-hidden="true"></div>
 
     <!-- FAQ -->
     <section class="section faq">
@@ -234,7 +349,9 @@
         <h2>Frequently asked questions.</h2>
       </div>
       <div class="faq-list reveal">
-        <details><summary>How does the Ulys smart wallet work?<i></i></summary><p>Ulys is a non-custodial wallet you control in plain language. Fund it, trade 130+ tokens and get AI-driven insight — all without gas fees or managing chains yourself. Your keys stay yours.</p></details>
+        <details><summary>How does idea-based trading work?<i></i></summary><p>Tell Ulys an idea in plain words, like "robots are taking over factories". Ulys builds a basket of tokens and tokenized stocks around it, explains every pick, and lets you adjust the weights before you buy the whole basket in one tap.</p></details>
+        <details><summary>What can I put in a basket?<i></i></summary><p>Any token and tokenized stocks, across chains like Ethereum, Solana and Base. Ulys handles the routing, so you never have to bridge or switch chains yourself.</p></details>
+        <details><summary>How do I share an idea?<i></i></summary><p>Every basket has its own link. Send it to anyone and they can open it, see every pick and weight, and copy the idea into their own wallet in one tap.</p></details>
         <details><summary>Can I connect other wallets to Ulys?<i></i></summary><p>Ulys is built as your primary smart wallet. Broader connectivity is on the roadmap as the platform expands.</p></details>
         <details><summary>Is the Ulys wallet secure?<i></i></summary><p>Ulys is non-custodial, so you hold your own keys — without the burden of storing a full seed phrase. Your assets are never in someone else's custody.</p></details>
         <details><summary>Is Ulys available outside of the US?<i></i></summary><p>Availability varies by region and is expanding. Download the app to check eligibility where you are.</p></details>
@@ -245,8 +362,8 @@
     <!-- Final CTA -->
     <section class="cta" id="download">
       <div class="cta-inner reveal">
-        <h2>You're already there.</h2>
-        <p class="lede center">Get Ulys on the Apple App Store and stay ahead of the next market move.</p>
+        <h2>Your next idea is<br />one tap away.</h2>
+        <p class="lede center">Get Ulys on the Apple App Store and turn what you believe into a basket in seconds.</p>
         <div class="store-badges">
           <a href="#" class="store-badge">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.53c-.02-2.05 1.67-3.03 1.75-3.08-.95-1.4-2.44-1.59-2.97-1.61-1.26-.13-2.47.74-3.11.74-.64 0-1.63-.72-2.68-.7-1.38.02-2.65.8-3.36 2.03-1.43 2.49-.37 6.17 1.03 8.19.68.99 1.5 2.1 2.56 2.06 1.03-.04 1.42-.66 2.66-.66 1.24 0 1.59.66 2.68.64 1.11-.02 1.81-1 2.49-1.99.78-1.14 1.11-2.25 1.12-2.31-.02-.01-2.15-.83-2.17-3.29Zm-2.04-6.03c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.86 2.48.9.07 1.83-.46 2.39-1.12Z"/></svg>
@@ -259,6 +376,8 @@
         </div>
       </div>
     </section>
+
+    </div><!-- /.below -->
   </main>
 
   <!-- Footer -->
@@ -281,10 +400,10 @@
 
       <div class="footer-col">
         <h4>Product</h4>
-        <a href="index.html#fund">Fund</a>
-        <a href="index.html#trade">Trade</a>
-        <a href="index.html#hold">Non-custodial</a>
-        <a href="index.html#intelligence">AI assistant</a>
+        <a href="index.html#ideas">Idea baskets</a>
+        <a href="index.html#share">Copy an idea</a>
+        <a href="index.html#assets">Any asset</a>
+        <a href="index.html#smart-orders">Smart Orders</a>
         <a href="index.html#download">Download</a>
       </div>
 
@@ -319,6 +438,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=38"></script>
+  <script src="app.js?v=44"></script>
 </body>
 </html>
