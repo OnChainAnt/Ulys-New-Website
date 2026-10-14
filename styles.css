@@ -1176,3 +1176,18 @@ img { max-width: 100%; display: block; }
   .faq.section { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .faq .section-head { position: static; }
 }
+
+/* ---- Vault, simplified: one hairline ring, five logo orbs drifting, a softly breathing lock ---- */
+.vault { width: min(260px, 72%); }
+.vault-ring { inset: 0; border: 1px solid var(--line); }
+.vault-orbit { animation: vault-spin 60s linear infinite; }
+.v-orb { width: 13%; margin: -6.5% 0 0 -6.5%; overflow: hidden; background: #1a1a1f;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent), 0 6px 18px color-mix(in srgb, var(--c1) 35%, transparent);
+  transform: rotate(var(--a)) translateX(385%) rotate(calc(-1 * var(--a))); }
+.v-orb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+.vault-core { inset: 36%; }
+.vault-core::after { animation: vault-breathe 4.5s ease-in-out infinite; }
+@keyframes vault-breathe { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ink) 0%, transparent); } 50% { box-shadow: 0 0 28px 2px color-mix(in srgb, var(--ink) 10%, transparent); } }
+.vault-tag { animation: none; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .vault-orbit, .vault-core::after { animation: none; } }
+.v-orb { width: 15%; margin: -7.5% 0 0 -7.5%; transform: rotate(var(--a)) translateX(333%) rotate(calc(-1 * var(--a))); }
