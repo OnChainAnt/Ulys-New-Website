@@ -595,9 +595,40 @@ const tuneWeights = (function tune() {
   const n = steps.length;
   let cur = -1, copyTimer = null;
 
+  // step 01: a short back-and-forth before Ulys builds the basket
+  const thread = sec.querySelector('.s-thread');
+  const miniTpl = sec.querySelector('.s-mini-tpl');
+  let chatRun = 0, chatPlayed = false;
+  const CHAT = [
+    [0, 'me', 'Robots are taking over factories'],
+    [700, 'typing'],
+    [1700, 'ai', "Love it. Should I lean into the companies building the robots, or the networks they'll run on?"],
+    [3300, 'me', 'Both, but mostly the companies.'],
+    [4000, 'typing'],
+    [4900, 'ai', 'Got it. Weighting toward the robot makers, with a slice of onchain infra.'],
+    [5900, 'basket'],
+  ];
+  function playChat() {
+    if (!thread) return;
+    const my = ++chatRun; chatPlayed = true;
+    thread.innerHTML = '';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    CHAT.forEach(([t, kind, text]) => setTimeout(() => {
+      if (my !== chatRun) return;
+      thread.querySelector('.s-typing')?.remove();
+      let el;
+      if (kind === 'typing') { el = document.createElement('div'); el.className = 's-typing'; el.innerHTML = '<i></i><i></i><i></i>'; }
+      else if (kind === 'basket') { el = miniTpl.content.firstElementChild.cloneNode(true); }
+      else { el = document.createElement('p'); el.className = `s-msg ${kind}`; el.textContent = text; }
+      thread.appendChild(el);
+    }, reduce ? 0 : t));
+  }
+  const storyVisible = () => { const r = sec.getBoundingClientRect(); return r.top < window.innerHeight && r.bottom > 0; };
+
   function activate(i) {
     if (i === cur) return;
     cur = i;
+    if (i === 0 && storyVisible()) playChat();
     stage.dataset.step = i;
     steps.forEach((s, k) => { s.classList.toggle('is-active', k === i); s.classList.toggle('is-past', k < i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
     screens.forEach((s, k) => s.classList.toggle('is-active', k === i));
@@ -618,6 +649,7 @@ const tuneWeights = (function tune() {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   onScroll();
+  new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && cur === 0 && !chatPlayed) playChat(); }), { threshold: 0.25 }).observe(stage);
 
   // clicking a step scrolls to it
   bars.forEach((b, k) => b.addEventListener('click', () => {

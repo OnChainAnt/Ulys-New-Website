@@ -1216,3 +1216,14 @@ img { max-width: 100%; display: block; }
 
 /* closing CTA, dark mode: deeper warm charcoal */
 :root[data-theme="dark"] .cta-inner { --surface: #151412; background-color: #151412; }
+
+/* ---- Story step 01: a short chat before the basket ---- */
+.s-chat .s-thread { position: absolute; left: 16px; right: 16px; top: 62px; bottom: 26px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; overflow: hidden; }
+.s-msg { max-width: 82%; padding: 11px 15px; font-size: 15px; line-height: 1.35; flex: none; animation: fadeUp .35s var(--ease) both; }
+.s-msg.me { align-self: flex-end; background: #0A84FF; color: #fff; border-radius: 20px 20px 6px 20px; }
+.s-msg.ai { align-self: flex-start; background: #1e1e22; color: rgba(255,255,255,.92); border-radius: 20px 20px 20px 6px; }
+.s-typing { align-self: flex-start; display: inline-flex; gap: 5px; padding: 14px 16px; background: #1e1e22; border-radius: 20px 20px 20px 6px; flex: none; animation: fadeUp .3s var(--ease) both; }
+.s-typing i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.55); animation: s-dot 1s ease-in-out infinite; }
+.s-typing i:nth-child(2) { animation-delay: .15s; } .s-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes s-dot { 0%, 60%, 100% { transform: none; opacity: .45; } 30% { transform: translateY(-3px); opacity: 1; } }
+.s-thread .s-mini { flex: none; margin-top: 4px; opacity: 1 !important; transform: none !important; animation: fadeUp .45s var(--ease) both; }
