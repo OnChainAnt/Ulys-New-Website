@@ -1022,3 +1022,9 @@ img { max-width: 100%; display: block; }
 .n-bubble { animation: none; }
 
 .neural-copy h2 { margin-top: 0; }
+
+/* closing CTA: "one prompt away." types out; the ghost keeps the line from shifting */
+.tw-cta { display: inline-grid; }
+.tw-cta > span { grid-area: 1 / 1; text-align: left; white-space: nowrap; }
+.tw-cta .tw-ghost { visibility: hidden; }
+.tw-cta .tw-typed::after { content: ""; display: inline-block; width: .06em; height: .9em; margin-left: .06em; vertical-align: -.08em; background: currentColor; animation: caret 1s step-end infinite; }

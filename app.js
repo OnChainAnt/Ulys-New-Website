@@ -959,6 +959,24 @@ const tuneWeights = (function tune() {
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); pulses = []; outs = []; heat = new Map(); phase = 0; }, 150); });
 })();
 
+/* ---- Closing CTA: type "one prompt away." when it scrolls into view ---- */
+(function ctaType() {
+  const el = document.querySelector('.tw-cta .tw-typed');
+  if (!el) return;
+  const text = el.dataset.text;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) { el.textContent = text; return; }
+  const io = new IntersectionObserver((es) => {
+    if (!es.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    let i = 0;
+    setTimeout(function tick() {
+      el.textContent = text.slice(0, ++i);
+      if (i < text.length) setTimeout(tick, 70 + Math.random() * 50);
+    }, 450);
+  }, { threshold: 0.6 });
+  io.observe(el.closest('h2'));
+})();
+
 /* ---- Scroll reveal ---- */
 (function reveal() {
   const els = document.querySelectorAll('.reveal');
