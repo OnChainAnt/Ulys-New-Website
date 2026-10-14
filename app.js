@@ -646,7 +646,11 @@ const tuneWeights = (function tune() {
     const r = c.getBoundingClientRect();
     c.style.setProperty('--mx', `${e.clientX - r.left}px`);
     c.style.setProperty('--my', `${e.clientY - r.top}px`);
+    // normalized -1..1 for the floating coins' parallax
+    c.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+    c.style.setProperty('--pq', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
   }));
+  cards.forEach((c) => c.addEventListener('pointerleave', () => { c.style.setProperty('--px', 0); c.style.setProperty('--pq', 0); }));
 })();
 
 /* ---- Headlines that light up word by word as they scroll into view ---- */
