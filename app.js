@@ -980,6 +980,78 @@ const tuneWeights = (function tune() {
   io.observe(el.closest('h2'));
 })();
 
+/* ---- Smart Orders card: a trigger on a basket — the line climbs to the trigger, the order executes ---- */
+(function triggerCard() {
+  const box = document.querySelector('.bcard-visual.trig');
+  if (!box) return;
+  const $ = (sel) => box.querySelector(sel);
+  const cond = $('.trig-cond'), src = $('.trig-src'), num = $('.trig-num'), thrEl = $('.trig-thr em');
+  const path = $('.trig-path'), area = $('.trig-area'), dot = $('.trig-dot'), ping = $('.trig-ping'), thrLine = $('.trig-line-thr');
+  const orb = $('.trig-orb'), what = $('.trig-what'), status = $('.trig-status');
+  const basketOrb = (a, b) => `radial-gradient(circle at 28% 30%, ${a} 0, transparent 62%), radial-gradient(circle at 72% 70%, ${b} 0, transparent 66%), #3a3833`;
+  const SC = [
+    { cond: 'NVIDIA beats earnings', src: 'Polymarket odds', from: 38, to: 77, thr: 70, fmt: (v) => `${Math.round(v)}%`, thrLabel: '70%', buy: 'Buy $250 of', name: 'AI Agents Onchain', orb: basketOrb('#30d1c4', '#7b6cf6') },
+    { cond: 'Bitcoin drops 8%', src: 'Price', from: 0, to: -8.9, thr: -8, fmt: (v) => `${v <= 0 ? '−' : '+'}${Math.abs(v).toFixed(1)}%`, thrLabel: '−8%', buy: 'Buy $100 of', name: 'Bitcoin', img: 'assets/logos/btc.png' },
+    { cond: 'Clarity Act passes in 2026', src: 'Polymarket odds', from: 31, to: 67, thr: 60, fmt: (v) => `${Math.round(v)}%`, thrLabel: '60%', buy: 'Buy $200 of', name: 'Ethereum', img: 'assets/logos/eth.png' },
+  ];
+  const W = 300, H = 110, N = 64;
+  let si = 0, pts = [], series = [], i = 0, hit = false, timer = 0, running = false, ymap = null;
+
+  function prep(sc) {
+    // eased drift from → to with a little noise that settles near the end
+    series = []; let n = 0;
+    for (let k = 0; k <= N; k++) {
+      const t = k / N, e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      n = n * 0.7 + (Math.random() - 0.5) * Math.abs(sc.to - sc.from) * 0.09;
+      series.push(sc.from + (sc.to - sc.from) * e + n * (1 - t * 0.8));
+    }
+    const lo = Math.min(...series, sc.thr), hi = Math.max(...series, sc.thr), pad = (hi - lo) * 0.18;
+    ymap = (v) => H - 6 - ((v - (lo - pad)) / ((hi + pad) - (lo - pad))) * (H - 12);
+    const ty = ymap(sc.thr).toFixed(1);
+    thrLine.setAttribute('y1', ty); thrLine.setAttribute('y2', ty);
+    cond.textContent = sc.cond; src.textContent = sc.src; thrEl.textContent = sc.thrLabel;
+    what.innerHTML = `${sc.buy} <b>${sc.name}</b>`;
+    orb.style.background = sc.img ? `center / cover no-repeat url(${sc.img})` : sc.orb;
+    status.textContent = 'Watching'; box.classList.remove('hit');
+    pts = []; i = 0; hit = false;
+  }
+  function draw(sc) {
+    const x = (i / N) * W, y = ymap(series[i]);
+    pts.push([x, y]);
+    const d = pts.map(([px, py], k) => `${k ? 'L' : 'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' ');
+    path.setAttribute('d', d);
+    area.setAttribute('d', `${d} L${x.toFixed(1)} ${H} L0 ${H} Z`);
+    dot.setAttribute('cx', x.toFixed(1)); dot.setAttribute('cy', y.toFixed(1));
+    num.textContent = sc.fmt(series[i]);
+    const crossed = sc.to > sc.from ? series[i] >= sc.thr : series[i] <= sc.thr;
+    if (crossed && !hit) {
+      hit = true; box.classList.add('hit'); status.textContent = 'Executed ✓';
+      ping.setAttribute('cx', x.toFixed(1)); ping.setAttribute('cy', y.toFixed(1));
+      ping.classList.remove('go'); void ping.getBBox(); ping.classList.add('go');
+    }
+  }
+  // frame-clock driven (setTimeout gets throttled in some browsers): one point per 70ms, then a 2.6s hold
+  let acc = 0, hold = 0, last = 0;
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(250, now - last); last = now;
+    const sc = SC[si];
+    if (i <= N) {
+      acc += dt;
+      while (acc >= 70 && i <= N) { acc -= 70; draw(sc); i++; }
+    } else if ((hold += dt) > 2600) {
+      hold = 0; acc = 0; si = (si + 1) % SC.length; prep(SC[si]);
+    }
+    timer = requestAnimationFrame(frame);
+  }
+  prep(SC[0]);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { for (; i <= N; i++) draw(SC[0]); return; }
+  new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting && !running) { running = true; last = performance.now(); timer = requestAnimationFrame(frame); }
+    else if (!e.isIntersecting && running) { running = false; cancelAnimationFrame(timer); }
+  }), { threshold: 0.2 }).observe(box);
+})();
+
 /* ---- Scroll reveal ---- */
 (function reveal() {
   const els = document.querySelectorAll('.reveal');

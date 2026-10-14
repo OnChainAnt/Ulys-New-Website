@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=73" />
+  <link rel="stylesheet" href="styles.css?v=77" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')!=='light')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body class="home">
@@ -318,17 +318,30 @@
           <span class="brk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <div class="bcard-copy">
             <p class="tag">[ Smart Orders ]</p>
-            <h3>Trade the moment it comes true.</h3>
-            <p>Put a trigger on any trade. Set it by a price, a real-world event or the odds of it happening, and Ulys places the order the instant it triggers.</p>
+            <h3>Give your idea a trigger.</h3>
+            <p>Invest the moment it comes true. Set a trigger by price, a real-world event or its odds on Polymarket, and Ulys places the order the instant it hits.</p>
           </div>
-          <div class="bcard-visual pair">
-            <div class="bk-phone back">
-              <div class="bk-screen"><img src="assets/smart-orders-watching.webp" width="923" height="2000" loading="lazy" decoding="async" alt="Ulys app: a list of smart orders being watched, each showing the price it fires at" /></div>
-              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
-            </div>
-            <div class="bk-phone front">
-              <div class="bk-screen"><img src="assets/smart-order-setup.webp" width="923" height="2000" loading="lazy" decoding="async" alt="Ulys app: setting up a smart order to buy $200 of Ethereum if Fed rates decrease, triggered by the odds" /></div>
-              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+          <div class="bcard-visual trig" aria-hidden="true">
+            <div class="trig-box">
+              <div class="trig-head">
+                <span class="trig-if">IF</span>
+                <span class="trig-cond">NVIDIA beats earnings</span>
+                <span class="trig-src">Polymarket odds</span>
+              </div>
+              <div class="trig-val"><b class="trig-num">38%</b><span class="trig-thr">Trigger at <em>70%</em></span></div>
+              <svg class="trig-chart" viewBox="0 0 300 110" preserveAspectRatio="none">
+                <defs><linearGradient id="trigFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".14"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
+                <line class="trig-line-thr" x1="0" x2="300" y1="30" y2="30"/>
+                <path class="trig-area" d=""/>
+                <path class="trig-path" d=""/>
+                <circle class="trig-dot" r="3.5" cx="0" cy="0"/>
+                <circle class="trig-ping" r="4" cx="0" cy="0"/>
+              </svg>
+              <div class="trig-order">
+                <span class="trig-orb"></span>
+                <span class="trig-what">Buy $250 of <b>AI Agents Onchain</b></span>
+                <span class="trig-status">Watching</span>
+              </div>
             </div>
           </div>
         </article>
@@ -340,24 +353,15 @@
             <h3>Your ideas.<br />Your keys.</h3>
             <p>Every basket lives in a non-custodial wallet only you control, without the stress of storing a full seed phrase. Fund it with Apple&nbsp;Pay, card or bank. No fees.*</p>
           </div>
-          <div class="bcard-visual">
-            <div class="bk-phone" role="img" aria-label="Ulys app: a portfolio of idea baskets in a non-custodial wallet">
-              <div class="bk-screen"><div class="bk-screen-inner s-port" aria-hidden="true">
-                <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
-                <p class="s-kicker">Your ideas</p>
-              <p class="s-total-big">$12,480<span>.52</span></p>
-              <p class="s-delta up">▲ $412.18 (3.4%) today</p>
-              <div class="s-actions"><span><i style="background:linear-gradient(135deg,#34d36b,#0fb3a0)">+</i>Buy</span><span><i style="background:linear-gradient(135deg,#ff8a3d,#ff4d6d)">−</i>Sell</span><span><i style="background:linear-gradient(135deg,#c6e33a,#34c759)">↓</i>Receive</span><span><i style="background:linear-gradient(135deg,#c084fc,#7c5cff)">↗</i>Send</span></div>
-              <ul class="s-ideas">
-                <li><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><b>Vintage Cards Onchain<em>4 assets</em></b><span class="s-val">$4,210.40<small class="down">▼ 4.44%</small></span></li>
-                <li><span class="s-orb" style="--c1:#30d1c4;--c2:#7b6cf6"></span><b>AI Agents Onchain<em>4 assets</em></b><span class="s-val">$3,880.12<small class="up">▲ 3.12%</small></span></li>
-                <li><span class="s-orb" style="--c1:#53d337;--c2:#1493ff"></span><b>Sports Betting Boom<em>4 assets</em></b><span class="s-val">$2,640.00<small class="up">▲ 2.36%</small></span></li>
-                <li><span class="s-orb" style="--c1:#9aa4b2;--c2:#ff8a3d"></span><b>Robotics Revolution<em>4 assets</em></b><span class="s-val">$1,750.00<small class="up">▲ 1.94%</small></span></li>
-              </ul>
-              <p class="s-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Non-custodial · Your keys</p>
-              </div></div>
-              <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+          <div class="bcard-visual vault" aria-hidden="true">
+            <div class="vault">
+              <span class="vault-ring r1"></span><span class="vault-ring r2"></span><span class="vault-ring r3"></span>
+              <span class="vault-sweep"></span>
+              <div class="vault-orbit o1"><span class="v-orb" style="--a:0deg;--c1:#e8833a;--c2:#7aa7e6"></span><span class="v-orb" style="--a:120deg;--c1:#30d1c4;--c2:#7b6cf6"></span><span class="v-orb" style="--a:240deg;--c1:#53d337;--c2:#1493ff"></span></div>
+              <div class="vault-orbit o2"><span class="v-orb" style="--a:45deg;--c1:#9aa4b2;--c2:#ff8a3d"></span><span class="v-orb" style="--a:135deg;--c1:#f472b6;--c2:#a855f7"></span><span class="v-orb" style="--a:225deg;--c1:#ffcf4c;--c2:#4c9eff"></span><span class="v-orb" style="--a:315deg;--c1:#54e9f2;--c2:#f4706d"></span></div>
+              <div class="vault-core"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/><path d="M12 16.2v1.8"/></svg></div>
             </div>
+            <p class="vault-tag"><span>✓</span> Non-custodial · Only you control it</p>
           </div>
         </article>
       </div>
@@ -383,6 +387,7 @@
       <div class="section-head reveal">
         <p class="eyebrow">FAQ</p>
         <h2>Frequently asked questions.</h2>
+        <p class="faq-help">Still curious? <a href="https://ulyssupport.zendesk.com/" target="_blank" rel="noreferrer">Visit the Help Center <span aria-hidden="true">→</span></a></p>
       </div>
       <div class="faq-list reveal">
         <details><summary>How does idea-based trading work?<i></i></summary><p>Tell Ulys an idea in plain words, like "robots are taking over factories". Ulys builds a basket of tokens and tokenized stocks around it, explains every pick, and lets you adjust the weights before you buy the whole basket in one tap.</p></details>
@@ -472,6 +477,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=52"></script>
+  <script src="app.js?v=55"></script>
 </body>
 </html>
