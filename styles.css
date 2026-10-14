@@ -1059,3 +1059,13 @@ img { max-width: 100%; display: block; }
 
 .bk-bubble.n-bubble:not([hidden]) { animation: none; }
 .n-mark { right: 42px; bottom: 40px; }
+
+/* App Store button frame: same subtle spectrum glow as the hero prompt bar */
+.store-badges {
+  border: 1.5px solid transparent;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--spectrum-soft) border-box;
+  background-size: 100% 100%, 200% 200%;
+  animation: gradient-animation 5s infinite;
+  box-shadow: rgba(11, 224, 237, 0.45) 0px 0px 20px -6px, rgba(128, 123, 245, 0.38) 0px 0px 34px -10px, rgba(255, 128, 160, 0.26) 0px 0px 48px -14px;
+}
+@media (prefers-reduced-motion: reduce) { .store-badges { animation: none; } }
