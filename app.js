@@ -683,6 +683,271 @@ const tuneWeights = (function tune() {
   update();
 })();
 
+/* ---- Neural engine: an idea flows through a minimal layered network into the app ----
+   Canvas covers the section. Layers of nodes joined by hairlines; the idea types out
+   on the left and dissolves into the input layer, pulses travel layer to layer, and the
+   four output nodes each send a real asset logo into its row in the phone. On screen only. */
+(function neural() {
+  const sec = document.querySelector('.neural');
+  if (!sec || sec.hidden) return;
+  const cv = sec.querySelector('.neural-canvas');
+  const ctx = cv.getContext('2d');
+  const netEl = sec.querySelector('.neural-brain');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const steps = [...sec.querySelectorAll('.neural-steps li')];
+  const bubble = sec.querySelector('.n-bubble');
+  const title = sec.querySelector('.n-title');
+  const sub = sec.querySelector('.n-sub');
+  const orb = sec.querySelector('.n-orb');
+  const segs = [...sec.querySelectorAll('.n-bar span')];
+  const rows = [...sec.querySelectorAll('.n-row')];
+  const btn = sec.querySelector('.n-btn');
+
+  const IDEAS = [
+    { text: 'AI agents are going to run the internet', title: 'AI Agents Onchain', orb: ['#30d1c4', '#7b6cf6'], picks: [
+      { tk: 'NVDA', name: 'NVIDIA', pct: 30, color: '#76b900', logo: 'nvda.svg' },
+      { tk: 'VIRTUAL', name: 'Virtuals', pct: 30, color: '#30d1c4', logo: 'virtual.png' },
+      { tk: 'TAO', name: 'Bittensor', pct: 25, color: '#c9c9c9', logo: 'tao.png' },
+      { tk: 'SOL', name: 'Solana', pct: 15, color: '#8b3dff', logo: 'sol.png' } ] },
+    { text: 'Vintage trading cards are moving onchain', title: 'Vintage Cards Onchain', orb: ['#e8833a', '#7aa7e6'], picks: [
+      { tk: 'CARDS', name: 'Collector Crypt', pct: 35, color: '#ef8a3c', logo: 'cards.png' },
+      { tk: 'EBAY', name: 'eBay', pct: 30, color: '#7fb2f0', logo: 'ebay.svg' },
+      { tk: 'GME', name: 'GameStop', pct: 20, color: '#b8893a', logo: 'gme.svg' },
+      { tk: 'SOL', name: 'Solana', pct: 15, color: '#8b3dff', logo: 'sol.png' } ] },
+    { text: 'Sports betting is going mainstream', title: 'Sports Betting Boom', orb: ['#53d337', '#1493ff'], picks: [
+      { tk: 'DKNG', name: 'DraftKings', pct: 30, color: '#53d337', logo: 'dkng.png' },
+      { tk: 'FLUT', name: 'Flutter', pct: 25, color: '#1493ff', logo: 'flut.svg' },
+      { tk: 'CHZ', name: 'Chiliz', pct: 25, color: '#e3344f', logo: 'chz.png' },
+      { tk: 'GENI', name: 'Genius Sports', pct: 20, color: '#a78bfa', logo: 'geni.png' } ] },
+    { text: 'Robots are taking over factories', title: 'Robotics Revolution', orb: ['#9aa4b2', '#ff8a3d'], picks: [
+      { tk: 'NVDA', name: 'NVIDIA', pct: 35, color: '#76b900', logo: 'nvda.svg' },
+      { tk: 'TSLA', name: 'Tesla', pct: 25, color: '#e82127', logo: 'tsla.svg' },
+      { tk: 'PEAQ', name: 'peaq', pct: 20, color: '#2ec5d3', logo: 'peaq.png' },
+      { tk: 'RENDER', name: 'Render', pct: 20, color: '#c9c9c9', logo: 'render.png' } ] },
+  ];
+  const imgs = {};
+  IDEAS.forEach((i) => i.picks.forEach((p) => { if (!imgs[p.logo]) { const im = new Image(); im.src = `assets/logos/${p.logo}`; imgs[p.logo] = im; } }));
+
+  // ---------- geometry: layers of nodes ----------
+  let W = 0, H = 0, layers = [], textAt = { x: 0, y: 0 }, mobile = false;
+  function build() {
+    const sr = sec.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = sr.width; H = sr.height; mobile = W < 900;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const r = netEl.getBoundingClientRect();
+    const x0 = r.left - sr.left, y0 = r.top - sr.top, w = r.width, h = r.height;
+    const sizes = [5, 8, 8, 4];
+    // leave room on the left for the idea text (desktop); on phones the text sits above
+    const left = mobile ? x0 + w * 0.1 : x0 + w * 0.42, right = mobile ? x0 + w * 0.9 : x0 + w * 0.98;
+    const top = y0 + h * (mobile ? 0.26 : 0.1), bot = y0 + h * (mobile ? 0.96 : 0.9);
+    layers = sizes.map((n, li) => {
+      const x = left + ((right - left) * li) / (sizes.length - 1);
+      const span = (bot - top) * (n / 8);
+      const cy = (top + bot) / 2;
+      return Array.from({ length: n }, (_, k) => ({ x, y: n === 1 ? cy : cy - span / 2 + (span * k) / (n - 1), g: 0 }));
+    });
+    textAt = mobile ? { x: x0 + w * 0.06, y: y0 + h * 0.1 } : { x: x0, y: (top + bot) / 2 };
+  }
+
+  // ---------- moving things ----------
+  let pulses = [], outs = [], heat = new Map();
+  const key = (li, a, b) => `${li}:${a}:${b}`;
+  function firePulse(toOut) {
+    // a path: input → hidden → hidden → output (optionally a chosen output)
+    const path = layers.map((L, li) => (li === layers.length - 1 && toOut != null ? toOut : Math.floor(Math.random() * L.length)));
+    pulses.push({ path, li: 0, t: 0, speed: 1.6 + Math.random() * 0.9 });
+  }
+
+  // typed idea text on the left
+  let typed = '', typing = null;
+  function typeIdea(text) {
+    typed = ''; let i = 0;
+    clearInterval(typing);
+    typing = setInterval(() => { typed = text.slice(0, ++i); if (i >= text.length) clearInterval(typing); }, 38);
+  }
+  let textAlpha = 1;
+
+  // ---------- phone ----------
+  function setStep(k) { steps.forEach((s, i) => { s.classList.toggle('on', i === k); s.classList.toggle('done', i < k); }); }
+  function resetPhone() {
+    bubble.classList.remove('in'); bubble.textContent = '';
+    title.innerHTML = '<i class="sk"></i>'; sub.textContent = 'Building your basket'; sub.classList.remove('ok');
+    orb.style.background = '';
+    segs.forEach((s) => { s.style.width = '0'; });
+    rows.forEach((r) => { r.classList.remove('filled'); r.querySelector('.n-ic').innerHTML = ''; r.querySelector('.n-name').innerHTML = '<i class="sk"></i>'; r.querySelector('.n-pct').innerHTML = ''; });
+    btn.classList.remove('ready');
+    setStep(-1);
+  }
+  function fillRow(idea, k) {
+    const p = idea.picks[k], r = rows[k];
+    r.classList.add('filled');
+    r.querySelector('.n-ic').innerHTML = `<img src="assets/logos/${p.logo}" alt="" />`;
+    r.querySelector('.n-name').innerHTML = `${p.name}<em>${p.tk}</em>`;
+    r.querySelector('.n-pct').innerHTML = `<i style="background:${p.color}"></i>${p.pct}%`;
+    const n = idea.picks.length;
+    segs[k].style.background = p.color;
+    segs[k].style.width = `calc(${p.pct}% - ${(4 * (n - 1)) / n}px)`;
+  }
+  function slot(k) {
+    const ic = rows[k].querySelector('.n-ic').getBoundingClientRect(), sr = sec.getBoundingClientRect();
+    return { x: ic.left - sr.left + ic.width / 2, y: ic.top - sr.top + ic.height / 2, r: ic.width / 2 };
+  }
+
+  // ---------- the cycle ----------
+  let idx = 0, phase = 0, t = 0;
+  function cycle(dt) {
+    const idea = IDEAS[idx];
+    t += dt;
+    if (phase === 0) { resetPhone(); textAlpha = 1; typeIdea(idea.text); phase = 1; t = 0; }
+    else if (phase === 1 && t > idea.text.length * 0.038 + 0.5) {
+      bubble.textContent = idea.text; bubble.classList.add('in'); setStep(0);
+      for (let i = 0; i < 10; i++) setTimeout(() => firePulse(), i * 90);
+      phase = 2; t = 0;
+    } else if (phase === 2 && t > 1.4) {
+      setStep(1); title.textContent = idea.title;
+      orb.style.background = `radial-gradient(circle at 28% 30%, ${idea.orb[0]} 0, transparent 62%), radial-gradient(circle at 72% 70%, ${idea.orb[1]} 0, transparent 66%), #3a3833`;
+      idea.picks.forEach((p, k) => setTimeout(() => firePulse(k), k * 420)); // each pick rides a pulse to its output node
+      phase = 3; t = 0;
+    } else if (phase === 3 && rows.every((r) => r.classList.contains('filled'))) {
+      setStep(3); sub.textContent = 'Basket ready'; sub.classList.add('ok'); btn.classList.add('ready');
+      phase = 4; t = 0;
+    } else if (phase === 4 && t > 3.4) { idx = (idx + 1) % IDEAS.length; phase = 0; }
+    if (phase >= 2) textAlpha = Math.max(0.28, textAlpha - dt * 0.9);
+  }
+
+  // ---------- drawing ----------
+  const ease = (x) => 1 - Math.pow(1 - x, 3);
+  let clock = 0, idle = 0;
+  function frame(dt) {
+    clock += dt;
+    ctx.clearRect(0, 0, W, H);
+    const out = layers[layers.length - 1];
+
+    // hairline connections between layers
+    ctx.lineWidth = 1;
+    for (let li = 0; li < layers.length - 1; li++) {
+      layers[li].forEach((a, i) => layers[li + 1].forEach((b, j) => {
+        const h = heat.get(key(li, i, j)) || 0;
+        ctx.strokeStyle = `rgba(255,255,255,${0.045 + h * 0.4})`;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        if (h) heat.set(key(li, i, j), Math.max(0, h - dt * 1.6));
+      }));
+    }
+    // output → phone row hairlines
+    out.forEach((o, k) => {
+      const s = slot(k), h = heat.get(`o${k}`) || 0;
+      ctx.strokeStyle = `rgba(255,255,255,${0.06 + h * 0.35})`;
+      ctx.setLineDash([2, 6]);
+      ctx.beginPath(); ctx.moveTo(o.x, o.y);
+      if (mobile) ctx.bezierCurveTo(o.x, o.y + 80, s.x, s.y - 80, s.x - s.r, s.y);
+      else ctx.bezierCurveTo(o.x + (s.x - o.x) * 0.5, o.y, o.x + (s.x - o.x) * 0.5, s.y, s.x - s.r - 6, s.y);
+      ctx.stroke(); ctx.setLineDash([]);
+      if (h) heat.set(`o${k}`, Math.max(0, h - dt * 0.9));
+    });
+    // nodes
+    layers.forEach((L) => L.forEach((n) => {
+      ctx.beginPath(); ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#0b0b0d'; ctx.fill();
+      ctx.strokeStyle = `rgba(255,255,255,${0.32 + n.g * 0.68})`; ctx.lineWidth = 1; ctx.stroke();
+      if (n.g > 0.02) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, 1.6 + n.g * 1.4, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${n.g})`; ctx.fill();
+        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 16); g.addColorStop(0, `rgba(200,240,255,${n.g * 0.28})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, Math.PI * 2); ctx.fill();
+      }
+      n.g = Math.max(0, n.g - dt * 1.5);
+    }));
+
+    // pulses
+    pulses = pulses.filter((p) => {
+      p.t += dt * p.speed;
+      if (p.t >= 1) {
+        heat.set(key(p.li, p.path[p.li], p.path[p.li + 1]), 1);
+        p.li++; p.t = 0;
+        const n = layers[p.li][p.path[p.li]]; n.g = 1;
+        if (p.li === layers.length - 1) {
+          // arriving at an output node: if a pick is waiting for this node, launch its logo
+          const idea = IDEAS[idx], k = p.path[p.li];
+          if (phase === 3 && !rows[k].classList.contains('filled') && !outs.some((o) => o.k === k)) {
+            outs.push({ k, idea, img: imgs[idea.picks[k].logo], t: 0 }); heat.set(`o${k}`, 1);
+          }
+          return false;
+        }
+      }
+      const a = layers[p.li][p.path[p.li]], b = layers[p.li + 1][p.path[p.li + 1]];
+      const e = ease(p.t), x = a.x + (b.x - a.x) * e, y = a.y + (b.y - a.y) * e;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 7); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(190,235,255,.7)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+      return true;
+    });
+
+    // logos travelling from output nodes into their rows
+    outs = outs.filter((o) => {
+      o.t += dt / 1.0;
+      const k = Math.min(1, o.t), e = ease(k), a = out[o.k], s = slot(o.k);
+      let x, y;
+      if (mobile) { const u = 1 - e; x = u * u * u * a.x + 3 * u * u * e * a.x + 3 * u * e * e * s.x + e * e * e * s.x; y = u * u * u * a.y + 3 * u * u * e * (a.y + 80) + 3 * u * e * e * (s.y - 80) + e * e * e * s.y; }
+      else { const mx = a.x + (s.x - a.x) * 0.5, u = 1 - e; x = u * u * u * a.x + 3 * u * u * e * mx + 3 * u * e * e * mx + e * e * e * s.x; y = u * u * u * a.y + 3 * u * u * e * a.y + 3 * u * e * e * s.y + e * e * e * s.y; }
+      const r = 11 + (s.r - 11) * e;
+      ctx.save(); ctx.beginPath(); ctx.arc(x, y, r + 1.5, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip();
+      ctx.fillStyle = '#1a1a1f'; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      if (o.img && o.img.complete && o.img.naturalWidth) ctx.drawImage(o.img, x - r, y - r, r * 2, r * 2);
+      ctx.restore();
+      if (k >= 1) { fillRow(o.idea, o.k); if (rows.filter((rw) => rw.classList.contains('filled')).length === 1) setStep(2); return false; }
+      return true;
+    });
+
+    // the idea, typed out in mono on the left
+    if (typed) {
+      ctx.save();
+      ctx.font = `400 ${mobile ? 13 : 15}px "IBM Plex Mono", ui-monospace, monospace`;
+      ctx.fillStyle = `rgba(242,241,238,${textAlpha})`; ctx.textBaseline = 'middle';
+      const maxW = mobile ? W * 0.8 : layers[0][0].x - textAt.x - 40;
+      // wrap to two lines if needed
+      const words = typed.split(' '); let line = '', lines = [];
+      words.forEach((w) => { const t2 = line ? `${line} ${w}` : w; if (ctx.measureText(t2).width > maxW && line) { lines.push(line); line = w; } else line = t2; });
+      lines.push(line);
+      const lh = mobile ? 18 : 22, y0 = textAt.y - ((lines.length - 1) * lh) / 2;
+      lines.forEach((ln, i) => ctx.fillText(ln, textAt.x, y0 + i * lh));
+      if (phase === 1 && Math.floor(clock * 2) % 2 === 0) { const lw = ctx.measureText(lines[lines.length - 1]).width; ctx.fillRect(textAt.x + lw + 3, y0 + (lines.length - 1) * lh - 8, 2, 16); }
+      // a faint guide from the text into the input layer
+      if (!mobile) {
+        ctx.strokeStyle = `rgba(255,255,255,${0.08 * textAlpha + 0.03})`; ctx.setLineDash([2, 6]);
+        layers[0].forEach((n) => { ctx.beginPath(); ctx.moveTo(layers[0][0].x - 40, textAt.y); ctx.lineTo(n.x - 4, n.y); ctx.stroke(); });
+        ctx.setLineDash([]);
+      }
+      ctx.restore();
+    }
+
+    // gentle idle activity
+    idle += dt; if (idle > 0.6) { idle = 0; firePulse(); }
+    cycle(dt);
+  }
+
+  function still() {
+    resetPhone();
+    const idea = IDEAS[0];
+    typed = idea.text; textAlpha = 0.8;
+    bubble.textContent = idea.text; bubble.classList.add('in'); title.textContent = idea.title;
+    idea.picks.forEach((_, k) => fillRow(idea, k));
+    sub.textContent = 'Basket ready'; sub.classList.add('ok'); btn.classList.add('ready'); setStep(3);
+    phase = 5; frame(0);
+  }
+
+  let running = false, last = 0, raf = 0;
+  const loop = (now) => { const dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now; frame(dt); if (running) raf = requestAnimationFrame(loop); };
+  build();
+  if (reduce) { still(); window.addEventListener('resize', () => { build(); still(); }); return; }
+  new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting && !running) { running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
+    else if (!e.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
+  }), { threshold: 0.05 }).observe(sec);
+  let rt = 0;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); pulses = []; outs = []; heat = new Map(); phase = 0; }, 150); });
+})();
+
 /* ---- Scroll reveal ---- */
 (function reveal() {
   const els = document.querySelectorAll('.reveal');
