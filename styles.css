@@ -1069,3 +1069,18 @@ img { max-width: 100%; display: block; }
   box-shadow: rgba(11, 224, 237, 0.45) 0px 0px 20px -6px, rgba(128, 123, 245, 0.38) 0px 0px 34px -10px, rgba(255, 128, 160, 0.26) 0px 0px 48px -14px;
 }
 @media (prefers-reduced-motion: reduce) { .store-badges { animation: none; } }
+
+/* Closing CTA: dark charcoal card with a light grey dot grid (in both themes) */
+.cta-inner {
+  --surface: #1b1b1d; --ink: #f2f1ee; --muted: rgba(242,241,238,.62); --faint: rgba(242,241,238,.4); --line: rgba(242,241,238,.16);
+  --btn: #f2f1ee; --btn-ink: #1a1a19;
+  color: var(--ink); background-color: #1b1b1d; border-color: rgba(255,255,255,.08); overflow: hidden; isolation: isolate;
+}
+.cta-inner::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgba(242,241,238,.16) 1px, transparent 1.4px); background-size: 20px 20px; background-position: 10px 10px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 35%, transparent 100%); mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 35%, transparent 100%);
+}
+.cta-inner h2 { color: #f2f1ee; }
+.cta-inner .lede { color: rgba(242,241,238,.62); }
+.cta-inner .brk i { border-color: rgba(242,241,238,.35); }
