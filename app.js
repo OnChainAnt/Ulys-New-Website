@@ -300,6 +300,9 @@ void main() {
     },
   ];
 
+  // real logos for every asset (assets/logos); letter badges are only a fallback
+  const LOGO = { CARDS: 'cards.png', EBAY: 'ebay.svg', GME: 'gme.svg', SOL: 'sol.png', NVDA: 'nvda.svg', VIRTUAL: 'virtual.png', TAO: 'tao.png', DKNG: 'dkng.png', FLUT: 'flut.svg', CHZ: 'chz.png', GENI: 'geni.png' };
+
   const CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
   const SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
   const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
@@ -333,8 +336,11 @@ void main() {
     const col = up ? '#34c759' : '#ff5a6e';
     const rows = idea.picks.map((p) => {
       const [bg, letter, fg, ring] = p.icon;
+      const icon = LOGO[p.tk]
+        ? `<span class="bk-icon logo"><img src="assets/logos/${LOGO[p.tk]}" alt="" /></span>`
+        : `<span class="bk-icon" style="background:${bg};color:${fg || '#fff'}${ring ? `;box-shadow:inset 0 0 0 2px ${ring}` : ''}">${letter}</span>`;
       return `<li class="bk-row">
-        <span class="bk-icon" style="background:${bg};color:${fg || '#fff'}${ring ? `;box-shadow:inset 0 0 0 2px ${ring}` : ''}">${letter}</span>
+        ${icon}
         <div><div class="bk-name">${p.name}<span>${p.tk}</span></div><div class="bk-why">${p.why}</div></div>
         <span class="bk-pct"><i style="background:${p.color}"></i><b data-pct="${p.pct}">0%</b>${CHEV}</span>
       </li>`;
@@ -509,10 +515,10 @@ const tuneWeights = (function tune() {
   const root = document.querySelector('.s-tune');
   if (!root) return null;
   const picks = [
-    { name: 'Collector Crypt', tk: 'CARDS', w: 35, color: '#ef8a3c', icon: '<span class="bk-icon" style="background:#2f7de1">C</span>' },
-    { name: 'eBay', tk: 'EBAY', w: 30, color: '#7fb2f0', icon: '<span class="bk-icon" style="background:#fff;color:#e53238">e</span>' },
-    { name: 'GameStop', tk: 'GME', w: 20, color: '#b8893a', icon: '<span class="bk-icon" style="background:#111;color:#d4a64a;box-shadow:inset 0 0 0 2px #b8893a">G</span>' },
-    { name: 'Solana', tk: 'SOL', w: 15, color: '#8b3dff', icon: '<span class="bk-icon" style="background:linear-gradient(135deg,#00d6a3,#9945ff)">S</span>' },
+    { name: 'Collector Crypt', tk: 'CARDS', w: 35, color: '#ef8a3c', icon: '<span class="bk-icon logo"><img src="assets/logos/cards.png" alt="" /></span>' },
+    { name: 'eBay', tk: 'EBAY', w: 30, color: '#7fb2f0', icon: '<span class="bk-icon logo"><img src="assets/logos/ebay.svg" alt="" /></span>' },
+    { name: 'GameStop', tk: 'GME', w: 20, color: '#b8893a', icon: '<span class="bk-icon logo"><img src="assets/logos/gme.svg" alt="" /></span>' },
+    { name: 'Solana', tk: 'SOL', w: 15, color: '#8b3dff', icon: '<span class="bk-icon logo"><img src="assets/logos/sol.png" alt="" /></span>' },
   ];
   const bar = root.querySelector('.s-tune-bar');
   const list = root.querySelector('.s-sliders');

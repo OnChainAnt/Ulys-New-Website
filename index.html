@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=56" />
+  <link rel="stylesheet" href="styles.css?v=59" />
   <script>(function(){try{if(localStorage.getItem('ulys-theme')!=='light')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body class="home">
@@ -132,6 +132,42 @@
     <!-- ===== Below the hero: jtx-style blueprint layout ===== -->
     <div class="below">
 
+    <!-- Neural engine: ideas flow through a brain-like network into the app -->
+    <section class="neural" id="engine" aria-label="Ulys turns an idea into a basket" hidden>
+      <canvas class="neural-canvas" aria-hidden="true"></canvas>
+      <div class="neural-inner">
+        <div class="neural-head">
+          <p class="mlabel"><span class="sq"></span>Inside Ulys</p>
+          <h2>Ideas in.<br /><span class="dim">Baskets out.</span></h2>
+          <p class="neural-lede">Every idea runs through Ulys. It reads what you mean, maps it to the tokens and stocks that move with it, and builds your basket in seconds.</p>
+          <ol class="neural-steps" aria-hidden="true">
+            <li>Reading intent</li><li>Mapping assets</li><li>Weighting</li><li>Basket ready</li>
+          </ol>
+        </div>
+        <div class="neural-brain" aria-hidden="true"></div>
+        <div class="neural-phone" aria-hidden="true">
+          <div class="bk-phone">
+            <div class="bk-screen"><div class="bk-screen-inner n-screen">
+              <div class="bk-statusbar"><span>9:41</span><span class="bk-sys"><svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="currentColor"/><path d="M24.5 4v4" stroke="currentColor" stroke-linecap="round" opacity=".4"/></svg></span></div>
+              <p class="bk-bubble n-bubble"></p>
+              <div class="n-card">
+                <div class="n-head"><span class="s-orb n-orb"></span><div><b class="n-title"><i class="sk"></i></b><small class="n-sub">Building your basket</small></div></div>
+                <div class="bk-bar n-bar"><span></span><span></span><span></span><span></span></div>
+                <ul class="n-rows">
+                    <li class="n-row"><span class="n-ic"></span><span class="n-name"><i class="sk"></i></span><span class="n-pct"></span></li>
+                    <li class="n-row"><span class="n-ic"></span><span class="n-name"><i class="sk"></i></span><span class="n-pct"></span></li>
+                    <li class="n-row"><span class="n-ic"></span><span class="n-name"><i class="sk"></i></span><span class="n-pct"></span></li>
+                    <li class="n-row"><span class="n-ic"></span><span class="n-name"><i class="sk"></i></span><span class="n-pct"></span></li>
+                </ul>
+                <span class="bk-invest n-btn">Invest in this idea</span>
+              </div>
+            </div></div>
+            <img class="bk-frame" src="assets/iphone-frame.webp" alt="" aria-hidden="true" width="1008" height="2000" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Pinned, scroll-driven story: one phone, four steps -->
     <section class="story" id="ideas" style="--steps:4">
       <span class="story-anchor" id="share" style="--k:2" aria-hidden="true"></span>
@@ -185,10 +221,10 @@
                 <div class="s-mini-head"><span class="s-orb" style="--c1:#9aa4b2;--c2:#ff8a3d"></span><div><b>Robotics Revolution</b><small class="up">▲ 1.94% today</small></div></div>
                 <div class="bk-bar s-bar"><span style="width:calc(35% - 3px);background:#76b900"></span><span style="width:calc(25% - 3px);background:#e82127"></span><span style="width:calc(20% - 3px);background:#2ec5d3"></span><span style="width:calc(20% - 3px);background:#c9c9c9"></span></div>
                 <ul class="s-rows">
-                  <li><span class="bk-icon" style="background:#76b900">N</span><b>NVIDIA<em>NVDA</em></b><span class="s-pct"><i style="background:#76b900"></i>35%</span></li>
-                  <li><span class="bk-icon" style="background:#e82127">T</span><b>Tesla<em>TSLA</em></b><span class="s-pct"><i style="background:#e82127"></i>25%</span></li>
-                  <li><span class="bk-icon" style="background:#0e6b73">p</span><b>peaq<em>PEAQ</em></b><span class="s-pct"><i style="background:#2ec5d3"></i>20%</span></li>
-                  <li><span class="bk-icon" style="background:#222;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)">R</span><b>Render<em>RENDER</em></b><span class="s-pct"><i style="background:#c9c9c9"></i>20%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/nvda.svg" alt="" loading="lazy" /></span><b>NVIDIA<em>NVDA</em></b><span class="s-pct"><i style="background:#76b900"></i>35%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/tsla.svg" alt="" loading="lazy" /></span><b>Tesla<em>TSLA</em></b><span class="s-pct"><i style="background:#e82127"></i>25%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/peaq.png" alt="" loading="lazy" /></span><b>peaq<em>PEAQ</em></b><span class="s-pct"><i style="background:#2ec5d3"></i>20%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/render.png" alt="" loading="lazy" /></span><b>Render<em>RENDER</em></b><span class="s-pct"><i style="background:#c9c9c9"></i>20%</span></li>
                 </ul>
                 <span class="bk-invest s-btn">Invest in this idea</span>
               </div>
@@ -223,10 +259,10 @@
                 <div class="s-mini-head"><span class="s-orb" style="--c1:#e8833a;--c2:#7aa7e6"></span><div><b>Vintage Cards Onchain</b><small class="down">▼ 4.44% today</small></div></div>
                 <div class="bk-bar s-bar"><span style="width:calc(35% - 3px);background:#ef8a3c"></span><span style="width:calc(30% - 3px);background:#7fb2f0"></span><span style="width:calc(20% - 3px);background:#b8893a"></span><span style="width:calc(15% - 3px);background:#8b3dff"></span></div>
                 <ul class="s-rows">
-                  <li><span class="bk-icon" style="background:#2f7de1">C</span><b>Collector Crypt<em>CARDS</em></b><span class="s-pct"><i style="background:#ef8a3c"></i>35%</span></li>
-                  <li><span class="bk-icon" style="background:#fff;color:#e53238">e</span><b>eBay<em>EBAY</em></b><span class="s-pct"><i style="background:#7fb2f0"></i>30%</span></li>
-                  <li><span class="bk-icon" style="background:#111;color:#d4a64a;box-shadow:inset 0 0 0 2px #b8893a">G</span><b>GameStop<em>GME</em></b><span class="s-pct"><i style="background:#b8893a"></i>20%</span></li>
-                  <li><span class="bk-icon" style="background:linear-gradient(135deg,#00d6a3,#9945ff)">S</span><b>Solana<em>SOL</em></b><span class="s-pct"><i style="background:#8b3dff"></i>15%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/cards.png" alt="" loading="lazy" /></span><b>Collector Crypt<em>CARDS</em></b><span class="s-pct"><i style="background:#ef8a3c"></i>35%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/ebay.svg" alt="" loading="lazy" /></span><b>eBay<em>EBAY</em></b><span class="s-pct"><i style="background:#7fb2f0"></i>30%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/gme.svg" alt="" loading="lazy" /></span><b>GameStop<em>GME</em></b><span class="s-pct"><i style="background:#b8893a"></i>20%</span></li>
+                  <li><span class="bk-icon logo"><img src="assets/logos/sol.png" alt="" loading="lazy" /></span><b>Solana<em>SOL</em></b><span class="s-pct"><i style="background:#8b3dff"></i>15%</span></li>
                 </ul>
                 <span class="bk-invest s-btn s-copybtn"><em>Copy this idea</em><em>Copied to your wallet ✓</em></span>
                 <p class="s-note">Same picks, same weights. Tune them before you buy.</p>
@@ -258,18 +294,18 @@
           </div>
           <div class="bcard-visual coins" aria-hidden="true">
             <span class="coins-glow"></span>
-              <span class="coin-w" style="--x:5%;--y:22%;--d:9cqw;--z:.45"><span class="coin c-pepe far" style="--t:8s;--dl:-2s;--r:-10deg"><b class="tk">PEPE</b></span></span>
-              <span class="coin-w" style="--x:16%;--y:6%;--d:16cqw;--z:1"><span class="coin c-eth" style="--t:7s;--dl:-1s;--r:-8deg"><svg viewBox="0 0 32 32"><path fill="#fff" fill-opacity=".6" d="M16 4v8.87l7.5 3.35z"/><path fill="#fff" d="M16 4 8.5 16.22 16 12.87z"/><path fill="#fff" fill-opacity=".6" d="M16 21.97V28l7.5-10.38z"/><path fill="#fff" d="M16 28v-6.03l-7.5-4.35z"/><path fill="#fff" fill-opacity=".2" d="m16 20.57 7.5-4.35L16 12.87z"/><path fill="#fff" fill-opacity=".6" d="m8.5 16.22 7.5 4.35v-7.7z"/></svg></span></span>
-              <span class="coin-w" style="--x:47%;--y:2%;--d:19cqw;--z:1.15"><span class="coin c-btc" style="--t:8.5s;--dl:-4s;--r:6deg"><b class="glyph">₿</b></span></span>
-              <span class="coin-w" style="--x:80%;--y:5%;--d:10cqw;--z:.55"><span class="coin c-usdc far" style="--t:9s;--dl:-3s;--r:10deg"><b class="glyph ring">$</b></span></span>
-              <span class="coin-w" style="--x:72%;--y:27%;--d:15cqw;--z:1"><span class="coin c-sol" style="--t:7.5s;--dl:-5s;--r:-6deg"><svg viewBox="0 0 32 32"><defs><linearGradient id="solg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs><path fill="url(#solg)" d="M9.5 20.5H26l-3.5 3.5H6zM9.5 8H26l-3.5 3.5H6zM6 14.25h16.5l3.5 3.5H9.5z"/></svg></span></span>
-              <span class="coin-w" style="--x:31%;--y:38%;--d:18cqw;--z:1.4"><span class="coin c-stock c-nvda" style="--t:6.5s;--dl:-2.5s;--r:-4deg"><b class="tk">NVDA</b><small>Stock</small></span></span>
+              <span class="coin-w" style="--x:5%;--y:22%;--d:9cqw;--z:.45"><span class="coin c-pepe far has-face" style="--t:8s;--dl:-2s;--r:-10deg"><img class="face" src="assets/logos/pepe.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:16%;--y:6%;--d:16cqw;--z:1"><span class="coin c-eth has-face" style="--t:7s;--dl:-1s;--r:-8deg"><img class="face" src="assets/logos/eth.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:47%;--y:2%;--d:19cqw;--z:1.15"><span class="coin c-btc has-face" style="--t:8.5s;--dl:-4s;--r:6deg"><img class="face" src="assets/logos/btc.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:80%;--y:5%;--d:10cqw;--z:.55"><span class="coin c-usdc far has-face" style="--t:9s;--dl:-3s;--r:10deg"><img class="face" src="assets/logos/usdc.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:72%;--y:27%;--d:15cqw;--z:1"><span class="coin c-sol has-face" style="--t:7.5s;--dl:-5s;--r:-6deg"><img class="face" src="assets/logos/sol.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:31%;--y:38%;--d:18cqw;--z:1.4"><span class="coin c-stock c-nvda has-face" style="--t:6.5s;--dl:-2.5s;--r:-4deg"><img class="face" src="assets/logos/nvda.svg" alt="" loading="lazy" /></span></span>
               <span class="coin-w" style="--x:3%;--y:55%;--d:12cqw;--z:.75"><span class="coin c-base" style="--t:8s;--dl:-6s;--r:8deg"><svg viewBox="0 0 32 32"><path fill="#fff" d="M16 26c5.52 0 10-4.48 10-10S21.52 6 16 6c-5.24 0-9.54 4.03-9.96 9.17h13.21v1.66H6.04C6.46 21.97 10.76 26 16 26z"/></svg></span></span>
-              <span class="coin-w" style="--x:91%;--y:48%;--d:8cqw;--z:.4"><span class="coin c-bonk far" style="--t:9.5s;--dl:-1.5s;--r:-12deg"><b class="tk">BONK</b></span></span>
-              <span class="coin-w" style="--x:60%;--y:60%;--d:14cqw;--z:1.1"><span class="coin c-stock c-tsla" style="--t:7s;--dl:-3.5s;--r:5deg"><b class="tk">TSLA</b><small>Stock</small></span></span>
-              <span class="coin-w" style="--x:19%;--y:77%;--d:11cqw;--z:.8"><span class="coin c-stock c-aapl" style="--t:8.8s;--dl:-4.5s;--r:-7deg"><b class="tk">AAPL</b><small>Stock</small></span></span>
-              <span class="coin-w" style="--x:83%;--y:74%;--d:11cqw;--z:.7"><span class="coin c-bnb" style="--t:7.8s;--dl:-2.2s;--r:9deg"><svg viewBox="0 0 32 32"><g fill="#fff"><rect x="13" y="13" width="6" height="6" transform="rotate(45 16 16)"/><rect x="14" y="6.5" width="4" height="4" transform="rotate(45 16 8.5)"/><rect x="14" y="21.5" width="4" height="4" transform="rotate(45 16 23.5)"/><rect x="6.5" y="14" width="4" height="4" transform="rotate(45 8.5 16)"/><rect x="21.5" y="14" width="4" height="4" transform="rotate(45 23.5 16)"/></g></svg></span></span>
-              <span class="coin-w" style="--x:44%;--y:83%;--d:9cqw;--z:.5"><span class="coin c-arb far" style="--t:9.2s;--dl:-5.5s;--r:-5deg"><b class="tk">ARB</b></span></span>
+              <span class="coin-w" style="--x:91%;--y:48%;--d:8cqw;--z:.4"><span class="coin c-bonk far has-face" style="--t:9.5s;--dl:-1.5s;--r:-12deg"><img class="face" src="assets/logos/bonk.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:60%;--y:60%;--d:14cqw;--z:1.1"><span class="coin c-stock c-tsla has-face" style="--t:7s;--dl:-3.5s;--r:5deg"><img class="face" src="assets/logos/tsla.svg" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:19%;--y:77%;--d:11cqw;--z:.8"><span class="coin c-stock c-aapl has-face" style="--t:8.8s;--dl:-4.5s;--r:-7deg"><img class="face" src="assets/logos/aapl.svg" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:83%;--y:74%;--d:11cqw;--z:.7"><span class="coin c-bnb has-face" style="--t:7.8s;--dl:-2.2s;--r:9deg"><img class="face" src="assets/logos/bnb.png" alt="" loading="lazy" /></span></span>
+              <span class="coin-w" style="--x:44%;--y:83%;--d:9cqw;--z:.5"><span class="coin c-arb far has-face" style="--t:9.2s;--dl:-5.5s;--r:-5deg"><img class="face" src="assets/logos/arb.png" alt="" loading="lazy" /></span></span>
           </div>
         </article>
 
@@ -429,6 +465,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=45"></script>
+  <script src="app.js?v=46"></script>
 </body>
 </html>
